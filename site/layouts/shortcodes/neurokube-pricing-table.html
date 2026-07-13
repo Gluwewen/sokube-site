@@ -1,0 +1,174 @@
+{{ $json := .Inner | transform.Unmarshal }}
+{{ $style := site.Params.pricing.style | default dict }}
+
+{{ $cardBackground := $style.card_background | default "bg-white" }}
+{{ $cardBorder := $style.card_border | default "border-gray-200" }}
+
+{{ $featuredBorder := $style.featured_border | default "border-neurokube-600" }}
+{{ $featuredShadow := $style.featured_shadow | default "shadow-xl" }}
+
+{{ $iconColor := $style.icon_color | default "text-blue-500" }}
+
+{{ $titleColor := $style.title_color | default "text-gray-900" }}
+{{ $descriptionColor := $style.description_color | default "text-gray-500" }}
+{{ $priceColor := $style.price_color | default "text-gray-900" }}
+
+{{ $buttonClass := $style.button_class | default "btn-primary" }}
+
+<section class="py-16 bg-white dark:bg-neurokube-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{ with $json.title }}
+        <div class="text-center">
+            <h2 class="text-3xl font-bold {{ $titleColor }}">
+                {{ . }}
+            </h2>
+
+            {{ with $json.description }}
+            <p class="mt-4 text-xl {{ $descriptionColor }}">
+                {{ . }}
+            </p>
+            {{ end }}
+        </div>
+        {{ end }}
+
+        <div class="mt-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                {{ range $json.plans }}
+
+                {{ $buttonBg := .button.style.bg | default "bg-neurokube-600" }}
+                {{ $buttonText := .button.style.text | default "text-white" }}
+                {{ $buttonBorder := .button.style.border | default "border-neurokube-600" }}
+                {{ $buttonHoverBg := .button.style.hoverBg | default "hover:bg-neurokube-700" }}
+                {{ $buttonHoverText := .button.style.hoverText | default "hover:text-neurokube-100" }}
+
+                {{ $badgeBg := .badge.background | default "bg-neurokube-200" }}
+                {{ $badgeTextColor := .badge.text | default "text-neurokube-600" }}
+                {{ $badgeLabel := .badge.label | default (i18n "popular") }}
+
+                <div class="w-full">
+
+                    <div class="
+                        h-full flex flex-col rounded-2xl border
+                        {{ $cardBackground }}
+
+                        {{ if .featured }}
+                            border-2
+                            dark:border-4
+                            {{ $featuredBorder }}
+                            {{ $featuredShadow }}
+                            dark:shadow-none
+                        {{ else }}
+                            {{ $cardBorder }}
+                            shadow-sm
+                        {{ end }}
+
+                        hover:shadow-lg
+                        transition-shadow
+                        duration-300
+                        relative
+                    ">
+
+                        {{ if .featured }}
+                        <div class="
+                            absolute top-4 right-4 inline-block rounded-full
+                            px-4 py-1 text-sm font-semibold
+                            {{ $badgeBg }}
+                            {{ $badgeTextColor }}
+                        ">
+                            {{ $badgeLabel }}
+                        </div>
+                        {{ end }}
+
+                        <div class="p-8 flex flex-col flex-grow">
+
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-bold {{ $titleColor }}">
+                                    {{ .name }}
+                                </h3>
+
+                                <p class="mt-2 {{ $descriptionColor }}">
+                                    {{ .description }}
+                                </p>
+                            </div>
+
+                            {{ if .priced }}
+                                <div class="mb-8">
+                                    <p class="flex items-baseline">
+                                        <span class="text-3xl font-bold tracking-tight {{ $priceColor }}">
+                                            {{ site.Params.pricing.currency }} {{ .price }}
+                                        </span>
+
+                                        <span class="ml-2 {{ $descriptionColor }}">
+                                            {{ i18n "perYear" }}
+                                        </span>
+                                    </p>
+                                </div>
+                            {{ end }}
+
+                            <ul class="space-y-4 text-gray-600 flex-grow">
+
+                                {{ range .features }}
+
+                                <li class="flex items-start">
+
+                                    <svg
+                                        class="h-6 w-6 flex-shrink-0 {{ $iconColor }}"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+                                    </svg>
+
+                                    <span class="ml-3">
+                                        {{ . }}
+                                    </span>
+
+                                </li>
+
+                                {{ end }}
+
+                            </ul>
+
+                            <div class="mt-8">
+                                <a
+                                    href="{{ .button.url }}"
+                                    class="
+                                        w-full
+                                        inline-flex
+                                        items-center
+                                        justify-center
+                                        rounded-lg
+                                        border
+                                        px-6
+                                        py-3
+                                        text-sm
+                                        font-semibold
+                                        transition-colors
+                                        duration-200
+
+                                        {{ $buttonBg }}
+                                        {{ $buttonText }}
+                                        {{ $buttonBorder }}
+                                        {{ $buttonHoverBg }}
+                                        {{ $buttonHoverText }}
+                                    "
+                                >
+                                    {{ .button.text }}
+                                </a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{ end }}
+
+            </div>
+        </div>
+
+    </div>
+</section>

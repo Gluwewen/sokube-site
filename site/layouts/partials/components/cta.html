@@ -1,0 +1,49 @@
+{{ if .Site.Params.cta.enable }}
+
+{{ $style := .Site.Params.cta.style | default dict }}
+
+{{ $background := $style.background | default "bg-primary-600" }}
+{{ $titleColor := $style.title | default "text-white" }}
+{{ $descriptionColor := $style.description | default "text-primary-100" }}
+
+{{ $primaryBtn := site.Params.cta.primary_button }}
+{{ $secondaryBtn := site.Params.cta.secondary_button }}
+
+{{ $primaryBackground := $primaryBtn.background | default "bg-white" }}
+{{ $primaryTextColor := $primaryBtn.text_color | default "text-neurokube-600" }}
+{{ $primaryHover := $primaryBtn.hover | default "hover:bg-neurokube-200" }}
+
+{{ $secondaryBackground := $secondaryBtn.background | default "bg-neurokube-600" }}
+{{ $secondaryTextColor := $secondaryBtn.text_color | default "text-white" }}
+{{ $secondaryHover := $secondaryBtn.hover | default "hover:bg-neurokube-800" }}
+{{ $secondaryBorder := $secondaryBtn.border | default "border-white" }}
+
+<section class="cta-section">
+    <div class="container">
+        {{ $angle := .Site.Params.cta.gradient_angle | default 45 }}
+        {{ $from := .Site.Params.cta.gradient_from }}
+        {{ $to := .Site.Params.cta.gradient_to }}
+        <div class="relative rounded-lg overflow-hidden {{ $background }} cta-gradient" style="--gradient-angle: {{ $angle }}; --gradient-from: {{ $from }}; --gradient-to: {{ $to }}">
+            <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
+                <h2 class="text-3xl md:text-4xl font-bold {{ $titleColor }} mb-6">{{ .Site.Params.cta.title }}</h2>
+                <p class="text-xl {{ $descriptionColor }} mb-8">{{ .Site.Params.cta.description }}</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    {{ with $primaryBtn }}
+                    <a href="{{ .url }}"
+                    class="btn text-center {{ $primaryBackground }} {{ $primaryTextColor }} {{ $primaryHover }}">
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+
+                    {{ with $secondaryBtn }}
+                    <a href="{{ .url }}"
+                    class="btn text-center border-2 {{ $secondaryBackground }} {{ $secondaryTextColor }} {{ $secondaryHover }} {{ $secondaryBorder }}">
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{ end }}

@@ -1,0 +1,116 @@
+/*
+  Surcharges mode sombre pour les composants définis dans le CSS du thème
+  (themes/hugo-saasify-theme/assets/css/main.css) qui n'ont pas de variante `dark:` intégrée.
+  Chargé après main.css — voir layouts/_default/baseof.html.
+
+  Pas de @layer ici volontairement : ce fichier est traité par PostCSS indépendamment
+  de main.css (deux passes distinctes), donc @layer n'a pas de @tailwind de référence
+  où s'accrocher. Sa position dans la cascade est déjà garantie par l'ordre de chargement
+  des <link> dans baseof.html.
+*/
+
+/* Tous les titres du site : text-gray-900 fixe dans le thème, sans variante sombre. */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: theme('colors.white');
+}
+
+/* Couleur de texte par défaut du corps de page en mode sombre. */
+.dark body {
+  color: theme('colors.neurokube.100');
+}
+
+/* .card-neurokube : les couleurs (fond, bordure, hover, texte, puces), en clair
+   comme en sombre, sont désormais entièrement pilotées par le shortcode
+   neurokube-card.html via hugo.toml ([params.cards.<palette>], variantes dark:
+   incluses). Ne plus ajouter de surcharge .dark .card-neurokube ici : ça
+   réintroduirait exactement le conflit qui empêchait les palettes kube/hr de
+   s'afficher correctement en mode sombre. */
+
+/* .card / .card-number : variante générique utilisée dans les blocs ÉTAPE 01/02/03
+   au sein du corps des pages Features ({{< section-container >}}). Distincte de
+   .card-neurokube, elle avait été oubliée lors du premier passage : même fond en
+   dégradé clair fixé en CSS classique, sans variante sombre. */
+.dark .card {
+  background: linear-gradient(
+    135deg,
+    theme('colors.neurokube.900'),
+    theme('colors.neurokube.800')
+  );
+  border-color: theme('colors.neurokube.700');
+}
+
+.dark .card:hover {
+  border-color: theme('colors.neurokube.400');
+}
+
+.dark .card p {
+  color: theme('colors.neurokube.100');
+}
+
+.dark .card li {
+  color: theme('colors.neurokube.100');
+}
+
+.dark .card-number {
+  color: theme('colors.neurokube.300');
+}
+
+/* .card-number : couleur fixe rgb(85 115 223), sans variante sombre — utilisé par
+   l'ancien composant .card (blocs ÉTAPE 01/02/03), qui n'a pas de système de
+   palette dynamique. .card-label n'est PAS inclus ici : chaque neurokube-card
+   porte déjà sa propre classe dark:text-{palette}-300 (via hugo.toml), et une
+   règle .dark .card-label ici l'écraserait systématiquement (même spécificité,
+   mais custom.css chargé après bundle.css dans baseof.html => custom.css gagne
+   toujours en mode sombre, quelle que soit la palette demandée). */
+.dark .card-number {
+  color: theme('colors.neurokube.300');
+  letter-spacing: 0.03em;
+}
+
+/* .prose (plugin Typography Tailwind + surcharges main.css) : aucune variante sombre
+   nulle part, ni côté plugin ni côté main.css. Concerne la FAQ et potentiellement
+   le blog partout où du Markdown est rendu via .prose. */
+.dark .prose,
+.dark .prose p,
+.dark .prose li,
+.dark .prose blockquote {
+  color: theme('colors.neurokube.100');
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: theme('colors.white');
+}
+
+.dark .prose a {
+  color: theme('colors.neurokube.300');
+}
+
+.dark .prose strong,
+.dark .prose b {
+  color: theme('colors.white');
+}
+
+.dark .prose code:not(pre code) {
+  background-color: theme('colors.neurokube.800');
+  color: theme('colors.neurokube.100');
+}
+
+
+/* text-gray-600 : couleur de texte secondaire générique utilisée sur tout le site
+   (descriptions de section, sous-titres...) sans variante sombre dédiée à chaque
+   usage. On aligne sur la teinte déjà choisie pour la description du Hero
+   (params.hero.style.description = "text-gray-600 dark:text-neurokube-200" dans
+   hugo.toml) pour que text-gray-600 ait un comportement cohérent partout en mode
+   sombre, plutôt que de rester gris et peu lisible dès qu'un composant n'a pas
+   sa propre variante définie. */
+.dark .text-gray-600 {
+  color: theme('colors.neurokube.200');
+}

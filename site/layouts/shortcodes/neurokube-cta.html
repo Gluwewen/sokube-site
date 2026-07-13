@@ -1,0 +1,58 @@
+<section class="cta-section">
+    <div class="container">
+
+        <div class="
+            relative
+            rounded-lg
+            overflow-hidden
+            {{ .Site.Params.cta.style.background }}
+        ">
+
+            <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
+
+                <h2 class="
+                    text-3xl
+                    md:text-4xl
+                    font-bold
+                    mb-6
+                    {{ .Site.Params.cta.style.title }}
+                ">
+                    {{ .Site.Params.cta.title }}
+                </h2>
+
+                <p class="
+                    text-xl
+                    mb-8
+                    {{ .Site.Params.cta.style.description }}
+                ">
+                    {{ .Site.Params.cta.description }}
+                </p>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+
+                    {{ with .Site.Params.cta.primary_button }}
+                    <a
+                        href="{{ .url }}"
+                        class="btn {{ .class }}"
+                    >
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+
+                    {{ with .Site.Params.cta.secondary_button }}
+                    <a
+                        href="{{ .url }}"
+                        class="btn border-2 {{ .class }}"
+                    >
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

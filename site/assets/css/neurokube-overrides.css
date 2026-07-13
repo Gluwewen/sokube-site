@@ -1,0 +1,121 @@
+/*
+ * Styles spécifiques NeuroKube — NE PAS déplacer dans themes/hugo-saasify-theme.
+ * Ce fichier doit vivre côté site (site/assets/css/neurokube-overrides.css)
+ * et être chargé APRÈS le main.css du thème (voir site.css), pour que les
+ * mises à jour du thème n'écrasent jamais ces personnalisations.
+ */
+
+@layer components {
+  .prose .btn-primary {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  .prose .btn-outline {
+    text-decoration: none !important;
+  }
+
+  /*
+   * .card : redéfinition volontaire de la classe .card du thème (cascade,
+   * voir avertissement précédent sur l'ordre des @import).
+   */
+  .card {
+    @apply p-8 border transition-all duration-300;
+    border-radius: 2rem;
+
+    background: linear-gradient(
+      135deg,
+      rgb(248 250 252),
+      rgb(241 245 249)
+    );
+
+    border-color: rgb(226 232 240);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+      0 20px 40px rgba(85,115,223,0.12);
+
+    border-color: rgb(85 115 223);
+  }
+
+  .card h3 {
+    @apply text-2xl font-bold mb-4;
+  }
+
+  .card p {
+    @apply text-gray-600 mb-6 leading-relaxed;
+  }
+
+  .card ul {
+    @apply space-y-2;
+    list-style: disc;
+    padding-left: 1.5rem;
+  }
+
+  .card li {
+    @apply text-gray-700;
+  }
+
+  .card-number {
+    @apply text-sm font-bold mb-4;
+    color: rgb(85 115 223);
+  }
+
+  .card-label {
+    @apply text-sm font-bold mb-4;
+    color: rgb(85 115 223);
+  }
+
+  /*
+   * .card-neurokube : UNIQUEMENT la structure (espacement, arrondi,
+   * transition, effet hover générique). AUCUNE couleur ici : le fond, la
+   * bordure et la bordure au survol sont entièrement pilotés par le
+   * shortcode neurokube-card.html via $style.background / $style.border /
+   * $style.hover_border (eux-mêmes définis dans hugo.toml sous
+   * [params.cards.<palette>]). Ne jamais réintroduire de couleur en dur ici :
+   * c'est exactement ce qui causait le bug d'affichage figé sur toutes les
+   * cartes, quelle que soit la palette ou le mode clair/sombre choisi.
+   */
+  .card-neurokube {
+    @apply p-8 border transition-all duration-300;
+    border-radius: 2rem;
+  }
+
+  .card-neurokube:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-neurokube h3 {
+    @apply text-2xl font-bold mb-4;
+  }
+
+  .card-neurokube p {
+    @apply mb-6 leading-relaxed;
+  }
+
+  .card-neurokube ul {
+    @apply space-y-2;
+    list-style: disc;
+    padding-left: 1.5rem;
+  }
+
+  .card-neurokube li {
+    /* Couleur héritée du conteneur ({{ $style.text }} sur le <div> parent,
+       dans neurokube-card.html) — ne pas fixer de couleur ici, sous peine de
+       cibler l'élément directement et de bloquer l'héritage, quelle que soit
+       la spécificité de la classe du parent. C'est exactement ce qui rendait
+       le texte terne en mode sombre : cette règle gagnait toujours face à
+       dark:text-gray-300 posé sur le conteneur. */
+  }
+
+  .btn-neurokube {
+    @apply inline-flex items-center justify-center;
+    @apply px-6 py-3 font-medium transition duration-200;
+    @apply bg-neurokube-600 text-white hover:bg-neurokube-700;
+    border-radius: 2rem;
+  }
+}

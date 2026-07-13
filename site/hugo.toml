@@ -1,0 +1,505 @@
+baseURL = "https://www.neurokube.ai/"
+title = "NeuroKube"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+# Theme Config
+# theme = "../.."
+theme = "hugo-saasify-theme"
+
+# Enable emoji support
+enableEmoji = true
+
+# Enable Git info for lastmod
+enableGitInfo = true
+
+# Enable taxonomies
+[taxonomies]
+  category = 'categories'
+  tag = 'tags'
+
+# Pagination
+[pagination]
+  pagerSize = 6
+  path = "page"
+
+[params]
+  description = ""
+  author = "Vincent Loiseau"
+  logo = "/images/logo.svg"
+  logo_fond-clair = "/images/logo_fond-clair.svg"
+  logo_fond-sombre = "/images/logo_fond-sombre.svg"
+  # Google Analytics ID (e.g., "G-XXXXXXXXXX")
+  # googleAnalytics = "G-XXXXXXXXXX"
+  
+  # Dark/Light mode toggling
+  [params.appearance]
+    defaultAppearance = "light"
+    autoSwitchAppearance = true
+    disableSwitch = false 
+
+  # Social Media Links
+  [params.social]
+    linkedin = "https://www.linkedin.com/company/sokube"
+    # twitter = "https://x.com/sokube_io"
+    # bluesky = "https://bsky.app/profile/bsky.app"
+    # youtube = "https://youtube.com/@chaomingli"
+    # facebook = "https://facebook.com/lichaoming"
+    # instagram = "https://instagram.com/lichaoming"
+    # github = "https://github.com/chaoming"
+    # telegram = "https://t.me/yourchannel"
+    # discord = "https://discord.gg/yourinvite"
+    # slack = "https://yourteam.slack.com"
+    # medium = "https://medium.com/@yourhandle"
+    # dribbble = "https://dribbble.com/yourprofile"
+    # behance = "https://behance.net/yourprofile"
+  
+  # Footer Configuration
+  [params.footer]
+    # Column names
+    column_1_title = "Features"
+    column_2_title = "ABOUT"
+    column_3_title = "LEGAL"
+
+    [params.footer.logo]
+    # Logo configuration
+      src = "/images/logo_fond-clair.svg"
+      dark_src = "/images/logo_fond-sombre.svg"
+    
+    [params.footer.style]
+      background = "bg-neurokube-200 dark:bg-neurokube-900"
+      border = "border-neurokube-50 dark:border-neurokube-800"
+      title = "text-neurokube-900 dark:text-white"
+      text = "text-neurokube-900 dark:text-neurokube-100"
+      link = "text-neurokube-800 hover:text-neurokube-600 dark:text-neurokube-100 dark:hover:text-neurokube-300"
+      social = "text-neurokube-400 hover:text-neurokube-600 dark:text-neurokube-300 dark:hover:text-neurokube-100"
+      copyright = "text-neurokube-900 dark:text-neurokube-100"
+      designer = "text-neurokube-900 hover:text-neurokube-600 dark:text-neurokube-100 dark:hover:text-neurokube-300"
+  
+  # Header Configuration
+  [params.header]
+    # Header background and border styles (optional)
+    background = "bg-neurokube-900"
+    border = "border-neurokube-900"
+    
+    # Logo configuration
+    [params.header.logo]
+      src = "/images/logo_fond-sombre.svg"
+      textClass = "text-neurokube-100"
+    
+    # Menu configuration
+    [params.header.menu]
+      spacing = "space-x-8"
+      linkClass = "text-base text-neurokube-100 hover:text-neurokube-200 font-bold transition duration-200"
+      
+      # Dropdown menu configuration
+      [params.header.menu.dropdown]
+        width = "w-72"
+        container_padding = "py-6"
+        item_padding = "px-8 py-3"
+        background = "bg-white dark:bg-neurokube-900"
+        border = "border border-gray-100 dark:border-neurokube-800"
+        shadow = "shadow-xl"
+        radius = "rounded-lg"
+        text_color = "text-gray-700 dark:text-neurokube-100"
+        hover_background = "hover:bg-gray-50 dark:hover:bg-neurokube-800"
+        text_size = "text-sm"
+    
+#     # Button configuration
+#     [params.header.buttons]
+#     # Sign In button
+#     [params.header.buttons.signIn]
+#       text = "Sign in"
+#       url = "/signin"
+      
+#     # Get Started button
+#     [params.header.buttons.getStarted]
+#       text = "Get Started"
+#       url = "/get-started"
+
+# Navigation Menu
+[menu]
+  [[menu.main]]
+    name = "Capabilities"
+    weight = 1
+    [menu.main.params]
+      has_submenu = true
+      megamenu = true
+      groups = [
+        { name = "Investigation & Diagnostics", url = "/features/ai-powered-incident-investigation/", items = [ { name = "AI-powered incident investigation", url = "/features/ai-powered-incident-investigation/" }, { name = "Root cause analysis assistance", url = "/features/root-cause-analysis-assistance/" } ] },
+        { name = "Platform Context & Intelligence", url = "/features/multi-context-platform-intelligence/", items = [ { name = "Multi-context platform intelligence", url = "/features/multi-context-platform-intelligence/" }, { name = "Versioned technical context", url = "/features/versioned-technical-context/" } ] },
+        { name = "Remediation & Learning", url = "/features/ai-assisted-remediation/", items = [ { name = "AI-assisted remediation", url = "/features/ai-assisted-remediation/" }, { name = "Continuous operational learning", url = "/features/continuous-operational-learning/" } ] },
+        { name = "Governance & Reliability", url = "/features/human-in-the-loop-governance/", items = [ { name = "Human-in-the-loop governance", url = "/features/human-in-the-loop-governance/" }, { name = "Proven resolution process", url = "/features/proven-resolution-process/" } ] }
+      ]
+  [[menu.main]]
+    name = "Offers"
+    url = "/offers"
+    weight = 2
+#  [[menu.main]]
+#    name = "Blog"
+#    url = "https://www.sokube.io/blog"
+#    weight = 3
+#    [menu.main.params]
+#      external = true 
+  [[menu.main]]
+    name = "About NeuroKube"
+    url = "/about/"
+    weight = 3
+    [menu.main.params]
+      has_submenu = true
+      submenu = [
+        { name = "Our mission", url = "/about/#mission" },
+        { name = "What makes NeuroKube different", url = "/about/#what-makes-neurokube-different" },
+        { name = "Born from a repeated operational problem", url = "/about/#born-from-a-repeated-operational-problem" },
+        { name = "Organizational intelligence", url = "/about/#from-kubernetes-operations-to-organizational-intelligence" },
+        { name = "A SoKube solution", url = "/about/#a-sokube-solution" }
+      ]
+  [[menu.main]]
+    name = "Contact"
+    url = "/contact"
+    weight = 4
+
+  # Footer Column 1 Menu
+  [[menu.footer_column_1]]
+    name = "Incident investigation"
+    url = "/features/ai-powered-incident-investigation/"
+    weight = 1
+  [[menu.footer_column_1]]
+    name = "Root-cause analysis"
+    url = "/features/root-cause-analysis-assistance/"
+    weight = 2
+  [[menu.footer_column_1]]
+    name = "Remediation"
+    url = "/features/ai-assisted-remediation/"
+    weight = 3
+
+  # Footer Column 2 Menu
+  [[menu.footer_column_2]]
+    name = "Mission"
+    url = "/about/#mission"
+    weight = 1
+  [[menu.footer_column_2]]
+    name = "Demo"
+    url = "/demo"
+    weight = 2
+  [[menu.footer_column_2]]
+    name = "Contact"
+    url = "/contact"
+    weight = 3
+
+  # Footer Column 3 Menu
+  [[menu.footer_column_3]]
+    name = "Terms of Use"
+    url = "/CGU"
+    weight = 1
+  [[menu.footer_column_3]]
+    name = "Cookies"
+    url = "/cookies"
+    weight = 2
+  [[menu.footer_column_3]]
+    name = "Privacy Policy"
+    url = "/privacy"
+    weight = 3
+
+
+# Global Hero Configuration
+[params.hero]
+  background = "bg-gradient-to-b from-neurokube-100 to-neurokube-50 dark:from-neurokube-900 dark:to-neurokube-900"
+
+  [params.hero.style]
+    title = "text-neurokube-900 dark:text-white"
+    description = "text-gray-600 dark:text-neurokube-200"
+
+    decoration_1 = "bg-neurokube-100 dark:bg-neurokube-800"
+    decoration_2 = "bg-neurokube-200 dark:bg-neurokube-700"
+
+  [params.hero.primary_button]
+    background = "bg-neurokube-600"
+    text_color = "text-white"
+    hover = "hover:bg-neurokube-700"
+
+  [params.hero.secondary_button]
+    background = "bg-white dark:bg-neurokube-800"
+    text_color = "text-neurokube-600 dark:text-neurokube-100"
+    hover = "hover:bg-neurokube-100 dark:hover:bg-neurokube-700"
+    border = "border-neurokube-600 dark:border-neurokube-400"
+
+# Global CTA Configuration
+[params.cta]
+  enable = true
+
+  [params.cta.style]
+    background = "bg-neurokube-600"
+    title = "text-white"
+    description = "text-neurokube-100"
+
+  [params.cta.primary_button]
+    class = "bg-white text-neurokube-600 hover:bg-neurokube-200"
+    background = "bg-white"
+    text_color = "text-neurokube-600"
+    hover = "hover:bg-neurokube-200"
+
+#  [params.cta.secondary_button]
+#    class = "border-white text-white hover:bg-neurokube-800"
+#    text_color = "text-white"
+#    hover = "hover:bg-neurokube-800"
+#    border = "border-white"
+
+# Section visibility toggles
+[params.sections]
+  testimonials = false
+  clientLogos = false
+  faq = false
+
+# Pricing Configuration
+[params.pricing]
+  currency = "CHF"
+
+  [params.pricing.style]
+    card_background = "bg-neurokube-50 dark:bg-neurokube-800"
+    card_border = "border-neurokube-300 dark:border-neurokube-700"
+    featured_border = "border-neurokube-600 dark:border-neurokube-300"
+    featured_shadow = "shadow-xl"
+    icon_color = "text-neurokube-600 dark:text-neurokube-300"
+    title_color = "text-gray-900 dark:text-white"
+    description_color = "text-gray-500 dark:text-neurokube-200"
+    price_color = "text-gray-900 dark:text-white"
+    button_class = "btn-primary"
+
+# Cards Configuration
+[params.cards]
+  grid_gap = "gap-8"
+
+  # Palette existante — inchangée, reste le comportement par défaut
+  [params.cards.default]
+    background = "bg-gradient-to-br from-neurokube-100 to-neurokube-50 dark:from-neurokube-900 dark:to-neurokube-800"
+    border = "border-neurokube-300 dark:border-neurokube-400"
+    hover_border = "hover:border-neurokube-600 dark:hover:border-neurokube-400"
+    label = "text-neurokube-600 dark:text-neurokube-300"
+    title = "text-neurokube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+    marker = "marker:text-neurokube-600 dark:marker:text-neurokube-300"
+
+  # Nouvelle palette KUBE (ex: cartes "PROBLEME" de la page About)
+  [params.cards.kube]
+    background = "bg-gradient-to-br from-kube-100 to-kube-50 dark:from-kube-900 dark:to-kube-800"
+    border = "border-kube-300 dark:border-kube-400"
+    hover_border = "hover:border-kube-600 dark:hover:border-kube-400"
+    label = "text-kube-600 dark:text-kube-300"
+    title = "text-kube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+    marker = "marker:text-kube-600 dark:marker:text-kube-300"
+
+  # Nouvelle palette HR (réutilisable ailleurs si besoin)
+  [params.cards.hr]
+    background = "bg-gradient-to-br from-hr-100 to-hr-50 dark:from-hr-900 dark:to-hr-800"
+    border = "border-hr-300 dark:border-hr-400"
+    hover_border = "hover:border-hr-600 dark:hover:border-hr-400"
+    label = "text-hr-600 dark:text-hr-300"
+    title = "text-hr-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+    marker = "marker:text-hr-600 dark:marker:text-hr-300"
+
+# Forms Configuration
+[params.forms]
+
+  [params.forms.style]
+    container = "max-w-3xl mx-auto"
+    input = "w-full rounded-xl border border-gray-300 dark:border-neurokube-700 dark:bg-neurokube-900 dark:text-white px-4 py-3"
+    label = "block text-sm font-medium mb-2 text-gray-700 dark:text-neurokube-100"
+    button = "btn btn-primary w-full"
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.80.0"
+
+[build]
+  writeStats = true
+
+[build.buildStats]
+  enable = true
+
+[security.funcs]
+  getenv = ['^HUGO_', '^CI$']
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = true
+    codeFences = true
+    guessSyntax = true
+    lineNumbersInTable = true
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.tableOfContents]
+    endLevel = 3
+    ordered = false
+    startLevel = 2
+
+# Multilingual Configuration
+# Uncomment the sections below to enable multilingual support
+# See docs/CONFIGURATION.md for detailed instructions
+
+[languages]
+  # English language
+  [languages.en]
+    locale = "en-us"
+    label = "English"
+    title = "NeuroKube"
+    weight = 1
+    contentDir = "content/en-us"
+
+    # English language for Hero
+    [languages.en.params.hero.primary_button]
+      text = "Request a Demo"
+      url = "/demo"
+
+    [languages.en.params.hero.secondary_button]
+      text = "Learn More"
+      url = "/about"
+
+    # English language for CTA
+    [languages.en.params.cta]
+      title = "Ready to unleash your god-mod DevOps?"
+      description = "Join companies already using NeuroKube to reduce the cognitive load of their DevOps teams."
+
+    [languages.en.params.cta.primary_button]
+      text = "Contact us"
+      url = "/demo"
+      class = "bg-white text-neurokube-600 hover:bg-neurokube-200"
+
+#    [languages.en.params.cta.secondary_button]
+#      text = "Book Demo"
+#      url = "/demo"
+#      class = "border-white text-white hover:bg-neurokube-800"
+
+  # French language
+  [languages.fr]
+    locale = "fr-ch"
+    label = "Français"
+    title = "NeuroKube"
+    weight = 2
+    contentDir = "content/fr-ch"
+
+    # French language for Hero
+    [languages.fr.params.hero.primary_button]
+      text = "Demander une démonstration"
+      url = "/demo"
+
+    [languages.fr.params.hero.secondary_button]
+      text = "En savoir plus"
+      url = "/about"
+    
+    # French language for CTA
+    [languages.fr.params.cta]
+      title = "Prêt à libérer le plein potentiel de votre équipe DevOps ?"
+      description = "Rejoignez les entreprises qui utilisent déjà NeuroKube pour réduire la charge cognitive de leurs équipes DevOps."
+
+    [languages.fr.params.cta.primary_button]
+      text = "Contactez-nous"
+      url = "/demo"
+      class = "bg-white text-neurokube-600 hover:bg-neurokube-200"
+
+#    [languages.fr.params.cta.secondary_button]
+#      text = "Demander une démonstration"
+#      url = "/demo"
+#      class = "border-white text-white hover:bg-neurokube-800"
+
+    [languages.fr.params.footer]
+      column_1_title = "FONCTIONNALITÉS"
+      column_2_title = "A PROPOS"
+      column_3_title = "LÉGAL"
+
+#    [languages.fr.params.header]
+#      [languages.fr.params.header.buttons]
+#        [languages.fr.params.header.buttons.signIn]
+#          text = "Connexion"
+#          url = "/fr/signin"
+#        [languages.fr.params.header.buttons.getStarted]
+#          text = "Commencer"
+#          url = "/fr/get-started"
+
+      [[languages.fr.menu.main]]
+        name = "Capacités"
+        url = "/fr/features"
+        weight = 1
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          megamenu = true
+          groups = [
+            { name = "Investigation & diagnostic", url = "/fr/features/ai-powered-incident-investigation/", items = [ { name = "Investigation d'incidents assistée par l'IA", url = "/fr/features/ai-powered-incident-investigation/" }, { name = "Assistance à l'analyse des causes racines", url = "/fr/features/root-cause-analysis-assistance/" } ] },
+            { name = "Contexte & intelligence plateforme", url = "/fr/features/multi-context-platform-intelligence/", items = [ { name = "Intelligence plateforme multi-contextes", url = "/fr/features/multi-context-platform-intelligence/" }, { name = "Contexte technique versionné", url = "/fr/features/versioned-technical-context/" } ] },
+            { name = "Remédiation & apprentissage", url = "/fr/features/ai-assisted-remediation/", items = [ { name = "Remédiation assistée par l'IA", url = "/fr/features/ai-assisted-remediation/" }, { name = "Apprentissage opérationnel continu", url = "/fr/features/continuous-operational-learning/" } ] },
+            { name = "Gouvernance & fiabilité", url = "/fr/features/human-in-the-loop-governance/", items = [ { name = "Gouvernance avec l'humain au cœur du processus", url = "/fr/features/human-in-the-loop-governance/" }, { name = "Processus de résolution éprouvé", url = "/fr/features/proven-resolution-process/" } ] }
+          ]
+
+      [[languages.fr.menu.main]]
+        name = "Offres"
+        url = "/fr/offers"
+        weight = 2
+      
+#      [[languages.fr.menu.main]]
+#        name = "Blog"
+#        url = "https://www.sokube.io/blog"
+#        weight = 3
+#        [languages.fr.menu.main.params]
+#          external = true
+
+      [[languages.fr.menu.main]]
+        name = "A propos de NeuroKube"
+        url = "/fr/about"
+        weight = 3
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          submenu = [
+            { name = "Notre mission", url = "/fr/about/#mission" },
+            { name = "Ce qui distingue NeuroKube", url = "/fr/about/#ce-qui-distingue-neurokube" },
+            { name = "Né d'un problème opérationnel récurrent", url = "/fr/about/#ne-d-un-problem-operationnel-recurrent" },
+            { name = "Intelligence organisationnelle", url = "/fr/about/#intelligence-organisationnelle" },
+            { name = "Une solution SoKube", url = "/fr/about/#une-solution-sokube" }
+          ]
+
+      [[languages.fr.menu.main]]
+        name = "Contact"
+        url = "/fr/contact"
+        weight = 4
+
+      [[languages.fr.menu.footer_column_1]]
+        name = "Investigation d'incidents"
+        url = "/fr/features/ai-powered-incident-investigation/"
+        weight = 1
+      [[languages.fr.menu.footer_column_1]]
+        name = "Analyse des causes racines"
+        url = "/fr/features/root-cause-analysis-assistance/"
+        weight = 2
+      [[languages.fr.menu.footer_column_1]]
+        name = "Remédiation"
+        url = "/fr/features/ai-assisted-remediation/"
+        weight = 3
+      
+      [[languages.fr.menu.footer_column_2]]
+        name = "Mission"
+        url = "/fr/about/#mission"
+        weight = 1
+      [[languages.fr.menu.footer_column_2]]
+        name = "Démo"
+        url = "/fr/demo"
+        weight = 2
+      [[languages.fr.menu.footer_column_2]]
+        name = "Contact"
+        url = "/fr/contact"
+        weight = 3
+
+      [[languages.fr.menu.footer_column_3]]
+        name = "CGU"
+        url = "/fr/cgu"
+        weight = 1
+      [[languages.fr.menu.footer_column_3]]
+        name = "Politique en matière de cookies"
+        url = "/fr/cookies"
+        weight = 2
+      [[languages.fr.menu.footer_column_3]]
+        name = "Politique de confidentialité des données"
+        url = "/fr/privacy"
+        weight = 3

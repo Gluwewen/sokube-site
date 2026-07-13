@@ -1,0 +1,27 @@
+
+# Specs and docs (not needed for build)
+.spec/
+README.md
+*.md
+
+# Git and IDE
+.git/
+.gitignore
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts & deps — rebuilt inside the image, must not leak from host
+site/node_modules/
+site/public/
+site/resources/
+.hugo_build.lock
+hugo_stats.json
+site/themes/hugo-saasify-theme/node_modules/
+site/themes/hugo-saasify-theme/exampleSite/
+
+# Not needed in the build context
+Dockerfile

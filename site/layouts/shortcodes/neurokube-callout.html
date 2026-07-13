@@ -1,0 +1,56 @@
+{{/* NeuroKube Callout Shortcode (site/layouts/shortcodes/neurokube-callout.html)
+     Bandeau à fond neutre (gris clair / neurokube-800 en sombre), pour mettre en
+     avant un message secondaire (ex: renvoi vers un site externe) avec un aspect
+     légèrement différent des sections standards, sans couleur de marque flashy.
+     À ne pas confondre avec neurokube-highlight-section.html (bloc hero + carte,
+     ex: "Our mission" en haut de la page About) — nom volontairement différent. */}}
+
+{{ $id := .Get "id" }}
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
+
+{{ $primaryText := .Get "primaryButtonText" }}
+{{ $primaryUrl := .Get "primaryButtonUrl" }}
+{{ $primaryExternal := .Get "primaryButtonExternal" | default "false" }}
+
+{{ $secondaryText := .Get "secondaryButtonText" }}
+{{ $secondaryUrl := .Get "secondaryButtonUrl" }}
+{{ $secondaryExternal := .Get "secondaryButtonExternal" | default "false" }}
+
+<section {{ with $id }}id="{{ . }}"{{ end }} class="bg-gray-50 dark:bg-neurokube-800 -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
+  <div class="container text-center max-w-3xl mx-auto">
+
+    {{ with $title }}
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+      {{ . }}
+    </h2>
+    {{ end }}
+
+    {{ with $description }}
+    <p class="text-xl text-gray-600 dark:text-neurokube-200 mb-10">
+      {{ . }}
+    </p>
+    {{ end }}
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
+      {{ with $primaryText }}
+      <a href="{{ $primaryUrl }}"
+         {{ if eq $primaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
+         class="btn text-center bg-neurokube-600 text-white hover:bg-neurokube-700">
+        {{ . }}
+      </a>
+      {{ end }}
+
+      {{ with $secondaryText }}
+      <a href="{{ $secondaryUrl }}"
+         {{ if eq $secondaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
+         class="btn text-center border-2 bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400">
+        {{ . }}
+      </a>
+      {{ end }}
+
+    </div>
+
+  </div>
+</section>

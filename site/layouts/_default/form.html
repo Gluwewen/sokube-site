@@ -1,0 +1,19 @@
+{{ define "main" }}
+<section class="section">
+    <div class="container">
+        <div class="max-w-4xl mx-auto text-center mb-16">
+            <h1 class="text-5xl font-bold mb-6">
+                {{ .Title }}
+            </h1>
+            {{ with .Description }}
+            <p class="text-xl text-gray-600">
+                {{ . }}
+            </p>
+            {{ end }}
+        </div>
+        <div class="prose max-w-none">
+            {{ .Content }}
+        </div>
+    </div>
+</section>
+{{ end }}

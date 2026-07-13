@@ -1,0 +1,17 @@
+{{ $cols := .Get "cols" | default "2" }}
+
+{{ $gridClass := "md:grid-cols-2" }}
+
+{{ if eq $cols "1" }}
+  {{ $gridClass = "md:grid-cols-1" }}
+{{ else if eq $cols "2" }}
+  {{ $gridClass = "md:grid-cols-2" }}
+{{ else if eq $cols "3" }}
+  {{ $gridClass = "md:grid-cols-3" }}
+{{ else if eq $cols "4" }}
+  {{ $gridClass = "md:grid-cols-4" }}
+{{ end }}
+
+<div class="grid {{ $gridClass }} {{ site.Params.cards.grid_gap | default "gap-8" }} my-16">
+    {{ .Inner }}
+</div>

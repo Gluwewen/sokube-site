@@ -1,0 +1,22 @@
+{{ $style := site.Params.forms.style | default dict }}
+
+{{ $input := $style.input | default "w-full rounded-xl border border-gray-300 px-4 py-3" }}
+{{ $labelStyle := $style.label | default "block text-sm font-medium mb-2 text-gray-700" }}
+
+{{ $label := .Get "label" }}
+{{ $name := .Get "name" }}
+{{ $type := .Get "type" | default "text" }}
+{{ $required := .Get "required" }}
+
+<div>
+    <label class="{{ $labelStyle }}">
+        {{ $label }}
+    </label>
+
+    <input
+        type="{{ $type }}"
+        name="{{ $name }}"
+        {{ if eq $required "true" }}required{{ end }}
+        class="{{ $input }}"
+    >
+</div>

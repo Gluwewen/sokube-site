@@ -1,0 +1,30 @@
+# Hugo
+site/public/
+site/resources/_gen/
+.hugo_build.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Optional: env or secrets if you add them later
+# .env
+# .env.local
+
+node_modules/
+public/
+resources/
+.hugo_build.lock
+hugo_stats.json
+site/themes/hugo-saasify-theme/node_modules/
+site/themes/hugo-saasify-theme/exampleSite/

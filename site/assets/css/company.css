@@ -1,0 +1,68 @@
+.company-page h1 {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.company-page h2 {
+    margin-top: 5rem;
+    margin-bottom: 1.5rem;
+    scroll-margin-top: 6rem;
+}
+
+.company-page h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.company-page p {
+    line-height: 1.9;
+}
+
+.company-page ul {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.company-page li {
+    margin-bottom: 0.5rem;
+}
+
+@layer components {
+
+  .company-page {
+    @apply py-12 lg:py-20;
+  }
+
+  .company-page .prose {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .company-page h1 {
+    @apply text-5xl lg:text-6xl text-center mb-12;
+  }
+
+  .company-page h2 {
+    @apply text-3xl lg:text-4xl mt-20 mb-8;
+  }
+
+  .company-page h3 {
+    @apply text-xl lg:text-2xl mt-10 mb-4;
+  }
+
+  .company-page p {
+    @apply text-lg leading-8;
+  }
+
+  .company-page ul {
+    @apply my-8;
+  }
+
+  .company-page li {
+    @apply mb-3;
+  }
+
+  .company-page hr {
+    @apply my-16 border-gray-200;
+  }
+}

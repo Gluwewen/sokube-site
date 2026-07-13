@@ -1,0 +1,72 @@
+{{ $headline := .Get "headline" }}
+{{ $sub_headline := .Get "sub_headline" }}
+{{ $hero_image := .Get "hero_image" }}
+{{ $hero_image_dark := replace $hero_image "-light" "-dark" }}
+{{ $background_image := .Get "background_image" }}
+{{ $gradient_from := .Get "gradient-from" }}
+{{ $gradient_to := .Get "gradient-to" }}
+{{ $gradient_angle := .Get "gradient-angle" | default "180" }}
+{{ $background := .Get "background" | default site.Params.hero.background }}
+{{ $style := site.Params.hero.style | default dict }}
+{{ $titleColor := $style.title | default "text-neurokube-900" }}
+{{ $descriptionColor := $style.description | default "text-gray-600" }}
+{{ $decoration1 := $style.decoration_1 | default "bg-neurokube-100" }}
+{{ $decoration2 := $style.decoration_2 | default "bg-neurokube-200" }}
+
+{{ $primaryBtn := site.Params.hero.primary_button }}
+{{ $secondaryBtn := site.Params.hero.secondary_button }}
+
+{{ $primaryBackground := $primaryBtn.background | default "bg-neurokube-600" }}
+{{ $primaryTextColor := $primaryBtn.text_color | default "text-white" }}
+{{ $primaryHover := $primaryBtn.hover | default "hover:bg-neurokube-700" }}
+
+{{ $secondaryBackground := $secondaryBtn.background | default "bg-white" }}
+{{ $secondaryTextColor := $secondaryBtn.text_color | default "text-neurokube-600" }}
+{{ $secondaryHover := $secondaryBtn.hover | default "hover:bg-neurokube-100" }}
+{{ $secondaryBorder := $secondaryBtn.border | default "border-neurokube-600" }}
+
+<section class="relative overflow-hidden {{ $background }}">
+    {{ if $background_image }}
+    <div class="absolute inset-0">
+        <img src="{{ $background_image | relURL }}" alt="Background" class="w-full h-full object-cover">
+    </div>
+    {{ end }}
+    <div class="container pt-16 pb-20 md:pt-24 md:pb-28">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <h1 class="text-4xl md:text-4xl lg:text-4xl font-bold leading-tight {{ $titleColor }}">
+                    {{ $headline | safeHTML }}
+                </h1>
+                <p class="text-xl {{ $descriptionColor }}">
+                    {{ $sub_headline | safeHTML }}
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    {{ with $primaryBtn }}
+                    <a href="{{ .url }}"
+                    class="btn text-center {{ $primaryBackground }} {{ $primaryTextColor }} {{ $primaryHover }}">
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+
+                    {{ with $secondaryBtn }}
+                    <a href="{{ .url }}"
+                    class="btn text-center border-2 {{ $secondaryBackground }} {{ $secondaryTextColor }} {{ $secondaryHover }} {{ $secondaryBorder }}">
+                        {{ .text }}
+                    </a>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="relative">
+                {{ if $hero_image }}
+                <div class="relative z-10">
+                    <img src="{{ $hero_image | relURL }}" alt="Hero Image" class="rounded-xl shadow-elevation dark:hidden">
+                    <img src="{{ $hero_image_dark | relURL }}" alt="Hero Image" class="rounded-xl shadow-elevation hidden dark:block">
+                </div>
+                {{ end }}
+                <!-- Background decoration -->
+                <div class="absolute -top-20 -right-20 w-64 h-64 {{ $decoration1 }} rounded-full filter blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 {{ $decoration2 }} rounded-full filter blur-3xl opacity-50"></div>
+            </div>
+        </div>
+    </div>
+</section>

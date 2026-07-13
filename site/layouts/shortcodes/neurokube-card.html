@@ -1,0 +1,33 @@
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $style := index site.Params.cards $paletteName }}
+{{ if not $style }}
+    {{ errorf "neurokube-card: palette %q introuvable dans [params.cards] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $style = site.Params.cards.default }}
+{{ end }}
+
+{{ $label := .Get "label" }}
+{{ $title := .Get "title" }}
+
+<div
+    class="
+        card-neurokube
+        {{ $style.background }}
+        {{ $style.border }}
+        {{ $style.hover_border }}
+    "
+>
+
+    {{ with $label }}
+        <div class="card-label {{ $style.label }}">
+            {{ . }}
+        </div>
+    {{ end }}
+
+    <h3 class="{{ $style.title }}">
+        {{ $title }}
+    </h3>
+
+    <div class="{{ $style.text }} {{ $style.marker }}">
+        {{ .Inner | $.Page.RenderString }}
+    </div>
+</div>
