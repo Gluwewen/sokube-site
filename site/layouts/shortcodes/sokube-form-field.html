@@ -7,10 +7,11 @@
 {{ $name := .Get "name" }}
 {{ $type := .Get "type" | default "text" }}
 {{ $required := .Get "required" }}
+{{ $requiredColor := .Get "requiredColor" | default "kube-600" }}
 
 <div>
     <label class="{{ $labelStyle }}">
-        {{ $label }}
+        {{ $label }}{{ if eq $required "true" }}<sup class="text-{{ $requiredColor }}">*</sup>{{ end }}
     </label>
 
     <input

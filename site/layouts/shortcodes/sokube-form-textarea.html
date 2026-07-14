@@ -3,15 +3,19 @@
 {{ $input := $style.input | default "w-full rounded-xl border border-gray-300 px-4 py-3" }}
 {{ $labelStyle := $style.label | default "block text-sm font-medium mb-2 text-gray-700" }}
 
+{{ $required := .Get "required" }}
+{{ $requiredColor := .Get "requiredColor" | default "kube-600" }}
+
 <div>
 
     <label class="{{ $labelStyle }}">
-        {{ .Get "label" }}
+        {{ .Get "label" }}{{ if eq $required "true" }}<sup class="text-{{ $requiredColor }}">*</sup>{{ end }}
     </label>
 
     <textarea
         name="{{ .Get "name" }}"
         rows="{{ .Get "rows" | default "5" }}"
+        {{ if eq $required "true" }}required{{ end }}
         class="{{ $input }}"
         placeholder="{{ .Get "placeholder" }}"
     ></textarea>

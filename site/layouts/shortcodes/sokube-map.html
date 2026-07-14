@@ -1,0 +1,19 @@
+{{ $address := .Get "address" | default "Rue Adrien-Lachenal 20, 1207 Genève, Suisse" }}
+{{ $zoom := .Get "zoom" | default "15" }}
+{{ $height := .Get "height" | default "400" }}
+{{ $title := .Get "title" | default "SoKube" }}
+
+{{ $query := replace $address " " "+" }}
+
+<div class="w-screen overflow-hidden shadow-sm mt-12 -mb-16 md:-mb-24" style="height: {{ $height }}px; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);">
+    <iframe
+        src="https://maps.google.com/maps?q={{ $query }}&z={{ $zoom }}&output=embed"
+        title="{{ $title }}"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+    ></iframe>
+</div>

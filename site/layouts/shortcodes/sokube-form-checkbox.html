@@ -1,0 +1,19 @@
+{{ $style := site.Params.forms.style | default dict }}
+{{ $labelStyle := $style.checkboxLabel | default "text-sm text-gray-600" }}
+
+{{ $name := .Get "name" | default "consent" }}
+{{ $required := .Get "required" }}
+
+<div class="flex items-start gap-3 mt-4">
+    <input
+        type="checkbox"
+        id="{{ $name }}"
+        name="{{ $name }}"
+        value="true"
+        {{ if eq $required "true" }}required{{ end }}
+        class="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+    >
+    <label for="{{ $name }}" class="{{ $labelStyle }}">
+        {{ .Inner | markdownify }}
+    </label>
+</div>

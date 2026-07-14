@@ -125,10 +125,10 @@ enableGitInfo = true
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "SoNative DevOps", url = "/offers/sonative-devops.md" },
-        { name = "SoNative Cloud", url = "/offers/sonative-cloud.md" },
-        { name = "SoNative Agile", url = "/offers/sonative-agile.md" },
-        { name = "SoNative App", url = "/offers/sonative-app.md" },
+        { name = "SoNative DevOps", url = "/offers/sonative-devops" },
+        { name = "SoNative Cloud", url = "/offers/sonative-cloud" },
+        { name = "SoNative Agile", url = "/offers/sonative-agile" },
+        { name = "SoNative App", url = "/offers/sonative-app" },
       ]
   [[menu.main]]
     name = "Services"
@@ -136,11 +136,11 @@ enableGitInfo = true
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "Assessment and Consulting", url = "/services/assessment-and-consulting.md" },
-        { name = "Realization of missions", url = "/services/realization-of-missions.md" },
-        { name = "Training Center by SoKube", url = "/services/training.md" },
-        { name = "Migration service", url = "/services/migration.md" },
-        { name = "Strategic & Technological Watch", url = "/services/strategic-watch.md" },
+        { name = "Assessment and Consulting", url = "/services/assessment-consultancy" },
+        { name = "Realization of missions", url = "/services/realization-of-missions" },
+        { name = "Training Center by SoKube", url = "/services/training" },
+        { name = "Migration service", url = "/services/migration" },
+        { name = "Strategic & Technological Watch", url = "/services/strategic-watch" },
       ]
   [[menu.main]]
     name = "Expertises"
@@ -148,40 +148,47 @@ enableGitInfo = true
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "Your DevSecOps Experts", url = "/expertises/devsecops.md" },
-        { name = "Your Kubernetes Experts", url = "/expertises/kubernetes.md" },
-        { name = "Your Cloud Native Applications Experts", url = "/expertises/cloud-native-apps.md" },
-        { name = "Your FinOps Experts", url = "/expertises/finops.md" },
+        { name = "Your DevSecOps Experts", url = "/expertises/devsecops" },
+        { name = "Your Kubernetes Experts", url = "/expertises/kubernetes" },
+        { name = "Your Cloud Native Applications Experts", url = "/expertises/cloud-native-apps" },
+        { name = "Your FinOps Experts", url = "/expertises/finops" },
       ]
   [[menu.main]]
     name = "Trainings"
-    url = "/training.md"
     weight = 4
   [[menu.main]]
     name = "About"
-    url = "/about/"
     weight = 5
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "Join us", url = "/hiring.md" },
-        { name = "Our partners", url = "/partners.md" },
+        { name = "Join us", url = "/hiring" },
+        { name = "Our partners", url = "/partners" },
       ]
   [[menu.main]]
     name = "Resources"
-    url = "/resources.md"
     weight = 6
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "FAQ", url = "/faq.md" },
-        { name = "Blog", url = "/blog.md" },
-        { name = "Sons Of KUBErnetes", url = "/sons-of-kubernetes.md" },
+        { name = "FAQ", url = "/faq" },
+        { name = "Blog", url = "/blog" },
+        { name = "Sons Of KUBErnetes", url = "/sons-of-kubernetes" },
       ]
   [[menu.main]]
     name = "Contact us"
-    url = "/contact.md"
+    url = "/contact/"
     weight = 7
+  [[menu.main]]
+    name = "Old"
+    weight = 8
+    [menu.main.params]
+      has_submenu = true
+      submenu = [
+        { name = "About", url = "/about" },
+        { name = "Offers", url = "/offers" },
+        { name = "Feature A", url = "/features/ai-assisted-remediation" },
+      ]
 
   # Footer Column 1 Menu
   [[menu.footer_column_1]]
@@ -453,10 +460,10 @@ enableGitInfo = true
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "SoNative DevOps", url = "/fr/offers/sonative-devops.md" },
-            { name = "SoNative Cloud", url = "/fr/offers/sonative-cloud.md" },
-            { name = "SoNative Agile", url = "/fr/offers/sonative-agile.md" },
-            { name = "SoNative App", url = "/fr/offers/sonative-app.md" },
+            { name = "SoNative DevOps", url = "/fr/offers/sonative-devops" },
+            { name = "SoNative Cloud", url = "/fr/offers/sonative-cloud" },
+            { name = "SoNative Agile", url = "/fr/offers/sonative-agile" },
+            { name = "SoNative App", url = "/fr/offers/sonative-app" },
           ]
 
       [[languages.fr.menu.main]]
@@ -465,11 +472,11 @@ enableGitInfo = true
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "Assessment et Conseils", url = "/fr/services/assessment-and-consulting.md" },
-            { name = "Réalisation de missions", url = "/fr/services/realization-of-missions.md" },
-            { name = "Centre de Formations by SoKube", url = "/fr/services/training.md" },
-            { name = "Service de migration", url = "/fr/services/migration.md" },
-            { name = "Veille stratégique et technologique", url = "/fr/services/strategic-watch.md" },
+            { name = "Assessment et Conseils", url = "/fr/services/assessment-consultancy" },
+            { name = "Réalisation de missions", url = "/fr/services/realization-of-missions" },
+            { name = "Centre de Formations by SoKube", url = "/fr/services/training" },
+            { name = "Service de migration", url = "/fr/services/migration" },
+            { name = "Veille stratégique et technologique", url = "/fr/services/strategic-watch" },
           ]
       [[languages.fr.menu.main]]
         name = "Expertises"
@@ -477,15 +484,15 @@ enableGitInfo = true
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "Vos Experts DevSecOps", url = "/fr/expertises/devsecops.md" },
-            { name = "Vos Experts Kubernetes", url = "/fr/expertises/kubernetes.md" },
-            { name = "Vos Experts Cloud Native Applications", url = "/fr/expertises/cloud-native-apps.md" },
-            { name = "Vos Experts FinOps", url = "/fr/expertises/finops.md" },
+            { name = "Vos Experts DevSecOps", url = "/fr/expertises/devsecops" },
+            { name = "Vos Experts Kubernetes", url = "/fr/expertises/kubernetes" },
+            { name = "Vos Experts Cloud Native Applications", url = "/fr/expertises/cloud-native-apps" },
+            { name = "Vos Experts FinOps", url = "/fr/expertises/finops" },
           ]
 
       [[languages.fr.menu.main]]
         name = "Formations"
-        url = "/fr/training.md"
+        url = "/fr/training/"
         weight = 4
 
       [[languages.fr.menu.main]]
@@ -494,8 +501,8 @@ enableGitInfo = true
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "Nous rejoindre", url = "/fr/hiring.md" },
-            { name = "Nos Partenaires", url = "/fr/partners.md" },
+            { name = "Nous rejoindre", url = "/fr/hiring" },
+            { name = "Nos Partenaires", url = "/fr/partners" },
           ]
       
       [[languages.fr.menu.main]]
@@ -504,15 +511,26 @@ enableGitInfo = true
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "FAQ", url = "/fr/faq.md" },
-            { name = "Blog", url = "/fr/blog.md" },
-            { name = "Sons Of KUBErnetes", url = "/fr/sons-of-kubernetes.md" },
+            { name = "FAQ", url = "/fr/faq" },
+            { name = "Blog", url = "/fr/blog" },
+            { name = "Sons Of KUBErnetes", url = "/fr/sons-of-kubernetes" },
           ]
       
       [[languages.fr.menu.main]]
         name = "Nous contacter"
-        url = "/contact.md"
+        url = "/fr/contact/"
         weight = 7
+
+      [[languages.fr.menu.main]]
+        name = "Old"
+        weight = 8
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          submenu = [
+            { name = "About", url = "/fr/about" },
+            { name = "Offers", url = "/fr/offers" },
+            { name = "Feature A", url = "/fr/features/ai-assisted-remediation" },
+          ]
 
       [[languages.fr.menu.footer_column_1]]
         name = "Investigation d'incidents"
