@@ -4,7 +4,7 @@ description: "Choose the perfect plan for your needs"
 layout: "pricing"
 ---
 
-{{< neurokube-pricing-table >}}
+{{< sokube-pricing-table >}}
 {
     "title": "Designed for teams like yours",
     "description": "At SoKube, we believe the best way to create lasting value is to augment human expertise rather than replace it. By combining platform engineering knowledge, operational intelligence, and AI-driven collaboration, we help teams investigate faster, share knowledge more effectively, and operate complex cloud-native platforms with confidence.",
@@ -93,7 +93,7 @@ layout: "pricing"
         }
     ]
 }
-{{< /neurokube-pricing-table >}}
+{{< /sokube-pricing-table >}}
 
 <div class="mt-16"></div>
 

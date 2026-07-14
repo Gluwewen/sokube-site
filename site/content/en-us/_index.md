@@ -26,7 +26,7 @@ testimonials:
     quote: "This theme made it easy to create a professional SaaS website. The build times are incredibly fast, and the code is clean and maintainable."
 ---
 
-{{< neurokube-hero
+{{< sokube-hero
     headline="Revolve all your kubernetes incidents in an enterprise environment"
     sub_headline="The AI copilot for your Kubernetes and DevOps platform. It handles the contextual work—from the first signal to the verified fix—while you remain in control of every decision along the way."
     primary_button_text="Request a demo"
@@ -36,16 +36,16 @@ testimonials:
     hero_image="/images/company/neurokube-usecase1-light.webp"
 >}}
 
-{{< neurokube-client-logos animate="true" >}}
+{{< sokube-client-logos animate="true" >}}
 
-{{< neurokube-features-section 
+{{< sokube-features-section 
     title="Modern platforms generate more context than teams can effectively process"
     description="Kubernetes platforms produce operational data from clusters, Git repositories, Infrastructure as Code, observability tools, and internal documentation. NeuroKube turns this fragmented information into operational intelligence, helping teams investigate faster, reduce escalation bottlenecks, and spread expertise across the organization."
 >}}
 
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="Today"
     title="Operating modern platforms"
   >}}
@@ -54,9 +54,9 @@ testimonials:
 - Manual investigations
 - Dependency on escalation processes
 
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="With NeuroKube"
     title="Operational intelligence at scale"
   >}}
@@ -65,11 +65,11 @@ testimonials:
 - Faster decision-making
 - Knowledge shared across the organization
 - Automation under human control
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
   
-{{< /neurokube-card-grid >}}
+{{< /sokube-card-grid >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="AI-Powered Incident Investigation"
     description="Speed up incident resolution through real-time correlation of telemetry, platform context, and operational knowledge."
     badge="Investigation"
@@ -82,7 +82,7 @@ testimonials:
     imagePosition="right"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Multi-Context Platform Intelligence"
     description="Get a complete view of your platform by connecting Kubernetes, GitOps, Infrastructure as Code, and operational knowledge."
     badge="Intelligence"
@@ -95,7 +95,7 @@ testimonials:
     imagePosition="left"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Root Cause Analysis Assistance"
     description="Go beyond symptoms and identify likely causes through AI-assisted contextual reasoning."
     badge="Analysis"
@@ -108,7 +108,7 @@ testimonials:
     imagePosition="right"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="AI-Assisted Remediation"
     description="Get actionable remediation recommendations while engineers keep full control."
     badge="Remediation"
@@ -121,7 +121,7 @@ testimonials:
     imagePosition="left"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Continuous Operational Learning"
     description="Turn every incident into reusable organizational knowledge."
     badge="Learning"
@@ -134,7 +134,7 @@ testimonials:
     imagePosition="right"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Human-in-the-Loop Governance"
     description="Ensure transparency, traceability, and human oversight for every recommendation and every action."
     badge="Governance"
@@ -147,7 +147,7 @@ testimonials:
     imagePosition="left"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Versioned Technical Context"
     description="Ground every recommendation in your platform's exact version, with a documentation and technical context that stays always up to date."
     badge="Versioned context"
@@ -160,7 +160,7 @@ testimonials:
     imagePosition="right"
 >}}
 
-{{< neurokube-feature
+{{< sokube-feature
     title="Proven Resolution Process"
     description="Follow a single thread, from alert to verification, modeled on your company's own practices and fully traceable."
     badge="Proven process"
@@ -173,90 +173,90 @@ testimonials:
     imagePosition="left"
 >}}
 
-{{< /neurokube-features-section >}}
+{{< /sokube-features-section >}}
 
-{{< neurokube-cards-section
+{{< sokube-cards-section
       id="agentic-architecture"
       title="An agentic architecture, not just another model call"
       description="Behind the assistant is real engineering: orchestration, specialization, and verification of the AI's work at every step."
 >}}
 
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="MULTI-CONTEXT"
     title="Three sources of context, brought together"
   >}}
   Runtime and Kubernetes, Git and code, documentation and knowledge base: brought together in a single reasoning process.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="MULTI-AGENT ORCHESTRATOR"
     title="Specialized agents, not a single model"
   >}}
   An investigation agent, a diagnostic agent, and a remediation agent, under human supervision and validation at every step.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="OUTPUT EVALUATION"
     title="Quality that's measured, not assumed"
   >}}
   Every response is checked against a reference answer by an LLM judge, using a set of real-world scenarios encountered by SoKube's DevOps experts at their clients. This framework validates that our optimizations don't introduce regressions, and lets us objectively compare the different LLMs the agents can run on.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="A KNOWLEDGE BASE THAT KEEPS EVOLVING"
     title="Every incident sharpens the platform"
   >}}
   Captured investigations and remediations continuously enrich future diagnostics and remediations.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-{{< /neurokube-card-grid >}}
-{{< /neurokube-cards-section >}}
+{{< /sokube-card-grid >}}
+{{< /sokube-cards-section >}}
 
-{{< neurokube-cards-section 
+{{< sokube-cards-section 
       title="Operational results"
       description="Orders of magnitude observed by NeuroKube across customer deployments. They depend on each organization's context and are not a contractual commitment."
 >}}
   
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="↓ MTTR"
     title="Resolution time cut by 3x to 10x"
   >}}
   Common incidents go from tens of minutes down to a few minutes, through the correlation of telemetry, infrastructure context, and organizational knowledge.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="↓ Cognitive load"
     title="Up to 20% to 50% more autonomous resolution"
   >}}
   Development and support teams resolve, on their own, what they used to escalate, with less dependency on the same experts.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="↑ Knowledge reuse"
     title="Shared organizational knowledge"
   >}}
   Capture operational expertise and make it reusable across teams and incidents.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-  {{< neurokube-card
+  {{< sokube-card
     label="360 oversight"
     title="Human-governed automation"
   >}}
   Speed up operations while keeping visibility, control, and compliance.
-  {{< /neurokube-card >}}
+  {{< /sokube-card >}}
 
-{{< /neurokube-card-grid >}}
-{{< /neurokube-cards-section >}}
+{{< /sokube-card-grid >}}
+{{< /sokube-cards-section >}}
 
-{{< neurokube-testimonials 
+{{< sokube-testimonials 
     title="Trusted by modern DevOps teams"
     description="See how Platform Engineering teams use NeuroKube to reduce cognitive load and speed up incident resolution."
     animate="true"
     background-color="#f1f5f9"
 >}}
 
-{{< neurokube-cta >}}
+{{< sokube-cta >}}

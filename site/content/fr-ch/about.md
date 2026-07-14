@@ -4,24 +4,24 @@ layout: "company"
 description: "L'assistant de plateforme propulsé par l'IA pour Kubernetes et les opérations cloud-native, gouverné par l'humain à chaque étape."
 ---
 
-{{< neurokube-highlight-section
+{{< sokube-highlight-section
     id="mission"
     title="Construire l'avenir de l'assistance aux plateformes par l'IA"
     subtitle="Moins de chasse au contexte. Plus de place pour décider et agir."
     card_title="Notre mission"
     background="bg-gradient-to-b from-neurokube-100 via-neurokube-100 to-white dark:from-neurokube-900 dark:via-neurokube-900 dark:to-neurokube-900"
 >}}
-NeuroKube a été créé pour rendre l'expertise opérationnelle scalable. Les plateformes modernes génèrent davantage de signaux, de dépendances et de complexité qu'un ingénieur ne peut raisonnablement traiter seul. En combinant l'IA agentique avec les connaissances des équipes plateforme, NeuroKube transforme des données opérationnelles fragmentées en intelligence exploitable. Notre mission est d'aider les organisations à investiguer plus rapidement, à apprendre en continu et à exploiter des systèmes complexes avec davantage de confiance, tout en gardant la décision entre les mains des équipes à chaque étape.
-{{< /neurokube-highlight-section >}}
+soKube a été créé pour rendre l'expertise opérationnelle scalable. Les plateformes modernes génèrent davantage de signaux, de dépendances et de complexité qu'un ingénieur ne peut raisonnablement traiter seul. En combinant l'IA agentique avec les connaissances des équipes plateforme, NeuroKube transforme des données opérationnelles fragmentées en intelligence exploitable. Notre mission est d'aider les organisations à investiguer plus rapidement, à apprendre en continu et à exploiter des systèmes complexes avec davantage de confiance, tout en gardant la décision entre les mains des équipes à chaque étape.
+{{< /sokube-highlight-section >}}
 
-{{< neurokube-cards-section
+{{< sokube-cards-section
     id="ne-d-un-problem-operationnel-recurrent"
     title="Né d'un problème opérationnel récurrent"
     description="Kubernetes n'est plus un simple orchestrateur. C'est devenu une plateforme stratégique à part entière, faite de couches qui s'empilent, réseau, sécurité, configuration, operators, workloads, stockage. Chacune ajoute de la surface à maîtriser et un point de défaillance de plus. À mesure que les clusters grandissent, les connaissances opérationnelles se dispersent entre les tableaux de bord, les logs, les dépôts Git, l'Infrastructure as Code et la documentation interne. Lorsqu'un incident survient, les ingénieurs passent souvent plus de temps à rassembler l'information qu'à résoudre le problème."
 >}}
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PROBLÈME 01"
 title="Signaux éparpillés"
 palette="kube"
@@ -29,9 +29,9 @@ palette="kube"
 <p>
     Métriques, logs, état Kubernetes, historique Git : sans lien entre eux, tout corréler à la main prend du temps.
 </p>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PROBLÈME 02"
 title="Investigation manuelle"
 palette="kube"
@@ -39,9 +39,9 @@ palette="kube"
 <p>
     kubectl, logs, manifests, runbooks : à chaque incident, le parcours d'investigation est réinventé de zéro.
 </p>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PROBLÈME 03"
 title="Escalades en cascade"
 palette="kube"
@@ -49,9 +49,9 @@ palette="kube"
 <p>
     Faute de contexte aux niveaux inférieurs, chaque problème complexe finit par remonter jusqu'aux mêmes experts, qui deviennent des goulots d'étranglement.
 </p>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PROBLÈME 04"
 title="Expertise enfermée"
 palette="kube"
@@ -59,20 +59,20 @@ palette="kube"
 <p>
     La connaissance reste dans quelques têtes. Rien ne se capitalise, et le turnover coûte cher.
 </p>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< /neurokube-card-grid >}}
-{{< /neurokube-cards-section >}}
+{{< /sokube-card-grid >}}
+{{< /sokube-cards-section >}}
 
-{{< neurokube-cards-section
+{{< sokube-cards-section
     id="ce-qui-distingue-neurokube"
     title="Ce qui distingue NeuroKube"
     description="NeuroKube n'a pas été conçu comme un simple chatbot destiné aux équipes d'infrastructure. Il a été pensé comme un système d'intelligence opérationnelle capable de comprendre le contexte, de guider les investigations et d'aider les ingénieurs à prendre de meilleures décisions tout au long du cycle de vie de la plateforme."
 >}}
 
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PRINCIPE 01"
 title="Intelligence multi-contextes"
 >}}
@@ -87,9 +87,9 @@ title="Intelligence multi-contextes"
     <li>Infrastructure as Code</li>
     <li>Connaissances internes</li>
 </ul>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PRINCIPE 02"
 title="Opérations de bout en bout"
 >}}
@@ -103,9 +103,9 @@ title="Opérations de bout en bout"
     <li>Remédiation et Pull Request</li>
     <li>Vérification</li>
 </ul>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PRINCIPE 03"
 title="L'humain au cœur du processus"
 >}}
@@ -120,9 +120,9 @@ title="L'humain au cœur du processus"
     <li>Workflows collaboratifs</li>
     <li>Sécurité avant tout</li>
 </ul>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="PRINCIPE 04"
 title="Apprentissage continu"
 >}}
@@ -136,20 +136,20 @@ title="Apprentissage continu"
     <li>Bonnes pratiques</li>
     <li>Intelligence collective</li>
 </ul>
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< /neurokube-card-grid >}}
-{{< /neurokube-cards-section >}}
+{{< /sokube-card-grid >}}
+{{< /sokube-cards-section >}}
 
-{{< neurokube-cards-section
+{{< sokube-cards-section
     id="intelligence-organisationnelle"
     title="Des opérations Kubernetes à l'intelligence organisationnelle"
     description="NeuroKube commence là où la complexité opérationnelle est aujourd'hui la plus forte : les plateformes cloud-native modernes. Mais Kubernetes n'est qu'un point de départ. L'architecture agentique qui propulse NeuroKube est conçue pour évoluer au-delà de l'infrastructure et devenir une couche d'intelligence collaborative pour les opérations techniques comme métier. Les défis d'infrastructure d'aujourd'hui façonnent les organisations intelligentes de demain. NeuroKube est conçu pour accompagner cette évolution."
 >}}
 
-{{< neurokube-card-grid cols="2" >}}
+{{< sokube-card-grid cols="2" >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="Aujourd'hui"
 title="Excellence opérationnelle pour les équipes plateforme"
 palette="hr"
@@ -158,9 +158,9 @@ palette="hr"
 - Investigation d'incidents
 - Remédiation opérationnelle
 - Gestion des connaissances plateforme
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< neurokube-card
+{{< sokube-card
 label="Demain"
 title="Une intelligence agentique à l'échelle de l'organisation"
 palette="hr"
@@ -171,12 +171,12 @@ palette="hr"
 - Gestion des connaissances
 - Support client
 - Processus métier
-{{< /neurokube-card >}}
+{{< /sokube-card >}}
 
-{{< /neurokube-card-grid >}}
-{{< /neurokube-cards-section >}}
+{{< /sokube-card-grid >}}
+{{< /sokube-cards-section >}}
 
-{{< neurokube-callout
+{{< sokube-callout
     id="une-solution-sokube"
     title="Une solution SoKube, née du terrain"
     description="NeuroKube a été conçu et développé par SoKube, en s'appuyant sur les retours d'expérience concrets de ses experts DevOps au contact quotidien des plateformes de ses clients — et en suivant une philosophie DevOps tout au long de son propre processus de réalisation."
@@ -188,7 +188,7 @@ palette="hr"
     secondaryButtonExternal="true"
 >}}
 
-{{< neurokube-hero
+{{< sokube-hero
     headline="Votre équipe DevOps augmentée par l'IA"
     sub_headline="NeuroKube est l'assistant de plateforme propulsé par l'IA pour Kubernetes et les opérations cloud-native. Investiguez les incidents plus rapidement, comprenez instantanément le contexte de votre plateforme et gardez la décision à chaque étape."
     primary_button_text="Demander une démonstration"
