@@ -120,44 +120,68 @@ enableGitInfo = true
 # Navigation Menu
 [menu]
   [[menu.main]]
-    name = "Capabilities"
+    name = "Offers"
     weight = 1
     [menu.main.params]
       has_submenu = true
-      megamenu = true
-      groups = [
-        { name = "Investigation & Diagnostics", url = "/features/ai-powered-incident-investigation/", items = [ { name = "AI-powered incident investigation", url = "/features/ai-powered-incident-investigation/" }, { name = "Root cause analysis assistance", url = "/features/root-cause-analysis-assistance/" } ] },
-        { name = "Platform Context & Intelligence", url = "/features/multi-context-platform-intelligence/", items = [ { name = "Multi-context platform intelligence", url = "/features/multi-context-platform-intelligence/" }, { name = "Versioned technical context", url = "/features/versioned-technical-context/" } ] },
-        { name = "Remediation & Learning", url = "/features/ai-assisted-remediation/", items = [ { name = "AI-assisted remediation", url = "/features/ai-assisted-remediation/" }, { name = "Continuous operational learning", url = "/features/continuous-operational-learning/" } ] },
-        { name = "Governance & Reliability", url = "/features/human-in-the-loop-governance/", items = [ { name = "Human-in-the-loop governance", url = "/features/human-in-the-loop-governance/" }, { name = "Proven resolution process", url = "/features/proven-resolution-process/" } ] }
+      submenu = [
+        { name = "SoNative DevOps", url = "/offers/sonative-devops.md" },
+        { name = "SoNative Cloud", url = "/offers/sonative-cloud.md" },
+        { name = "SoNative Agile", url = "/offers/sonative-agile.md" },
+        { name = "SoNative App", url = "/offers/sonative-app.md" },
       ]
   [[menu.main]]
-    name = "Offers"
-    url = "/offers"
+    name = "Services"
     weight = 2
-#  [[menu.main]]
-#    name = "Blog"
-#    url = "https://www.sokube.io/blog"
-#    weight = 3
-#    [menu.main.params]
-#      external = true 
+    [menu.main.params]
+      has_submenu = true
+      submenu = [
+        { name = "Assessment and Consulting", url = "/services/assessment-and-consulting.md" },
+        { name = "Realization of missions", url = "/services/realization-of-missions.md" },
+        { name = "Training Center by SoKube", url = "/services/training.md" },
+        { name = "Migration service", url = "/services/migration.md" },
+        { name = "Strategic & Technological Watch", url = "/services/strategic-watch.md" },
+      ]
   [[menu.main]]
-    name = "About NeuroKube"
-    url = "/about/"
+    name = "Expertises"
     weight = 3
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "Our mission", url = "/about/#mission" },
-        { name = "What makes NeuroKube different", url = "/about/#what-makes-neurokube-different" },
-        { name = "Born from a repeated operational problem", url = "/about/#born-from-a-repeated-operational-problem" },
-        { name = "Organizational intelligence", url = "/about/#from-kubernetes-operations-to-organizational-intelligence" },
-        { name = "A SoKube solution", url = "/about/#a-sokube-solution" }
+        { name = "Your DevSecOps Experts", url = "/expertises/devsecops.md" },
+        { name = "Your Kubernetes Experts", url = "/expertises/kubernetes.md" },
+        { name = "Your Cloud Native Applications Experts", url = "/expertises/cloud-native-apps.md" },
+        { name = "Your FinOps Experts", url = "/expertises/finops.md" },
       ]
   [[menu.main]]
-    name = "Contact"
-    url = "/contact"
+    name = "Trainings"
+    url = "/training.md"
     weight = 4
+  [[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 5
+    [menu.main.params]
+      has_submenu = true
+      submenu = [
+        { name = "Join us", url = "/hiring.md" },
+        { name = "Our partners", url = "/partners.md" },
+      ]
+  [[menu.main]]
+    name = "Resources"
+    url = "/resources.md"
+    weight = 6
+    [menu.main.params]
+      has_submenu = true
+      submenu = [
+        { name = "FAQ", url = "/faq.md" },
+        { name = "Blog", url = "/blog.md" },
+        { name = "Sons Of KUBErnetes", url = "/sons-of-kubernetes.md" },
+      ]
+  [[menu.main]]
+    name = "Contact us"
+    url = "/contact.md"
+    weight = 7
 
   # Footer Column 1 Menu
   [[menu.footer_column_1]]
@@ -323,6 +347,9 @@ enableGitInfo = true
 [security.funcs]
   getenv = ['^HUGO_', '^CI$']
 
+[security.node.permissions]
+  disable = true
+
 [markup]
   [markup.highlight]
     noClasses = false
@@ -421,49 +448,71 @@ enableGitInfo = true
 #          url = "/fr/get-started"
 
       [[languages.fr.menu.main]]
-        name = "Capacités"
-        url = "/fr/features"
+        name = "Offres"
         weight = 1
         [languages.fr.menu.main.params]
           has_submenu = true
-          megamenu = true
-          groups = [
-            { name = "Investigation & diagnostic", url = "/fr/features/ai-powered-incident-investigation/", items = [ { name = "Investigation d'incidents assistée par l'IA", url = "/fr/features/ai-powered-incident-investigation/" }, { name = "Assistance à l'analyse des causes racines", url = "/fr/features/root-cause-analysis-assistance/" } ] },
-            { name = "Contexte & intelligence plateforme", url = "/fr/features/multi-context-platform-intelligence/", items = [ { name = "Intelligence plateforme multi-contextes", url = "/fr/features/multi-context-platform-intelligence/" }, { name = "Contexte technique versionné", url = "/fr/features/versioned-technical-context/" } ] },
-            { name = "Remédiation & apprentissage", url = "/fr/features/ai-assisted-remediation/", items = [ { name = "Remédiation assistée par l'IA", url = "/fr/features/ai-assisted-remediation/" }, { name = "Apprentissage opérationnel continu", url = "/fr/features/continuous-operational-learning/" } ] },
-            { name = "Gouvernance & fiabilité", url = "/fr/features/human-in-the-loop-governance/", items = [ { name = "Gouvernance avec l'humain au cœur du processus", url = "/fr/features/human-in-the-loop-governance/" }, { name = "Processus de résolution éprouvé", url = "/fr/features/proven-resolution-process/" } ] }
+          submenu = [
+            { name = "SoNative DevOps", url = "/fr/offers/sonative-devops.md" },
+            { name = "SoNative Cloud", url = "/fr/offers/sonative-cloud.md" },
+            { name = "SoNative Agile", url = "/fr/offers/sonative-agile.md" },
+            { name = "SoNative App", url = "/fr/offers/sonative-app.md" },
           ]
 
       [[languages.fr.menu.main]]
-        name = "Offres"
-        url = "/fr/offers"
+        name = "Services"
         weight = 2
-      
-#      [[languages.fr.menu.main]]
-#        name = "Blog"
-#        url = "https://www.sokube.io/blog"
-#        weight = 3
-#        [languages.fr.menu.main.params]
-#          external = true
-
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          submenu = [
+            { name = "Assessment et Conseils", url = "/fr/services/assessment-and-consulting.md" },
+            { name = "Réalisation de missions", url = "/fr/services/realization-of-missions.md" },
+            { name = "Centre de Formations by SoKube", url = "/fr/services/training.md" },
+            { name = "Service de migration", url = "/fr/services/migration.md" },
+            { name = "Veille stratégique et technologique", url = "/fr/services/strategic-watch.md" },
+          ]
       [[languages.fr.menu.main]]
-        name = "A propos de NeuroKube"
-        url = "/fr/about"
+        name = "Expertises"
         weight = 3
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "Notre mission", url = "/fr/about/#mission" },
-            { name = "Ce qui distingue NeuroKube", url = "/fr/about/#ce-qui-distingue-neurokube" },
-            { name = "Né d'un problème opérationnel récurrent", url = "/fr/about/#ne-d-un-problem-operationnel-recurrent" },
-            { name = "Intelligence organisationnelle", url = "/fr/about/#intelligence-organisationnelle" },
-            { name = "Une solution SoKube", url = "/fr/about/#une-solution-sokube" }
+            { name = "Vos Experts DevSecOps", url = "/fr/expertises/devsecops.md" },
+            { name = "Vos Experts Kubernetes", url = "/fr/expertises/kubernetes.md" },
+            { name = "Vos Experts Cloud Native Applications", url = "/fr/expertises/cloud-native-apps.md" },
+            { name = "Vos Experts FinOps", url = "/fr/expertises/finops.md" },
           ]
 
       [[languages.fr.menu.main]]
-        name = "Contact"
-        url = "/fr/contact"
+        name = "Formations"
+        url = "/fr/training.md"
         weight = 4
+
+      [[languages.fr.menu.main]]
+        name = "A propos"
+        weight = 5
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          submenu = [
+            { name = "Nous rejoindre", url = "/fr/hiring.md" },
+            { name = "Nos Partenaires", url = "/fr/partners.md" },
+          ]
+      
+      [[languages.fr.menu.main]]
+        name = "Ressources"
+        weight = 6
+        [languages.fr.menu.main.params]
+          has_submenu = true
+          submenu = [
+            { name = "FAQ", url = "/fr/faq.md" },
+            { name = "Blog", url = "/fr/blog.md" },
+            { name = "Sons Of KUBErnetes", url = "/fr/sons-of-kubernetes.md" },
+          ]
+      
+      [[languages.fr.menu.main]]
+        name = "Nous contacter"
+        url = "/contact.md"
+        weight = 7
 
       [[languages.fr.menu.footer_column_1]]
         name = "Investigation d'incidents"
