@@ -1,0 +1,6 @@
+{{ $gap := .Get "gap" | default "gap-12" }}
+{{ $columns := .Get "columns" | default "sm:grid-cols-2" }}
+
+<div class="grid {{ $columns }} {{ $gap }} max-w-4xl mx-auto items-start justify-items-center">
+    {{ .Inner }}
+</div>

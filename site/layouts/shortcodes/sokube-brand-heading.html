@@ -1,0 +1,32 @@
+{{/*
+    Two-line (or more) stylized heading where specific letters/words are
+    highlighted in an accent color, e.g. to reproduce a logo-like title such
+    as "Sons Of KUBErnetes" / "Sisters Of KUBErnetes".
+
+    Usage: wrap the part(s) to highlight between single asterisks on each
+    line, inside the YAML block passed as .Inner:
+
+    {{< sokube-brand-heading >}}
+    lines:
+      - "*S*ons *O*f *KUBE*rnetes"
+      - "*S*isters *O*f *KUBE*rnetes"
+    {{< /sokube-brand-heading >}}
+*/}}
+
+{{ $data := .Inner | transform.Unmarshal }}
+
+{{ $size := .Get "size" | default "text-4xl sm:text-5xl" }}
+{{ $baseColor := .Get "baseColor" | default "text-gray-900" }}
+{{ $baseColorDark := .Get "baseColorDark" | default "dark:text-white" }}
+{{ $accentColor := .Get "accentColor" | default "text-kube-600" }}
+{{ $accentColorDark := .Get "accentColorDark" | default "dark:text-kube-400" }}
+
+<h2 class="{{ $size }} font-extrabold text-center leading-tight {{ $baseColor }} {{ $baseColorDark }}">
+    {{- range $data.lines }}
+    <span class="block">{{- $parts := split . "*" -}}
+        {{- range $i, $part := $parts -}}
+            {{- if eq (mod $i 2) 1 -}}<span class="{{ $accentColor }} {{ $accentColorDark }}">{{ $part }}</span>{{- else -}}{{ $part }}{{- end -}}
+        {{- end -}}
+    </span>
+    {{- end }}
+</h2>

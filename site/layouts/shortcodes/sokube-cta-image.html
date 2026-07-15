@@ -1,0 +1,30 @@
+{{ $image := .Get "image" }}
+{{ $imageAlt := .Get "imageAlt" | default "" }}
+{{ $buttonText := .Get "buttonText" | default "Learn more" }}
+{{ $buttonLink := .Get "buttonLink" | default "#" }}
+
+{{ $buttonBgColor := .Get "buttonBgColor" | default "bg-kube-600" }}
+{{ $buttonBgColorDark := .Get "buttonBgColorDark" | default "dark:bg-kube-600" }}
+{{ $buttonTextColor := .Get "buttonTextColor" | default "text-white" }}
+{{ $buttonTextColorDark := .Get "buttonTextColorDark" | default "dark:text-white" }}
+
+<div class="flex flex-col items-center text-center gap-6">
+    {{ with $image }}
+    {{/* Fixed frame size on purpose (not parameterized) so every image lines up identically, whatever its own aspect ratio */}}
+    <div class="w-64 h-64 sm:w-72 sm:h-72 p-3 flex items-center justify-center shadow-none bg-white">
+        <img src="{{ . | relURL }}" alt="{{ $imageAlt }}" class="sokube-cta-image-img max-w-full max-h-full w-auto h-auto object-contain shadow-none">
+    </div>
+    {{ end }}
+
+    {{/*
+        The button's color and its destination are kept structurally separate:
+        the <a> only carries the link (href) and the button shape/background,
+        while the label text sits in its own <span> with the text-color classes.
+        This avoids the theme's ".prose a { color: ... }" rule (which targets
+        the <a> element itself) silently overriding the configured text color.
+    */}}
+    <a href="{{ $buttonLink }}"
+       class="btn {{ $buttonBgColor }} {{ $buttonBgColorDark }} hover:scale-105 no-underline">
+        <span class="{{ $buttonTextColor }} {{ $buttonTextColorDark }}">{{ $buttonText }}</span>
+    </a>
+</div>

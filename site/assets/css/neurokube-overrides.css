@@ -16,6 +16,18 @@
   }
 
   /*
+   * Le thème applique globalement `.prose img { @apply rounded-lg shadow-lg; }`
+   * (voir themes/hugo-saasify-theme/assets/css/main.css). Le shortcode
+   * sokube-cta-image.html ne veut ni arrondi ni ombre sur son image : on
+   * neutralise donc explicitement cette règle du thème, uniquement pour les
+   * images marquées .sokube-cta-image-img, sans toucher au thème.
+   */
+  .prose img.sokube-cta-image-img {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /*
    * .card : redéfinition volontaire de la classe .card du thème (cascade,
    * voir avertissement précédent sur l'ordre des @import).
    */
