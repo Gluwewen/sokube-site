@@ -326,6 +326,17 @@ module.exports = {
     'dark:border-hr-300',
     'dark:hover:border-hr-400',
 
+    // === AJOUTS lot 3 (sokube-blog-category-filter pill colors, hugo.toml [params.blog.categoryFilter]) ===
+    'bg-transparent',
+    'dark:bg-transparent',
+    'dark:bg-neurokube-100',
+    'dark:text-neurokube-900',
+    'dark:hover:bg-neurokube-200',
+    'dark:hover:text-neurokube-900',
+    'hover:text-white',
+    'hover:text-neurokube-900',
+    'dark:border-neurokube-100',
+
     // === AJOUTS marker (puces des listes dans les neurokube-card) ===
     'marker:text-neurokube-600',
     'dark:marker:text-neurokube-300',

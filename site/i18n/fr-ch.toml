@@ -32,6 +32,12 @@ other = "Etiquettes"
 [allPosts]
 other = "Tous les articles"
 
+[filterAll]
+other = "Tous"
+
+[backToArticles]
+other = "Retour aux articles"
+
 [search]
 other = "Rechercher"
 

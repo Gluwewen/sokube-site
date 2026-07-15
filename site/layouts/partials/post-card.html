@@ -1,0 +1,116 @@
+{{/*
+    Override of themes/hugo-saasify-theme/layouts/partials/post-card.html.
+    Kept here (site/layouts/partials) so the theme itself is never modified.
+    Changes vs. the theme version:
+      - the outer <article> gets a "post-card" class and a data-categories
+        attribute (comma-separated, urlized) so the sokube-blog-category-filter
+        shortcode can show/hide cards client-side.
+      - the category label is shown as a dark pill overlaid on top of the
+        thumbnail image (top-left corner), matching the blog design. Its
+        colors (background / text / hover background / hover text, for
+        light and dark mode) are configurable in hugo.toml under
+        [params.blog.categoryBadge]; see that block's comment for the rules
+        around adding new class combinations to the tailwind safelist.
+      - the card's own background, title text/hover colors, and the color
+        of every other text and icon in the card are configurable in
+        hugo.toml under [params.blog.postCard] (same safelist rules apply).
+*/}}
+{{ $categories := .Params.categories | default slice }}
+{{ $categorySlugs := slice }}
+{{ range $categories }}
+    {{ $categorySlugs = $categorySlugs | append (. | urlize) }}
+{{ end }}
+
+{{ $badge := .Site.Params.blog.categoryBadge | default dict }}
+{{ $badgeBackground := $badge.background | default "bg-neurokube-900 dark:bg-neurokube-100" }}
+{{ $badgeText := $badge.text | default "text-white dark:text-neurokube-900" }}
+{{ $badgeHoverBackground := $badge.hover_background | default "hover:bg-neurokube-800 dark:hover:bg-neurokube-200" }}
+{{ $badgeHoverText := $badge.hover_text | default "hover:text-white dark:hover:text-neurokube-900" }}
+{{ $badgeClasses := printf "%s %s %s %s" $badgeBackground $badgeText $badgeHoverBackground $badgeHoverText }}
+
+{{ $postCard := .Site.Params.blog.postCard | default dict }}
+{{ $cardBackground := $postCard.background | default "bg-white dark:bg-neurokube-900" }}
+{{ $titleText := $postCard.title_text | default "text-neurokube-900 dark:text-white" }}
+{{ $titleHoverText := $postCard.title_hover_text | default "hover:text-neurokube-600 dark:hover:text-neurokube-300" }}
+{{ $bodyText := $postCard.text | default "text-gray-600 dark:text-neurokube-300" }}
+
+<article class="post-card {{ $cardBackground }} rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+         data-categories="{{ delimit $categorySlugs "," }}">
+    <div class="relative">
+        {{ with .Params.featured_image }}
+            <a href="{{ $.RelPermalink }}" class="block aspect-w-16 aspect-h-9 overflow-hidden">
+                <img
+                    src="{{ . }}"
+                    alt="{{ $.Title }}"
+                    class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                >
+            </a>
+        {{ end }}
+
+        {{ with first 1 $categories }}
+            {{ range . }}
+                <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}"
+                   class="absolute top-4 left-4 z-10 inline-block px-4 py-1.5 text-sm font-semibold rounded-full {{ $badgeClasses }}">
+                    {{ . }}
+                </a>
+            {{ end }}
+        {{ end }}
+    </div>
+
+    <div class="p-6">
+        <!-- Title -->
+        <h2 class="text-2xl font-bold mb-3 transition-colors duration-200 {{ $titleText }} {{ $titleHoverText }}">
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+
+        <!-- Description -->
+        <p class="mb-4 line-clamp-2 {{ $bodyText }}">
+            {{ with .Description }}
+                {{ . }}
+            {{ else }}
+                {{ .Summary | truncate 160 }}
+            {{ end }}
+        </p>
+
+        <!-- Author and Date in a cleaner layout -->
+        <div class="flex items-center justify-between text-sm mb-4 {{ $bodyText }}">
+            {{ with .Params.author }}
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span>{{ . }}</span>
+                </div>
+            {{ end }}
+
+            <div class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <time datetime="{{ .Date.Format "2006-01-02" }}">
+                    {{ .Date.Format "Jan 2, 2006" }}
+                </time>
+            </div>
+        </div>
+
+        <!-- Read More link and Reading Time -->
+        <div class="flex justify-between items-center">
+            <a href="{{ .RelPermalink }}"
+               class="inline-flex items-center font-medium {{ $bodyText }}">
+                {{ i18n "readMore" }}
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+
+            <!-- Reading Time -->
+            <span class="text-sm flex items-center {{ $bodyText }}">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+                <span>{{ .ReadingTime }} {{ i18n "readTime" }}</span>
+            </span>
+        </div>
+    </div>
+</article>

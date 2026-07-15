@@ -32,6 +32,12 @@ other = "Tags"
 [allPosts]
 other = "All Posts"
 
+[filterAll]
+other = "All"
+
+[backToArticles]
+other = "Back to Articles"
+
 [search]
 other = "Search"
 

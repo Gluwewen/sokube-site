@@ -117,6 +117,104 @@ enableGitInfo = true
 #       text = "Get Started"
 #       url = "/get-started"
 
+# Blog configuration
+  [params.blog]
+    enable = true
+    title = "Find all our news through our articles, case studies …"
+    subtitle = """
+**Discover our blog**. 
+
+We are excited to share our latest blog posts with you.
+Whether you are looking for interviews, analysis or technological advances, we have something for you!
+We hope you enjoy reading all our articles as much as we enjoyed creating them for you!
+Read on to find out how the Cloud Native can expand your development horizons.
+"""
+    
+    # Blog CTA configuration
+    [params.blog.cta]
+      enable = false  # Enable/disable CTA in blog posts
+
+    # Category filter pills configuration (blog list page).
+    # Each field accepts one or more Tailwind classes; combine a light-mode
+    # class and a dark: variant in the same string (e.g. "bg-neurokube-900
+    # dark:bg-neurokube-100"). If you introduce a class combination that
+    # doesn't otherwise appear in the project, add it to the safelist in
+    # tailwind.config.js so it isn't purged from the compiled CSS.
+    [params.blog.categoryFilter]
+      # The currently active pill (e.g. "All" by default, or the clicked category)
+      [params.blog.categoryFilter.selected]
+        background = "bg-neurokube-900 dark:bg-neurokube-100"
+        text = "text-white dark:text-neurokube-900"
+        hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
+        hover_text = "hover:text-white dark:hover:text-neurokube-900"
+
+      # The inactive pills
+      [params.blog.categoryFilter.unselected]
+        background = "bg-transparent dark:bg-transparent"
+        text = "text-neurokube-900 dark:text-neurokube-100"
+        hover_background = "hover:bg-neurokube-100 dark:hover:bg-neurokube-800"
+        hover_text = "hover:text-neurokube-900 dark:hover:text-white"
+
+    # Category badge configuration (the pill overlaid on top of an article's
+    # featured image in post cards). Same rules as [params.blog.categoryFilter]
+    # above: combine light + dark: classes in the same string, and add any
+    # brand-new class combination to the tailwind.config.js safelist.
+    [params.blog.categoryBadge]
+      background = "bg-neurokube-900 dark:bg-neurokube-100"
+      text = "text-white dark:text-neurokube-900"
+      hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
+      hover_text = "hover:text-white dark:hover:text-neurokube-900"
+
+    # Post card configuration (article cards on the blog list page).
+    # Same rules as [params.blog.categoryFilter] above: combine light + dark:
+    # classes in the same string, and add any brand-new class combination to
+    # the tailwind.config.js safelist.
+    [params.blog.postCard]
+      # Card background
+      background = "bg-white dark:bg-neurokube-800"
+
+      # Title
+      title_text = "text-neurokube-900 dark:text-white"
+      title_hover_text = "hover:text-neurokube-600 dark:hover:text-neurokube-300"
+
+      # All other text and inline icons in the card (description, author,
+      # date, "Read More" link, reading time)
+      text = "text-gray-600 dark:text-neurokube-300"
+
+    # Sidebar configuration
+    [params.blog.sidebar]
+      # Back to Articles button (top of sidebar)
+      [params.blog.sidebar.backToArticles]
+        enable = true
+
+      # Recent articles section
+      [params.blog.sidebar.recent]
+        enable = true
+        title = "Recent Articles"
+        count = 5
+      
+      # Categories section
+      [params.blog.sidebar.categories]
+        enable = true
+        title = "Categories"
+      
+      # Tags section
+      [params.blog.sidebar.tags]
+        enable = false
+        title = "Popular Tags"
+        count = 20
+
+      # Subscribe form section
+      [params.blog.sidebar.subscribe]
+        enable = true
+        title = "Subscribe to Newsletter"
+        description = "Get the latest posts delivered right to your inbox"
+        action = "https://formspree.io/f/your-form-id"
+        emailName = "email"
+        buttonText = "Subscribe"
+        placeholder = "Enter your email"
+        disclaimer = "We respect your privacy. Unsubscribe at any time."
+
 # Navigation Menu
 [menu]
   [[menu.main]]
@@ -429,6 +527,18 @@ enableGitInfo = true
     [languages.fr.params.cta]
       title = "Prêt à libérer le plein potentiel de votre équipe DevOps ?"
       description = "Rejoignez les entreprises qui utilisent déjà NeuroKube pour réduire la charge cognitive de leurs équipes DevOps."
+
+    # French language for Blog
+    [languages.fr.params.blog]
+      title = "Retrouvez toute notre actualité à travers nos articles, études de cas …"
+      subtitle = """
+**Découvrez notre blog**.
+
+Nous sommes ravis de partager avec vous nos derniers articles.
+Que vous soyez à la recherche d'interviews, d'analyses ou d'avancées technologiques, vous trouverez ici de quoi satisfaire votre curiosité !
+Nous espérons que vous prendrez autant de plaisir à lire nos articles que nous en avons eu à les écrire pour vous !
+Poursuivez votre lecture pour découvrir comment le Cloud Native peut élargir vos horizons de développement.
+"""
 
     [languages.fr.params.cta.primary_button]
       text = "Contactez-nous"

@@ -1,0 +1,136 @@
+{{/*
+    sokube-blog-category-filter
+
+    Renders a row of pill buttons ("All" + one per distinct category found
+    among the blog posts) that filter the article cards below client-side.
+
+    Usage: place {{< sokube-blog-category-filter >}} in the blog section's
+    _index.md (content/en-us/blog/_index.md, content/fr-ch/blog/_index.md).
+    It must be used on a list page (the blog section index), so that
+    .Page.Pages returns the blog posts.
+
+    It pairs with:
+      - layouts/partials/post-card.html, which adds the "post-card" class
+        and a data-categories="slug-1,slug-2" attribute to each card.
+      - layouts/_default/list.html, which renders {{ .Content }} for the
+        blog section so this shortcode's output actually appears.
+
+    Colors (background / text / hover background / hover text, each for
+    light and dark mode) are configurable in hugo.toml under
+    [params.blog.categoryFilter.selected] and
+    [params.blog.categoryFilter.unselected]. Every value below has a
+    fallback (via "default") matching the values shipped in hugo.toml, so
+    the shortcode still renders correctly if that config block is removed.
+
+    Note: if you override a color with a Tailwind class that isn't already
+    used elsewhere in the project (e.g. a brand-new dark: combination),
+    add it to the safelist in tailwind.config.js — same rule as the
+    sokube-card / sokube-cta shortcodes, since Tailwind can't see class
+    names that only ever come from hugo.toml at build time.
+
+    No shortcode parameters.
+*/}}
+
+{{ $pages := .Page.Pages }}
+{{ $categories := slice }}
+{{ range $pages }}
+    {{ range .Params.categories }}
+        {{ $categories = $categories | append . }}
+    {{ end }}
+{{ end }}
+{{ $categories = $categories | uniq | sort }}
+
+{{ if gt (len $categories) 0 }}
+    {{ $selected := .Site.Params.blog.categoryFilter.selected | default dict }}
+    {{ $unselected := .Site.Params.blog.categoryFilter.unselected | default dict }}
+
+    {{ $selectedBackground := $selected.background | default "bg-neurokube-900 dark:bg-neurokube-100" }}
+    {{ $selectedText := $selected.text | default "text-white dark:text-neurokube-900" }}
+    {{ $selectedHoverBackground := $selected.hover_background | default "hover:bg-neurokube-800 dark:hover:bg-neurokube-200" }}
+    {{ $selectedHoverText := $selected.hover_text | default "hover:text-white dark:hover:text-neurokube-900" }}
+
+    {{ $unselectedBackground := $unselected.background | default "bg-transparent dark:bg-transparent" }}
+    {{ $unselectedText := $unselected.text | default "text-neurokube-900 dark:text-neurokube-100" }}
+    {{ $unselectedHoverBackground := $unselected.hover_background | default "hover:bg-neurokube-100 dark:hover:bg-neurokube-800" }}
+    {{ $unselectedHoverText := $unselected.hover_text | default "hover:text-neurokube-900 dark:hover:text-white" }}
+
+    {{ $selectedClasses := printf "%s %s %s %s" $selectedBackground $selectedText $selectedHoverBackground $selectedHoverText }}
+    {{ $unselectedClasses := printf "%s %s %s %s" $unselectedBackground $unselectedText $unselectedHoverBackground $unselectedHoverText }}
+
+    {{ $baseClasses := "category-pill px-5 py-2 rounded-full border-2 border-neurokube-900 dark:border-neurokube-100 font-medium text-sm transition-colors duration-200" }}
+
+<div class="blog-category-filter flex flex-wrap justify-center gap-3 mb-10"
+     data-blog-category-filter
+     data-selected-classes="{{ $selectedClasses }}"
+     data-unselected-classes="{{ $unselectedClasses }}">
+    <button type="button"
+            class="{{ $baseClasses }} {{ $selectedClasses }} is-active"
+            data-category="all">
+        {{ i18n "filterAll" }}
+    </button>
+    {{ range $categories }}
+        <button type="button"
+                class="{{ $baseClasses }} {{ $unselectedClasses }}"
+                data-category="{{ . | urlize }}">
+            {{ . }}
+        </button>
+    {{ end }}
+</div>
+
+<p class="blog-category-filter-empty hidden text-center text-gray-500 mb-10" data-blog-category-filter-empty>
+    {{ i18n "noResults" }}
+</p>
+
+<script>
+(function () {
+    function init() {
+        document.querySelectorAll("[data-blog-category-filter]").forEach(function (filter) {
+            var buttons = filter.querySelectorAll(".category-pill");
+            var emptyMessage = filter.parentElement.querySelector("[data-blog-category-filter-empty]");
+            var selectedClasses = (filter.getAttribute("data-selected-classes") || "").split(/\s+/).filter(Boolean);
+            var unselectedClasses = (filter.getAttribute("data-unselected-classes") || "").split(/\s+/).filter(Boolean);
+
+            function activate(button) {
+                buttons.forEach(function (b) {
+                    b.classList.remove("is-active");
+                    b.classList.remove.apply(b.classList, selectedClasses);
+                    b.classList.add.apply(b.classList, unselectedClasses);
+                });
+                button.classList.add("is-active");
+                button.classList.remove.apply(button.classList, unselectedClasses);
+                button.classList.add.apply(button.classList, selectedClasses);
+            }
+
+            function applyFilter(category) {
+                // Queried on every click (not cached at init time) so cards
+                // rendered further down the page are always picked up.
+                var cards = document.querySelectorAll(".post-card");
+                var visibleCount = 0;
+                cards.forEach(function (card) {
+                    var cardCategories = (card.getAttribute("data-categories") || "").split(",");
+                    var matches = category === "all" || cardCategories.indexOf(category) !== -1;
+                    card.style.display = matches ? "" : "none";
+                    if (matches) visibleCount++;
+                });
+                if (emptyMessage) {
+                    emptyMessage.classList.toggle("hidden", visibleCount !== 0);
+                }
+            }
+
+            buttons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    activate(button);
+                    applyFilter(button.getAttribute("data-category"));
+                });
+            });
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+</script>
+{{ end }}

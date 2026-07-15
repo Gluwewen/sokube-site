@@ -19,7 +19,7 @@
 {{ $baseColor := .Get "baseColor" | default "text-gray-900" }}
 {{ $baseColorDark := .Get "baseColorDark" | default "dark:text-white" }}
 {{ $accentColor := .Get "accentColor" | default "text-kube-600" }}
-{{ $accentColorDark := .Get "accentColorDark" | default "dark:text-kube-400" }}
+{{ $accentColorDark := .Get "accentColorDark" | default "dark:text-kube-600" }}
 
 <h2 class="{{ $size }} font-extrabold text-center leading-tight {{ $baseColor }} {{ $baseColorDark }}">
     {{- range $data.lines }}
