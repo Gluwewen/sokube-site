@@ -1,33 +1,154 @@
 {{ $data := .Inner | transform.Unmarshal }}
 {{ if ne (.Site.Params.sections.faq) false }}
-<section class="bg-white dark:bg-neurokube-900">
-    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-        <div class="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">{{ $data.title | default "Frequently Asked Questions" }}</h2>
-            {{ with $data.description }}
-            <p class="mb-5 font-light text-gray-500 dark:text-neurokube-200 sm:text-xl">{{ . }}</p>
+
+{{/* --- Colors (fully parameterizable, light + dark) --- */}}
+{{/* Accent color: arrow in the menu + expand/collapse icons */}}
+{{ $accentColor := .Get "accentColor" | default "text-kube-600" }}
+{{ $accentColorDark := .Get "accentColorDark" | default "dark:text-kube-300" }}
+
+{{/* Bullet / number markers used inside the answers' lists */}}
+{{ $markerColor := .Get "markerColor" | default "marker:text-kube-600" }}
+{{ $markerColorDark := .Get "markerColorDark" | default "dark:marker:text-kube-300" }}
+
+{{/* Menu (category nav) text color, inactive vs active state */}}
+{{ $menuTextColor := .Get "menuTextColor" | default "text-gray-400" }}
+{{ $menuTextColorDark := .Get "menuTextColorDark" | default "dark:text-neurokube-300" }}
+{{ $menuActiveTextColor := .Get "menuActiveTextColor" | default "text-gray-900" }}
+{{ $menuActiveTextColorDark := .Get "menuActiveTextColorDark" | default "dark:text-white" }}
+
+{{/* Shared body text size: description, questions, answers and menu all match */}}
+{{ $bodyTextSize := "text-base sm:text-xl" }}
+
+{{/* --- Build the ordered, de-duplicated list of categories (order = first appearance) --- */}}
+{{ $categories := slice }}
+{{ range $data.questions }}
+    {{ $cat := .category | default "" }}
+    {{ if and (ne $cat "") (not (in $categories $cat)) }}
+        {{ $categories = $categories | append $cat }}
+    {{ end }}
+{{ end }}
+{{ $hasCategories := gt (len $categories) 0 }}
+
+{{/* --- Sections to render: named categories first, then a fallback bucket for uncategorized questions --- */}}
+{{ $sections := $categories }}
+{{ $uncategorized := where $data.questions "category" "" }}
+{{ if and $hasCategories (gt (len $uncategorized) 0) }}
+    {{ $sections = $sections | append "" }}
+{{ end }}
+
+<section class="bg-white dark:bg-neurokube-900 py-8 lg:py-16">
+    <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
+
+        <h1 class="mb-10 text-3xl font-extrabold text-gray-900 dark:text-white">
+            {{ $data.title | default "Frequently Asked Questions" }}
+        </h1>
+        {{ with $data.description }}
+        <p class="mb-10 -mt-6 font-light text-gray-500 dark:text-neurokube-200 {{ $bodyTextSize }}">{{ . }}</p>
+        {{ end }}
+
+        <div class="lg:flex lg:gap-16">
+
+            {{ if $hasCategories }}
+            <aside class="lg:w-56 shrink-0 mb-10 lg:mb-0">
+                <nav class="lg:sticky lg:top-24 space-y-4" id="faq-nav-{{ .Ordinal }}"
+                     data-faq-nav
+                     data-active-classes="{{ $menuActiveTextColor }} {{ $menuActiveTextColorDark }} font-semibold"
+                     data-inactive-classes="{{ $menuTextColor }} {{ $menuTextColorDark }} font-medium">
+                    {{ range $sections }}
+                    {{ $label := . }}
+                    {{ if eq $label "" }}{{ $label = "Other" }}{{ end }}
+                    {{ $slug := printf "faq-%s-%d" ($label | urlize) $.Ordinal }}
+                    <a href="#{{ $slug }}"
+                       data-faq-nav-link
+                       data-target="{{ $slug }}"
+                       class="faq-nav-link flex items-center gap-2 {{ $bodyTextSize }} {{ $menuTextColor }} {{ $menuTextColorDark }} font-medium hover:{{ $accentColor }} transition-colors duration-150">
+                        <span class="faq-nav-arrow {{ $accentColor }} {{ $accentColorDark }} opacity-0 transition-opacity duration-150">&rarr;</span>
+                        <span>{{ $label }}</span>
+                    </a>
+                    {{ end }}
+                </nav>
+            </aside>
             {{ end }}
-        </div>
-        
-        <div class="space-y-6">
-            {{ range $data.questions }}
-            <div class="border rounded-lg overflow-hidden bg-white dark:bg-neurokube-900 dark:border-neurokube-700 shadow-sm hover:shadow-md transition-shadow duration-200">
-                <button class="w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark:hover:bg-neurokube-800 transition-colors duration-200 focus:outline-none" 
-                        onclick="this.parentElement.querySelector('.faq-content').classList.toggle('hidden');
-                                 this.querySelector('svg').classList.toggle('rotate-180')">
-                    <span class="text-lg font-medium text-gray-900 dark:text-white">{{ .question }}</span>
-                    <svg class="w-5 h-5 text-gray-500 dark:text-neurokube-300 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="faq-content hidden border-t dark:border-neurokube-700">
-                    <div class="p-6 prose prose-sm sm:prose lg:prose-lg max-w-none">
-                        {{ .answer | markdownify }}
+
+            <div class="flex-1 space-y-16 min-w-0">
+                {{ range $sections }}
+                {{ $label := . }}
+                {{ $items := cond (eq $label "") $uncategorized (where $data.questions "category" $label) }}
+                {{ if eq $label "" }}{{ $label = "Other" }}{{ end }}
+                {{ $slug := printf "faq-%s-%d" ($label | urlize) $.Ordinal }}
+
+                <div id="{{ $slug }}" class="faq-category-section scroll-mt-28" data-faq-section>
+                    {{ if $hasCategories }}
+                    <h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">{{ $label }}</h2>
+                    {{ end }}
+
+                    <div class="divide-y divide-gray-200 dark:divide-neurokube-700">
+                        {{ range $items }}
+                        <div class="py-5">
+                            <button type="button"
+                                class="faq-toggle w-full flex justify-between items-start gap-4 text-left focus:outline-none"
+                                onclick="this.parentElement.querySelector('.faq-content').classList.toggle('hidden');
+                                         this.querySelector('.faq-icon-plus').classList.toggle('hidden');
+                                         this.querySelector('.faq-icon-minus').classList.toggle('hidden');">
+                                <div class="faq-question {{ $bodyTextSize }} font-semibold text-gray-900 dark:text-white [&_p]:m-0">
+                                    {{ .question | markdownify }}
+                                </div>
+                                <span class="shrink-0 {{ $accentColor }} {{ $accentColorDark }} mt-0.5">
+                                    <svg class="faq-icon-plus w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" stroke-width="1.5"></circle>
+                                        <path stroke-linecap="round" stroke-width="1.5" d="M12 8v8M8 12h8"></path>
+                                    </svg>
+                                    <svg class="faq-icon-minus w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" stroke-width="1.5"></circle>
+                                        <path stroke-linecap="round" stroke-width="1.5" d="M8 12h8"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                            <div class="faq-content hidden mt-4 prose max-w-none {{ $bodyTextSize }} dark:prose-invert {{ $markerColor }} {{ $markerColorDark }}">
+                                {{ .answer | markdownify }}
+                            </div>
+                        </div>
+                        {{ end }}
                     </div>
                 </div>
+                {{ end }}
             </div>
-            {{ end }}
         </div>
     </div>
 </section>
+
+{{ if $hasCategories }}
+<script>
+(function () {
+    var root = document.getElementById('faq-nav-{{ .Ordinal }}');
+    if (!root) return;
+    var links = root.querySelectorAll('[data-faq-nav-link]');
+    var sections = document.querySelectorAll('[data-faq-section]');
+    if (!links.length || !sections.length) return;
+
+    var activeClasses = (root.dataset.activeClasses || '').split(/\s+/).filter(Boolean);
+    var inactiveClasses = (root.dataset.inactiveClasses || '').split(/\s+/).filter(Boolean);
+
+    function setActive(id) {
+        links.forEach(function (link) {
+            var isActive = link.dataset.target === id;
+            activeClasses.forEach(function (c) { link.classList.toggle(c, isActive); });
+            inactiveClasses.forEach(function (c) { link.classList.toggle(c, !isActive); });
+            var arrow = link.querySelector('.faq-nav-arrow');
+            if (arrow) arrow.classList.toggle('opacity-0', !isActive);
+        });
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) setActive(entry.target.id);
+        });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+
+    sections.forEach(function (section) { observer.observe(section); });
+    setActive(sections[0].id);
+})();
+</script>
+{{ end }}
+
 {{ end }}

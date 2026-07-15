@@ -1,5 +1,5 @@
-baseURL = "https://www.neurokube.ai/"
-title = "NeuroKube"
+baseURL = "https://www.sokube.io/"
+title = "SoKube"
 defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 
@@ -280,7 +280,7 @@ enableGitInfo = true
 [params.sections]
   testimonials = false
   clientLogos = false
-  faq = false
+  faq = true
 
 # Pricing Configuration
 [params.pricing]
