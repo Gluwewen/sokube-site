@@ -26,9 +26,6 @@ enableGitInfo = true
 [params]
   description = ""
   author = "Vincent Loiseau"
-  logo = "/images/logo.svg"
-  logo_fond-clair = "/images/logo_fond-clair.svg"
-  logo_fond-sombre = "/images/logo_fond-sombre.svg"
   # Google Analytics ID (e.g., "G-XXXXXXXXXX")
   # googleAnalytics = "G-XXXXXXXXXX"
   
@@ -63,8 +60,10 @@ enableGitInfo = true
 
     [params.footer.logo]
     # Logo configuration
-      src = "/images/logo_fond-clair.svg"
-      dark_src = "/images/logo_fond-sombre.svg"
+      # src = "/images/logo_fond-clair.svg"
+      # dark_src = "/images/logo_fond-sombre.svg"
+      src = "/images/logo_sk_bleu_rose.png"
+      dark_src = "/images/logo_sk_blanc_rose_tr.png"
     
     [params.footer.style]
       background = "bg-neurokube-200 dark:bg-neurokube-900"
@@ -84,7 +83,8 @@ enableGitInfo = true
     
     # Logo configuration
     [params.header.logo]
-      src = "/images/logo_fond-sombre.svg"
+      # src = "/images/logo_fond-sombre.svg"
+      src = "/images/logo_sk_blanc_rose_tr.png"
       textClass = "text-neurokube-100"
     
     # Menu configuration
@@ -478,7 +478,6 @@ Read on to find out how the Cloud Native can expand your development horizons.
   [languages.en]
     locale = "en-us"
     label = "English"
-    title = "NeuroKube"
     weight = 1
     contentDir = "content/en-us"
 
@@ -510,7 +509,6 @@ Read on to find out how the Cloud Native can expand your development horizons.
   [languages.fr]
     locale = "fr-ch"
     label = "Français"
-    title = "NeuroKube"
     weight = 2
     contentDir = "content/fr-ch"
 
