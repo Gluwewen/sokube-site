@@ -1,43 +1,50 @@
 {{/*
-    Override of themes/hugo-saasify-theme/layouts/_default/list.html.
-    Kept here (site/layouts/_default) so the theme itself is never modified.
-    Changes vs. the theme version:
-      - the blog subtitle (params.blog.subtitle in hugo.toml) is passed
-        through markdownify, so it can contain **bold** text and multiple
-        paragraphs (separate lines in hugo.toml, blank line = new paragraph)
-        instead of rendering as one flat line of raw markdown syntax.
-      - {{ .Content }} is rendered for the blog section so that shortcodes
-        placed in the blog section's _index.md (e.g. sokube-blog-category-filter)
-        appear above the article grid.
-      - the number of columns in the article grid is read from
-        params.<section>.layout.columns (hugo.toml), via
-        layouts/partials/blog-section-config.html, so /blog/ and any other
-        section using this layout can each use their own column count
-        (1, 2 or 3).
+    trainings
 
-    Note: /trainings/ now uses its own dedicated layout instead of this one
-    - see layouts/_default/trainings.html - so it can mix a freeform
-    content area (title optional, custom shortcodes) with the same grid/
-    pagination machinery below.
+    Hybrid layout for /trainings/, mixing:
+      - layouts/_default/simple.html's freeform content area: an optional
+        auto <h1> (skipped when front matter sets hideTitle: true, e.g. to
+        use your own sokube-brand-heading shortcode instead) followed by
+        .Content rendered inside a "prose" wrapper, so the page author has
+        full Markdown/shortcode freedom above the training grid.
+      - layouts/_default/list.html's blog-listing machinery: the category
+        filter pills, a paginated grid of training cards (post-card.html)
+        whose column count comes from params.<section>.layout.columns, and
+        the pagination controls.
+
+    Enable it on a section's _index.md via front matter:
+
+        ---
+        title: "Formations"
+        layout: "trainings"
+        hideTitle: true
+        ---
+
+    Unlike /blog/, the category filter is NOT placed manually in the
+    content - it's injected automatically (via layouts/partials/
+    blog-category-filter.html) right above the grid, so you don't need to
+    remember {{</* sokube-blog-category-filter >}} in the Markdown.
+
+    Since it reads its configuration through layouts/partials/
+    blog-section-config.html exactly like list.html does, this layout isn't
+    hardcoded to /trainings/ - any section can opt into it the same way.
 */}}
 {{ define "main" }}
 {{ $cfg := partial "blog-section-config.html" . }}
 <div class="container mx-auto px-4 py-12">
     <div class="max-w-7xl mx-auto">
-        {{ if .IsHome }}
-            <h1 class="text-4xl font-bold mb-8">{{ .Site.Title }}</h1>
-        {{ else if eq .Section "blog" }}
+        {{ if not .Params.hideTitle }}
             <h1 class="text-4xl font-bold mb-8">{{ $cfg.title | default .Title }}</h1>
             {{ with $cfg.subtitle }}
                 <div class="prose prose-xl text-gray-600 mb-8 max-w-none">{{ . | markdownify }}</div>
             {{ end }}
-            {{ .Content }}
-        {{ else }}
-            <h1 class="text-4xl font-bold mb-8">{{ .Title }}</h1>
-            {{ with .Description }}
-                <div class="text-xl text-gray-600 mb-8">{{ . }}</div>
-            {{ end }}
         {{ end }}
+
+        <div class="prose prose-lg !max-w-none mb-8">
+            {{ .Content }}
+        </div>
+
+        {{ partial "blog-category-filter.html" . }}
 
         {{ $layout := $cfg.layout | default dict }}
         {{ $columns := $layout.columns | default 3 }}

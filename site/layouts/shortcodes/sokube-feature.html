@@ -14,10 +14,26 @@
     This lets you show the button only on the feature blocks where it makes
     sense (e.g. a "Prérequis" block linking to a contact form) instead of on
     every sokube-feature call on the page.
+
+    "description" supports line breaks, but NOT as an actual newline typed
+    inside the quoted value - Hugo's shortcode parser rejects a real line
+    break inside a quoted string ("unterminated quoted string in shortcode
+    parameter-argument"). Instead, type the literal two characters \n
+    (backslash + n) where you want a line break, on a single physical line:
+
+        description="Some intro text. \n*A second line, on its own.*"
+
+    Two of them in a row (\n\n) start a new paragraph instead of just
+    breaking the line.
 */}}
 
 {{ $title := .Get "title" }}
 {{ $description := .Get "description" }}
+{{/* Turn the literal "\n\n" token into a real paragraph break, and any
+     remaining literal "\n" into a Markdown hard break (two trailing spaces
+     + newline), before running the result through markdownify. */}}
+{{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
+{{ $description = $description | replaceRE `\\n` "  \n" }}
 {{ $badge := .Get "badge" }}
 {{ $badgeTextColor := .Get "badgeTextColor" | default "text-neurokube-600" }}
 {{ $badgeBgColor := .Get "badgeBgColor" | default "bg-neurokube-100" }}
@@ -74,9 +90,9 @@
             {{ $title }}
         </h3>
 
-        <p class="text-lg text-gray-600">
-            {{ $description }}
-        </p>
+        <div class="text-lg text-gray-600 [&_a]:text-neurokube-600 [&_a]:underline [&_a]:hover:text-neurokube-700">
+            {{ $description | markdownify }}
+        </div>
 
         {{ if gt (len $features) 0 }}
         <ul class="space-y-4">

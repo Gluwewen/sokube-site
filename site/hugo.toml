@@ -242,20 +242,6 @@ Read on to find out how the Cloud Native can expand your development horizons.
 # for how the right block is picked based on the page's section.
   [params.trainings]
     enable = true
-    title = "Our DevOps, DevSecOps, Cloud and Agile Training Courses: Delivered by experts, tailored to your needs and customizable, on-site, in French or English!"
-    subtitle = """Designed and delivered by seasoned experts in [DevOps](/site/content/en-us/offers/sonative-devops.md), [Agile](/site/content/en-us/offers/sonative-agile.md), [Cloud Native Applications](/site/content/en-us/offers/sonative-app.md), and [Cloud](/site/content/en-us/offers/sonative-cloud.md), our training courses are aimed at providing you with the skills and knowledge you need to succeed in your projects and day-to-day responsibilities.
-
-🌟 **Experienced specialist consultants:** Our instructors are industry experts with extensive hands-on experience. They bring cutting-edge knowledge directly from server rooms and development teams into the classroom.
-
-🧩 **Customizable courses:** We understand that every organization is unique. That is why our courses can be tailored to your specific needs and context, providing unmatched flexibility and relevance.
-
-🏢 **On-site delivery:** Our instructor-led, in-person training approach—either at your premises or ours—encourages direct interaction with trainers and peers, creating an immersive and collaborative learning environment.
-
-🇫🇷 / 🇬🇧 **Training in French and English:** We offer all our training courses in either French or English to best meet your needs and support multilingual and mixed-language teams.
-
-📚/ ⚙️ **Hands-on learning:** Our training programs combine theory and practice through labs and demonstrations, with a strong focus on practical skills that can be applied immediately in real-world situations.
-
-    """
 
     # Layout configuration
     [params.trainings.layout]
@@ -653,23 +639,6 @@ Que vous soyez à la recherche d'interviews, d'analyses ou d'avancées technolog
 Nous espérons que vous prendrez autant de plaisir à lire nos articles que nous en avons eu à les écrire pour vous !
 Poursuivez votre lecture pour découvrir comment le Cloud Native peut élargir vos horizons de développement.
 """
-
-    # French language for Trainings
-      [languages.fr.params.trainings]
-        title = "Nos Formations DevOps, DevSecOps, Cloud et Agilité: Enseignées par des experts, adaptées à vos besoins et personnalisables, sur site en Français ou Anglais !"
-        subtitle = """
-  Conçues et dispensées par des experts chevronnés dans les domaines du [DevOps](/site/content/fr-ch/offers/sonative-devops.md), [Agile](/site/content/fr-ch/offers/sonative-agile.md), [Cloud Native Application](/site/content/fr-ch/offers/sonative-app.md) et [Cloud](/site/content/fr-ch/offers/sonative-cloud.md), nos formations ont pour objectif de vous fournir les compétences et les connaissances dont vous avez besoin pour réussir dans vos missions et projets.
-
-🌟 **Consultants spécialistes expérimentés :** Nos formateurs sont des experts, issus de l’industrie, possédant une expérience pratique étendue. Ils apportent des connaissances de pointe directement de la salle des serveurs et des équipes de développement à votre salle de cours.
-
-🧩 **Cours personnalisables :** Nous comprenons que chaque organisation est unique. C’est pourquoi nos cours peuvent être personnalisés pour répondre à vos besoins spécifiques et à votre contexte, vous offrant une flexibilité inégalée.
-
-🏢 **En présentiel :** Notre approche d’enseignement en présentiel, soit dans vos locaux soit dans nos locaux, favorise des interactions directes avec les formateurs et les pairs, créant ainsi un environnement d’apprentissage immersif et collaboratif.
-
-🇫🇷 / 🇬🇧 **Enseignement en Français et en Anglais :** Nous vous proposons de réaliser ces formations en Français ou en Anglais pour être au plus proche de vos besoins et permettre des équipes mixtes.
-
-📚/ ⚙️ **Mise en pratique :** Nos cours de formation comprennent un mélange de théorie et de pratique, via des labs et des démos, en mettant l’accent sur les compétences utiles pouvant être appliquées immédiatement.
-  """
 
     [languages.fr.params.cta.primary_button]
       text = "Contactez-nous"
