@@ -16,6 +16,17 @@
   }
 
   /*
+   * Same issue as .btn-primary above: Tailwind Typography's `.prose a`
+   * rule (blue link color) otherwise wins over .btn-neurokube's
+   * `text-white` whenever the sokube-feature shortcode's button is
+   * rendered inside a `.prose` container (e.g. single.html's article body).
+   */
+  .prose .btn-neurokube {
+    color: white !important;
+    text-decoration: none !important;
+  }
+
+  /*
    * Le thème applique globalement `.prose img { @apply rounded-lg shadow-lg; }`
    * (voir themes/hugo-saasify-theme/assets/css/main.css). Le shortcode
    * sokube-cta-image.html ne veut ni arrondi ni ombre sur son image : on

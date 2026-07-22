@@ -9,11 +9,18 @@
         thumbnail image (top-left corner), matching the blog design. Its
         colors (background / text / hover background / hover text, for
         light and dark mode) are configurable in hugo.toml under
-        [params.blog.categoryBadge]; see that block's comment for the rules
-        around adding new class combinations to the tailwind safelist.
+        [params.<section>.categoryBadge] (section = blog or trainings, via
+        layouts/partials/blog-section-config.html); see that block's
+        comment for the rules around adding new class combinations to the
+        tailwind safelist.
       - the card's own background, title text/hover colors, and the color
         of every other text and icon in the card are configurable in
-        hugo.toml under [params.blog.postCard] (same safelist rules apply).
+        hugo.toml under [params.<section>.postCard] (same safelist rules
+        apply).
+      - the "Author and Date" row and the "Reading Time" indicator are only
+        shown when params.<section>.postMeta.enable is true (same toggle
+        used by the single-post page's post-meta.html), so a section can
+        hide meta info everywhere at once instead of only on single pages.
 */}}
 {{ $categories := .Params.categories | default slice }}
 {{ $categorySlugs := slice }}
@@ -21,18 +28,22 @@
     {{ $categorySlugs = $categorySlugs | append (. | urlize) }}
 {{ end }}
 
-{{ $badge := .Site.Params.blog.categoryBadge | default dict }}
+{{ $cfg := partial "blog-section-config.html" . }}
+
+{{ $badge := $cfg.categoryBadge | default dict }}
 {{ $badgeBackground := $badge.background | default "bg-neurokube-900 dark:bg-neurokube-100" }}
 {{ $badgeText := $badge.text | default "text-white dark:text-neurokube-900" }}
 {{ $badgeHoverBackground := $badge.hover_background | default "hover:bg-neurokube-800 dark:hover:bg-neurokube-200" }}
 {{ $badgeHoverText := $badge.hover_text | default "hover:text-white dark:hover:text-neurokube-900" }}
 {{ $badgeClasses := printf "%s %s %s %s" $badgeBackground $badgeText $badgeHoverBackground $badgeHoverText }}
 
-{{ $postCard := .Site.Params.blog.postCard | default dict }}
+{{ $postCard := $cfg.postCard | default dict }}
 {{ $cardBackground := $postCard.background | default "bg-white dark:bg-neurokube-900" }}
 {{ $titleText := $postCard.title_text | default "text-neurokube-900 dark:text-white" }}
 {{ $titleHoverText := $postCard.title_hover_text | default "hover:text-neurokube-600 dark:hover:text-neurokube-300" }}
 {{ $bodyText := $postCard.text | default "text-gray-600 dark:text-neurokube-300" }}
+
+{{ $postMeta := $cfg.postMeta | default dict }}
 
 <article class="post-card {{ $cardBackground }} rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
          data-categories="{{ delimit $categorySlugs "," }}">
@@ -74,6 +85,7 @@
         </p>
 
         <!-- Author and Date in a cleaner layout -->
+        {{ if $postMeta.enable }}
         <div class="flex items-center justify-between text-sm mb-4 {{ $bodyText }}">
             {{ with .Params.author }}
                 <div class="flex items-center">
@@ -93,6 +105,7 @@
                 </time>
             </div>
         </div>
+        {{ end }}
 
         <!-- Read More link and Reading Time -->
         <div class="flex justify-between items-center">
@@ -105,12 +118,14 @@
             </a>
 
             <!-- Reading Time -->
+            {{ if $postMeta.enable }}
             <span class="text-sm flex items-center {{ $bodyText }}">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                 </svg>
                 <span>{{ .ReadingTime }} {{ i18n "readTime" }}</span>
             </span>
+            {{ end }}
         </div>
     </div>
 </article>

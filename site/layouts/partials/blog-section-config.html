@@ -1,0 +1,28 @@
+{{/*
+    blog-section-config
+
+    Central place that decides which config block from hugo.toml applies to
+    the "blog family" templates (list.html, single.html, sidebar.html,
+    post-card.html, sokube-blog-category-filter.html, sokube-feature.html).
+
+    Every content section that wants its own independent toggles (number of
+    columns, post meta, sidebar blocks, "Learn More" button, ...) gets a
+    [params.<section>] block in hugo.toml with the same keys as
+    [params.blog]. This partial picks the right one based on the current
+    page's .Section.
+
+    Usage: {{ $cfg := partial "blog-section-config.html" . }}
+    (pass a Page - the partial reads .Section on it)
+
+    For sections that don't have a dedicated block (e.g. the homepage),
+    an empty dict is returned so callers can fall back to safe defaults
+    instead of accidentally inheriting the blog's or trainings' settings.
+*/}}
+{{- $section := .Section -}}
+{{- $result := dict -}}
+{{- if eq $section "trainings" -}}
+    {{- $result = .Site.Params.trainings | default dict -}}
+{{- else if eq $section "blog" -}}
+    {{- $result = .Site.Params.blog | default dict -}}
+{{- end -}}
+{{- return $result -}}

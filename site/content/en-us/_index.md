@@ -78,6 +78,7 @@ testimonials:
     image="/images/features/incident-investigation-light.webp"
     buttonText="Learn more"
     buttonLink="/features/ai-powered-incident-investigation/"
+    showButton="true"
     features="Cross-platform correlation,Contextual analysis,Guided investigations,Reduced MTTR"
     imagePosition="right"
 >}}
@@ -91,6 +92,7 @@ testimonials:
     image="/images/features/multi-context-intelligence-light.webp"
     buttonText="Learn more"
     buttonLink="/features/multi-context-platform-intelligence/"
+    showButton="true"
     features="Kubernetes runtime,Git repositories,Infrastructure as Code,Knowledge bases"
     imagePosition="left"
 >}}
@@ -104,6 +106,7 @@ testimonials:
     image="/images/features/root-cause-analysis-light.webp"
     buttonText="Learn more"
     buttonLink="/features/root-cause-analysis-assistance/"
+    showButton="true"
     features="Dependency mapping,Anomaly correlation,Context enrichment,Hypothesis generation"
     imagePosition="right"
 >}}
@@ -117,6 +120,7 @@ testimonials:
     image="/images/features/ai-assisted-remediation-light.webp"
     buttonText="Learn more"
     buttonLink="/features/ai-assisted-remediation/"
+    showButton="true"
     features="Guided recovery actions,Human validation,Operational guardrails,Integration with existing processes"
     imagePosition="left"
 >}}
@@ -130,6 +134,7 @@ testimonials:
     image="/images/features/continuous-operational-learning-light.webp"
     buttonText="Learn more"
     buttonLink="/features/continuous-operational-learning/"
+    showButton="true"
     features="Incident-driven knowledge,Runbooks,Best practices,Collective expertise"
     imagePosition="right"
 >}}
@@ -143,6 +148,7 @@ testimonials:
     image="/images/features/human-in-the-loop-light.webp"
     buttonText="Learn more"
     buttonLink="/features/human-in-the-loop-governance/"
+    showButton="true"
     features="Approval workflows,Full traceability,Policy enforcement,Security-first operations"
     imagePosition="left"
 >}}
@@ -156,6 +162,7 @@ testimonials:
     image="/images/features/versioned-technical-context.webp"
     buttonText="Learn more"
     buttonLink="/features/versioned-technical-context/"
+    showButton="true"
     features="Versioned documentation bundle,Versioned MCP,Exact technical context,Continuous updates"
     imagePosition="right"
 >}}
@@ -169,6 +176,7 @@ testimonials:
     image="/images/features/proven-resolution-process-light.webp"
     buttonText="Learn more"
     buttonLink="/features/proven-resolution-process/"
+    showButton="true"
     features="Single thread,Modeled on your practices,Auditable at every step,No disruption to DevOps"
     imagePosition="left"
 >}}

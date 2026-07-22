@@ -78,6 +78,7 @@ testimonials:
     image="/images/features/incident-investigation-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/ai-powered-incident-investigation/"
+    showButton="true"
     features="Corrélation multi-plateformes,Analyse contextualisée,Investigations guidées,Réduction du MTTR"
     imagePosition="right"
 >}}
@@ -91,6 +92,7 @@ testimonials:
     image="/images/features/multi-context-intelligence-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/multi-context-platform-intelligence/"
+    showButton="true"
     features="Environnement d'exécution Kubernetes,Dépôts Git,Infrastructure as Code,Bases de connaissances"
     imagePosition="left"
 >}}
@@ -104,6 +106,7 @@ testimonials:
     image="/images/features/root-cause-analysis-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/root-cause-analysis-assistance/"
+    showButton="true"
     features="Cartographie des dépendances,Corrélation des anomalies,Enrichissement du contexte,Génération d'hypothèses"
     imagePosition="right"
 >}}
@@ -117,6 +120,7 @@ testimonials:
     image="/images/features/ai-assisted-remediation-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/ai-assisted-remediation/"
+    showButton="true"
     features="Actions de rétablissement guidées,Validation humaine,Garde-fous opérationnels,Intégration aux processus existants"
     imagePosition="left"
 >}}
@@ -130,6 +134,7 @@ testimonials:
     image="/images/features/continuous-operational-learning-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/continuous-operational-learning/"
+    showButton="true"
     features="Connaissances issues des incidents,Procédures opérationnelles (Runbooks),Bonnes pratiques,Expertise collective"
     imagePosition="right"
 >}}
@@ -143,6 +148,7 @@ testimonials:
     image="/images/features/human-in-the-loop-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/human-in-the-loop-governance/"
+    showButton="true"
     features="Flux de validation,Traçabilité complète,Application des politiques,Opérations orientées sécurité"
     imagePosition="left"
 >}}
@@ -156,6 +162,7 @@ testimonials:
     image="/images/features/versioned-technical-context.webp"
     buttonText="En savoir plus"
     buttonLink="/features/versioned-technical-context/"
+    showButton="true"
     features="Bundle documentaire versionné,MCP versionné,Contexte technique exact,Mise à jour continue"
     imagePosition="right"
 >}}
@@ -169,6 +176,7 @@ testimonials:
     image="/images/features/proven-resolution-process-light.webp"
     buttonText="En savoir plus"
     buttonLink="/features/proven-resolution-process/"
+    showButton="true"
     features="Fil conducteur unique,Calqué sur vos pratiques,Auditable à chaque étape,Sans disruption DevOps"
     imagePosition="left"
 >}}

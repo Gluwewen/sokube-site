@@ -1,4 +1,20 @@
-{{/* NeuroKube Feature Shortcode */}}
+{{/*
+    NeuroKube Feature Shortcode
+
+    The "Learn More" button is now opt-in, per shortcode call, via a
+    showButton parameter (defaults to "false"):
+
+        {{</* sokube-feature
+            ...
+            buttonText="S'inscrire"
+            buttonLink="/contact"
+            showButton="true"
+        >}}
+
+    This lets you show the button only on the feature blocks where it makes
+    sense (e.g. a "Prérequis" block linking to a contact form) instead of on
+    every sokube-feature call on the page.
+*/}}
 
 {{ $title := .Get "title" }}
 {{ $description := .Get "description" }}
@@ -10,8 +26,17 @@
 {{ $buttonText := .Get "buttonText" | default "Learn More" }}
 {{ $buttonLink := .Get "buttonLink" | default "#" }}
 {{ $imagePosition := .Get "imagePosition" | default "right" }}
+{{ $showButton := eq (.Get "showButton" | default "false") "true" }}
 
-{{ $features := split (.Get "features") "," }}
+{{/* .Get "features" is "" when the parameter is omitted, and split "" ","
+     returns [""] (one empty string) rather than an empty slice - without
+     filtering that out, an empty checkmark bullet would still render. */}}
+{{ $features := slice }}
+{{ range split (.Get "features") "," }}
+    {{ if ne . "" }}
+        {{ $features = $features | append . }}
+    {{ end }}
+{{ end }}
 
 <div class="grid lg:grid-cols-2 gap-12 items-center">
 
@@ -53,6 +78,7 @@
             {{ $description }}
         </p>
 
+        {{ if gt (len $features) 0 }}
         <ul class="space-y-4">
 
             {{ range $features }}
@@ -70,19 +96,22 @@
                     />
                 </svg>
 
-                <span>{{ . | default "" }}</span>
+                <span>{{ . }}</span>
 
             </li>
             {{ end }}
 
         </ul>
+        {{ end }}
 
+        {{ if $showButton }}
         <a
             href="{{ $buttonLink }}"
             class="btn-neurokube inline-block"
         >
             {{ $buttonText }}
         </a>
+        {{ end }}
 
     </div>
 

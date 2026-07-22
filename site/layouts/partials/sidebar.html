@@ -1,48 +1,63 @@
 {{/*
     Override of themes/hugo-saasify-theme/layouts/partials/sidebar.html.
     Kept here (site/layouts/partials) so the theme itself is never modified.
-    The only change: a "Back to Articles" pill button is added at the top of
-    the sidebar, toggled the same way as the other sections
-    (params.blog.sidebar.backToArticles.enable in hugo.toml).
+    Changes vs. the theme version:
+      - a "Back to Articles" pill button is added at the top of the sidebar.
+      - every toggle/label now comes from params.<section>.sidebar.* in
+        hugo.toml (via layouts/partials/blog-section-config.html) instead of
+        the hardcoded params.blog.sidebar.*, so /blog/ and /trainings/ can
+        each configure their sidebar independently.
+      - the "Back to Articles" link and the "Recent" list's Type filter are
+        derived from the current page's section (blog -> /blog/ + Type
+        "blog", trainings -> /trainings/ + Type "trainings") instead of
+        being hardcoded to "blog".
 */}}
+{{ $cfg := partial "blog-section-config.html" . }}
+{{ $sidebar := $cfg.sidebar | default dict }}
+{{ $section := .Section }}
+{{ $sectionURL := printf "/%s/" $section | relLangURL }}
+
 <div class="space-y-8">
     <!-- Back to Articles -->
-    {{ if .Site.Params.blog.sidebar.backToArticles.enable }}
+    {{ $backToArticles := $sidebar.backToArticles | default dict }}
+    {{ if $backToArticles.enable }}
         <div>
-            <a href="{{ "/blog/" | relLangURL }}"
+            <a href="{{ $sectionURL }}"
                class="inline-flex items-center gap-2 px-5 py-2 rounded-full border-2 border-kube-600 text-kube-600 font-medium text-sm hover:bg-kube-50 transition-colors duration-200">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                {{ .Site.Params.blog.sidebar.backToArticles.text | default (i18n "backToArticles" .) }}
+                {{ $backToArticles.text | default (i18n "backToArticles" .) }}
             </a>
         </div>
     {{ end }}
 
     <!-- Subscribe Form -->
-    {{ if .Site.Params.blog.sidebar.subscribe.enable }}
+    {{ $subscribe := $sidebar.subscribe | default dict }}
+    {{ if $subscribe.enable }}
         {{ $params := dict
             "Site" .Site
             "Language" .Site.Language
-            "title" .Site.Params.blog.sidebar.subscribe.title
-            "description" .Site.Params.blog.sidebar.subscribe.description
-            "action" .Site.Params.blog.sidebar.subscribe.action
-            "emailName" .Site.Params.blog.sidebar.subscribe.emailName
-            "buttonText" .Site.Params.blog.sidebar.subscribe.buttonText
-            "placeholder" .Site.Params.blog.sidebar.subscribe.placeholder
-            "disclaimer" .Site.Params.blog.sidebar.subscribe.disclaimer
-            "hidden" .Site.Params.blog.sidebar.subscribe.hidden
+            "title" $subscribe.title
+            "description" $subscribe.description
+            "action" $subscribe.action
+            "emailName" $subscribe.emailName
+            "buttonText" $subscribe.buttonText
+            "placeholder" $subscribe.placeholder
+            "disclaimer" $subscribe.disclaimer
+            "hidden" $subscribe.hidden
         }}
         {{ partial "components/subscribe-form" $params }}
     {{ end }}
 
     <!-- Recent Articles -->
-    {{ if .Site.Params.blog.sidebar.recent.enable }}
+    {{ $recent := $sidebar.recent | default dict }}
+    {{ if $recent.enable }}
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-bold mb-4">{{ .Site.Params.blog.sidebar.recent.title | default (i18n "recentArticles" .) }}</h3>
+            <h3 class="text-lg font-bold mb-4">{{ $recent.title | default (i18n "recentArticles" .) }}</h3>
             <div class="space-y-4">
-                {{ $recentCount := .Site.Params.blog.sidebar.recent.count | default 5 }}
-                {{ range first $recentCount (where .Site.RegularPages "Type" "blog") }}
+                {{ $recentCount := $recent.count | default 5 }}
+                {{ range first $recentCount (where .Site.RegularPages "Type" $section) }}
                     <div class="group">
                         <a href="{{ .RelPermalink }}" class="block">
                             {{ with .Params.featured_image }}
@@ -74,9 +89,10 @@
     {{ end }}
 
     <!-- Categories -->
-    {{ if .Site.Params.blog.sidebar.categories.enable }}
+    {{ $categories := $sidebar.categories | default dict }}
+    {{ if $categories.enable }}
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-bold mb-4">{{ .Site.Params.blog.sidebar.categories.title | default (i18n "categories" .) }}</h3>
+            <h3 class="text-lg font-bold mb-4">{{ $categories.title | default (i18n "categories" .) }}</h3>
             <div class="flex flex-wrap gap-2">
                 {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
                     <a href="{{ "/categories/" | relLangURL }}{{ $name | urlize }}"
@@ -90,11 +106,12 @@
     {{ end }}
 
     <!-- Tags Cloud -->
-    {{ if .Site.Params.blog.sidebar.tags.enable }}
+    {{ $tags := $sidebar.tags | default dict }}
+    {{ if $tags.enable }}
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-bold mb-4">{{ .Site.Params.blog.sidebar.tags.title | default (i18n "popularTags" .) }}</h3>
+            <h3 class="text-lg font-bold mb-4">{{ $tags.title | default (i18n "popularTags" .) }}</h3>
             <div class="flex flex-wrap gap-2">
-                {{ $tagCount := .Site.Params.blog.sidebar.tags.count | default 20 }}
+                {{ $tagCount := $tags.count | default 20 }}
                 {{ range first $tagCount .Site.Taxonomies.tags.ByCount }}
                     <a href="{{ "/tags/" | relLangURL }}{{ .Name | urlize }}"
                        class="text-sm text-gray-600 hover:text-primary-600">
