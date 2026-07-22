@@ -144,6 +144,47 @@ Read on to find out how the Cloud Native can expand your development horizons.
       # "featured_image" regardless of this setting. See layouts/_default/single.html.
       bannerImageEnable = false
 
+    # Hero section shown at the top of the single-post page instead of the
+    # plain badge/title/image header, when layout.bannerImageEnable (above)
+    # is true. See layouts/_default/single.html.
+    # Every color field accepts one or more Tailwind classes; combine a
+    # light-mode class and a dark: variant in the same string, same rule as
+    # [params.blog.categoryFilter] below. Add any brand-new class
+    # combination to the tailwind.config.js safelist.
+    [params.blog.hero]
+      background = "bg-neurokube-600 dark:bg-neurokube-800"
+
+      [params.blog.hero.style]
+        title = "text-white"
+        description = "text-neurokube-100"
+
+      # Category pill shown on top of the hero (same categories as the
+      # plain header).
+      [params.blog.hero.badge]
+        background = "bg-white/10 dark:bg-white/10"
+        text = "text-white"
+
+      # Action button, shared by every post in this section - the label
+      # (and link) are the same everywhere, so they live here instead of
+      # per-post. Override under [languages.fr.params.blog.hero.cta] for a
+      # translated label.
+      [params.blog.hero.cta]
+        enable = true
+        label = "Learn more"
+        link = "/contact"
+        background = "bg-white"
+        text_color = "text-neurokube-600"
+        hover = "hover:bg-neurokube-100"
+
+      # "Back to <section>" link. Points to the section's own list page
+      # (e.g. /blog/) automatically - only the label and colors are
+      # configurable. Override under [languages.fr.params.blog.hero.backLink]
+      # for a translated label.
+      [params.blog.hero.backLink]
+        text = "Back to articles"
+        text_color = "text-white"
+        hover_text = "hover:text-neurokube-100"
+
     # Article header info (single post page): reading time, publication
     # date and tags. See layouts/partials/post-meta.html.
     [params.blog.postMeta]
@@ -249,6 +290,33 @@ Read on to find out how the Cloud Native can expand your development horizons.
       sidebarEnable = false
       # See the comment on params.blog.layout.bannerImageEnable above.
       bannerImageEnable = true
+
+    # See the comment on params.blog.hero above.
+    [params.trainings.hero]
+      background = "bg-neurokube-600 dark:bg-neurokube-800"
+
+      [params.trainings.hero.style]
+        title = "text-white"
+        description = "text-neurokube-100"
+
+      [params.trainings.hero.badge]
+        background = "bg-white/10 dark:bg-white/10"
+        text = "text-white"
+
+      # Override the label under [languages.fr.params.trainings.hero.cta].
+      [params.trainings.hero.cta]
+        enable = true
+        label = "Register for our training course!"
+        link = "/contact"
+        background = "bg-white"
+        text_color = "text-neurokube-600"
+        hover = "hover:bg-neurokube-100"
+
+      # Override the label under [languages.fr.params.trainings.hero.backLink].
+      [params.trainings.hero.backLink]
+        text = "Back to trainings"
+        text_color = "text-white"
+        hover_text = "hover:text-neurokube-100"
 
     # Article header info (single training page): reading time, publication
     # date and tags.
@@ -639,6 +707,19 @@ Que vous soyez à la recherche d'interviews, d'analyses ou d'avancées technolog
 Nous espérons que vous prendrez autant de plaisir à lire nos articles que nous en avons eu à les écrire pour vous !
 Poursuivez votre lecture pour découvrir comment le Cloud Native peut élargir vos horizons de développement.
 """
+
+      [languages.fr.params.blog.hero.cta]
+        label = "Inscrivez-vous à notre formation !"
+
+      [languages.fr.params.blog.hero.backLink]
+        text = "Retour aux articles"
+
+    # French language for Trainings hero (single training page)
+    [languages.fr.params.trainings.hero.cta]
+      label = "Inscrivez-vous à notre formation !"
+
+    [languages.fr.params.trainings.hero.backLink]
+      text = "Retour aux formations"
 
     [languages.fr.params.cta.primary_button]
       text = "Contactez-nous"

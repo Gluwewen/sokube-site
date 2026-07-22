@@ -53,7 +53,7 @@
     <!-- Recent Articles -->
     {{ $recent := $sidebar.recent | default dict }}
     {{ if $recent.enable }}
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="bg-white rounded-2xl shadow-md p-6">
             <h3 class="text-lg font-bold mb-4">{{ $recent.title | default (i18n "recentArticles" .) }}</h3>
             <div class="space-y-4">
                 {{ $recentCount := $recent.count | default 5 }}
@@ -61,7 +61,7 @@
                     <div class="group">
                         <a href="{{ .RelPermalink }}" class="block">
                             {{ with .Params.featured_image }}
-                                <div class="aspect-w-16 aspect-h-9 mb-3 overflow-hidden rounded-lg">
+                                <div class="aspect-w-16 aspect-h-9 mb-3 overflow-hidden rounded-2xl">
                                     <img
                                         src="{{ . }}"
                                         alt="{{ $.Title }}"
@@ -91,7 +91,7 @@
     <!-- Categories -->
     {{ $categories := $sidebar.categories | default dict }}
     {{ if $categories.enable }}
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="bg-white rounded-2xl shadow-md p-6">
             <h3 class="text-lg font-bold mb-4">{{ $categories.title | default (i18n "categories" .) }}</h3>
             <div class="flex flex-wrap gap-2">
                 {{ range $name, $taxonomy := .Site.Taxonomies.categories }}
@@ -108,7 +108,7 @@
     <!-- Tags Cloud -->
     {{ $tags := $sidebar.tags | default dict }}
     {{ if $tags.enable }}
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="bg-white rounded-2xl shadow-md p-6">
             <h3 class="text-lg font-bold mb-4">{{ $tags.title | default (i18n "popularTags" .) }}</h3>
             <div class="flex flex-wrap gap-2">
                 {{ $tagCount := $tags.count | default 20 }}

@@ -39,6 +39,22 @@
   }
 
   /*
+   * Same selector as the theme's `.prose img { @apply rounded-lg shadow-lg; }`
+   * (see themes/hugo-saasify-theme/assets/css/main.css), redeclared here so
+   * it wins on cascade order (this file loads after the theme's CSS) rather
+   * than needing extra specificity. Bumps every image rendered inside a
+   * `.prose` container up to the rounding used on the single.html hero
+   * banner - the sokube-feature shortcode's images (which is what actually
+   * needed a class, .sokube-feature-img, to hang this off before this rule
+   * existed), and any plain image inside a blog/training post's Markdown
+   * body. .sokube-cta-image-img above stays unaffected since it's a more
+   * specific selector.
+   */
+  .prose img {
+    @apply rounded-2xl;
+  }
+
+  /*
    * .card : redéfinition volontaire de la classe .card du thème (cascade,
    * voir avertissement précédent sur l'ordre des @import).
    */
@@ -103,8 +119,7 @@
    * cartes, quelle que soit la palette ou le mode clair/sombre choisi.
    */
   .card-neurokube {
-    @apply p-8 border transition-all duration-300;
-    border-radius: 2rem;
+    @apply p-8 border transition-all duration-300 rounded-2xl;
   }
 
   .card-neurokube:hover {

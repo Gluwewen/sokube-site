@@ -11,11 +11,11 @@
         turn it on/off independently.
       - when params.<section>.layout.bannerImageEnable is true, the header
         image uses the "featured_image_banner" front matter field (falling
-        back to "featured_image" if not set) and is displayed as a
-        fixed-height, cropped banner instead of its natural size - useful
-        now that full-width (no sidebar) articles would otherwise stretch
-        the featured image very tall. The list-page thumbnail (post-card.html)
-        is unaffected and always uses "featured_image".
+        back to "featured_image" if not set), and the whole badge/title/
+        image header is replaced by a colored hero section (see the "Hero
+        section" block below) instead of the plain header used otherwise.
+        The list-page thumbnail (post-card.html) is unaffected and always
+        uses "featured_image".
 */}}
 {{ define "main" }}
 {{ $cfg := partial "blog-section-config.html" . }}
@@ -31,30 +31,112 @@
     <div class="flex flex-col {{ if $sidebarEnable }}lg:flex-row{{ end }} gap-8 mb-12">
         <!-- Main Content -->
         <article class="flex-1">
-            <header class="mb-8">
-                {{ with .Params.categories }}
-                    <div class="mb-4">
-                        {{ range . }}
-                            <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}"
-                               class="inline-block px-3 py-1 text-sm font-medium text-primary-600 bg-primary-50 rounded-full hover:bg-primary-100 mr-2">
-                                {{ . }}
-                            </a>
+            {{ if $bannerImageEnable }}
+                <!--
+                    Hero section: badge + title + description (front matter
+                    "description") + shared CTA button + "back to section"
+                    link, over a full-bleed header image blended into the
+                    section's background color via a gradient overlay
+                    (solid color where the text sits, fading into the photo
+                    on the right) - rather than a separate image panel.
+                    Every color and the CTA/back-link labels come from
+                    params.<section>.hero in hugo.toml (via
+                    blog-section-config.html), so each section using
+                    layout.bannerImageEnable can look different in both
+                    light and dark mode.
+
+                    $heroFrom/$heroVia turn the configured "bg-x dark:bg-y"
+                    background into matching "from-x dark:from-y" /
+                    "via-x dark:via-y" gradient-stop classes. Since these are
+                    built at render time (not literally present in this
+                    file), add any new color combination to the safelist in
+                    tailwind.config.js - see the comment there.
+                -->
+                {{ $hero := $cfg.hero | default dict }}
+                {{ $heroBg := $hero.background | default "bg-neurokube-600 dark:bg-neurokube-800" }}
+                {{ $heroFrom := replace $heroBg "bg-" "from-" }}
+                {{ $heroVia := replace $heroBg "bg-" "via-" }}
+                {{ $heroStyle := $hero.style | default dict }}
+                {{ $heroTitleColor := $heroStyle.title | default "text-white" }}
+                {{ $heroDescColor := $heroStyle.description | default "text-neurokube-100" }}
+                {{ $heroBadge := $hero.badge | default dict }}
+                {{ $heroBadgeClasses := printf "%s %s" ($heroBadge.background | default "bg-white/10 dark:bg-white/10") ($heroBadge.text | default "text-white") }}
+                {{ $heroCta := $hero.cta | default dict }}
+                {{ $heroBack := $hero.backLink | default dict }}
+                {{ $sectionURL := printf "/%s/" .Section | relLangURL }}
+
+                <div class="relative mb-8 rounded-2xl overflow-hidden min-h-[380px] lg:min-h-[440px] {{ $heroBg }}">
+                    {{ with $heroImage }}
+                        <img src="{{ . }}"
+                             alt="{{ $.Title }}"
+                             class="absolute inset-0 w-full h-full object-cover"
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-r {{ $heroFrom }} {{ $heroVia }} to-transparent" aria-hidden="true"></div>
+                    {{ end }}
+
+                    <div class="relative z-10 p-8 lg:p-12 max-w-xl lg:max-w-2xl flex flex-col gap-6">
+                        {{ with .Params.categories }}
+                            <div>
+                                {{ range . }}
+                                    <span class="inline-block px-3 py-1 text-sm font-medium rounded-full mr-2 {{ $heroBadgeClasses }}">
+                                        {{ . }}
+                                    </span>
+                                {{ end }}
+                            </div>
                         {{ end }}
+
+                        <h1 class="text-3xl lg:text-4xl font-bold {{ $heroTitleColor }}">{{ .Title }}</h1>
+
+                        {{ partial "post-meta.html" . }}
+
+                        {{ with .Description }}
+                            <p class="text-lg {{ $heroDescColor }}">{{ . }}</p>
+                        {{ end }}
+
+                        <div class="flex flex-wrap items-center gap-x-8 gap-y-4 mt-2">
+                            {{ if $heroCta.enable }}
+                                <a href="{{ $heroCta.link | default "#" }}"
+                                   class="inline-flex items-center px-6 py-3 rounded-full font-medium transition-colors duration-200 {{ $heroCta.background | default "bg-white" }} {{ $heroCta.text_color | default "text-neurokube-600" }} {{ $heroCta.hover | default "hover:bg-neurokube-100" }}">
+                                    {{ $heroCta.label | default "Learn more" }}
+                                </a>
+                            {{ end }}
+
+                            <a href="{{ $sectionURL }}"
+                               class="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide transition-colors duration-200 {{ $heroBack.text_color | default "text-white" }} {{ $heroBack.hover_text | default "hover:text-neurokube-100" }}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                                {{ $heroBack.text | default "Back" }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {{ else }}
+                <header class="mb-8">
+                    {{ with .Params.categories }}
+                        <div class="mb-4">
+                            {{ range . }}
+                                <a href="{{ "/categories/" | relLangURL }}{{ . | urlize }}"
+                                   class="inline-block px-3 py-1 text-sm font-medium text-primary-600 bg-primary-50 rounded-full hover:bg-primary-100 mr-2">
+                                    {{ . }}
+                                </a>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+
+                    <h1 class="text-4xl font-bold mb-4">{{ .Title }}</h1>
+
+                    {{ partial "post-meta.html" . }}
+                </header>
+
+                {{ with $heroImage }}
+                    <div class="mb-8">
+                        <img src="{{ . }}"
+                             alt="{{ $.Title }}"
+                             class="w-full h-auto rounded-2xl"
+                             loading="lazy">
                     </div>
                 {{ end }}
-
-                <h1 class="text-4xl font-bold mb-4">{{ .Title }}</h1>
-
-                {{ partial "post-meta.html" . }}
-            </header>
-
-            {{ with $heroImage }}
-                <div class="mb-8">
-                    <img src="{{ . }}"
-                         alt="{{ $.Title }}"
-                         class="w-full {{ if $bannerImageEnable }}h-64 md:h-80 object-cover{{ else }}h-auto{{ end }} rounded-lg"
-                         loading="lazy">
-                </div>
             {{ end }}
 
             <div class="prose prose-lg max-w-none">

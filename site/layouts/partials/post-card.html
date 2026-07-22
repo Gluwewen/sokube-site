@@ -45,7 +45,7 @@
 
 {{ $postMeta := $cfg.postMeta | default dict }}
 
-<article class="post-card {{ $cardBackground }} rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+<article class="post-card {{ $cardBackground }} rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
          data-categories="{{ delimit $categorySlugs "," }}">
     <div class="relative">
         {{ with .Params.featured_image }}

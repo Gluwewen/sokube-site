@@ -23,7 +23,7 @@
         {{ $angle := .Site.Params.cta.gradient_angle | default 45 }}
         {{ $from := .Site.Params.cta.gradient_from }}
         {{ $to := .Site.Params.cta.gradient_to }}
-        <div class="relative rounded-lg overflow-hidden {{ $background }} cta-gradient" style="--gradient-angle: {{ $angle }}; --gradient-from: {{ $from }}; --gradient-to: {{ $to }}">
+        <div class="relative rounded-2xl overflow-hidden {{ $background }} cta-gradient" style="--gradient-angle: {{ $angle }}; --gradient-from: {{ $from }}; --gradient-to: {{ $to }}">
             <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
                 <h2 class="text-3xl md:text-4xl font-bold {{ $titleColor }} mb-6">{{ .Site.Params.cta.title }}</h2>
                 <p class="text-xl {{ $descriptionColor }} mb-8">{{ .Site.Params.cta.description }}</p>

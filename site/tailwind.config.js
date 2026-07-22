@@ -230,11 +230,20 @@ module.exports = {
 
     // Gradients
     'bg-gradient-to-br',
+    'bg-gradient-to-r',
     'from-neurokube-50',
     'from-neurokube-100',
     'from-neurokube-200',
     'via-neurokube-100',
     'via-neurokube-200',
+    // layouts/_default/single.html hero: gradient built at render time from
+    // params.<section>.hero.background (default "bg-neurokube-600
+    // dark:bg-neurokube-800"). Add any new bg-x/dark:bg-y combo you set
+    // there as matching from-x/via-x (and dark: variants) below.
+    'from-neurokube-600',
+    'via-neurokube-600',
+    'dark:from-neurokube-800',
+    'dark:via-neurokube-800',
     'to-neurokube-50',
     'to-neurokube-100',
     'to-neurokube-200',
