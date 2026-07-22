@@ -1,0 +1,33 @@
+{{/*
+    brand-heading
+
+    Shared renderer behind layouts/shortcodes/sokube-brand-heading.html: a
+    two-line (or more) stylized heading where *word*-wrapped segments are
+    highlighted in an accent color, e.g. to reproduce a logo-like title such
+    as "Sons Of KUBErnetes", or a whole line highlighted on its own (wrap
+    the entire line in asterisks).
+
+    Usage: {{ partial "brand-heading.html" (dict "lines" (slice "Some *highlighted* text" "*A fully highlighted line*")) }}
+
+    Params (passed as a dict):
+      lines           ([]string, required) - one <span> per line; wrap the
+                       part(s) to highlight in single asterisks.
+      size, baseColor, baseColorDark, accentColor, accentColorDark (optional,
+      same defaults as the shortcode)
+*/}}
+{{ $lines := .lines | default slice }}
+{{ $size := .size | default "text-4xl sm:text-5xl" }}
+{{ $baseColor := .baseColor | default "text-gray-900" }}
+{{ $baseColorDark := .baseColorDark | default "dark:text-white" }}
+{{ $accentColor := .accentColor | default "text-kube-600" }}
+{{ $accentColorDark := .accentColorDark | default "dark:text-kube-600" }}
+
+<h2 class="{{ $size }} font-extrabold text-center leading-tight {{ $baseColor }} {{ $baseColorDark }}">
+    {{- range $lines }}
+    <span class="block">{{- $parts := split . "*" -}}
+        {{- range $i, $part := $parts -}}
+            {{- if eq (mod $i 2) 1 -}}<span class="{{ $accentColor }} {{ $accentColorDark }}">{{ $part }}</span>{{- else -}}{{ $part }}{{- end -}}
+        {{- end -}}
+    </span>
+    {{- end }}
+</h2>

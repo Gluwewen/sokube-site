@@ -1,5 +1,6 @@
 ---
 title: "Git"
+layout: "training"
 description: "Le but de cette formation est de découvrir Git, le système de contrôle de version le plus utilisé. Ce cours contient de nombreux ateliers pratiques, utilisant une approche étape par étape qui vous aidera à apprendre les commandes et les concepts fondamentaux de Git. Le cours commence par une démonstration du contrôle de version dans un contexte mono-utilisateur et autonome, avant d’explorer comment les référentiels distants permettent aux utilisateurs de collaborer efficacement sur des projets."
 categories: ["Infra As Code"]
 tags: ["Infra As Code"]

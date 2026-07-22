@@ -1,0 +1,82 @@
+{{/*
+    trainings-extra-sections
+
+    Toggleable sections appended at the end of every individual training
+    page (layouts/_default/training.html - git.md, scrum-team-bootstrap.md,
+    ...), never on /trainings/_index.md. They are NOT part of any page's
+    Markdown content: everything is configured under params.trainings.<name>
+    in hugo.toml (via layouts/partials/blog-section-config.html), and
+    rendered here directly.
+
+    Usage: {{ partial "trainings-extra-sections.html" . }} - pass the
+    current Page.
+
+    Section 1 ("introSection"): a sokube-brand-heading-style title +
+    a Markdown description (supports multiple paragraphs, **bold**,
+    *italic*) + a full-width banner image, on its own background color so
+    it stands out from the rest of the page. Toggle with
+    params.trainings.introSection.enable.
+
+    The light/dark background colors are configured separately, as plain
+    Tailwind classes without any "dark:" prefix - this partial adds the
+    "dark:" prefix itself:
+      params.trainings.introSection.style.backgroundLight (e.g. a solid
+        color or a "bg-gradient-to-b from-... to-..." gradient)
+      params.trainings.introSection.style.backgroundDark (e.g. a solid
+        color; "dark:bg-none" is added automatically alongside it so any
+        light-mode gradient's background-image doesn't show through)
+    Remember to safelist in tailwind.config.js any new color/gradient class
+    used here (and its "dark:"-prefixed form), since these values come from
+    hugo.toml rather than a literal class in an .html file.
+*/}}
+{{ $cfg := partial "blog-section-config.html" . }}
+
+<!-- Section 1: stylized heading + description + banner image -->
+{{ $intro := $cfg.introSection | default dict }}
+{{ if $intro.enable }}
+    {{ $heading := $intro.heading | default dict }}
+    {{ $style := $intro.style | default dict }}
+    {{ $descriptionColor := $style.description | default "text-gray-600 dark:text-neurokube-200" }}
+
+    {{ $bgLight := $style.backgroundLight | default "bg-gradient-to-b from-neurokube-100 to-neurokube-50" }}
+    {{ $bgDark := $style.backgroundDark | default "bg-neurokube-400" }}
+    {{ $darkClasses := slice "dark:bg-none" }}
+    {{ range (split $bgDark " ") }}
+        {{ if . }}{{ $darkClasses = $darkClasses | append (printf "dark:%s" .) }}{{ end }}
+    {{ end }}
+    {{ $sectionBg := printf "%s %s" $bgLight (delimit $darkClasses " ") }}
+
+    <section class="py-16 {{ $sectionBg }}">
+        <div class="container mx-auto px-4">
+            <!--
+                No inner max-w-* here on purpose: this section's text and
+                image should span the same width as the sokube-feature
+                blocks above (which are only constrained by this same
+                "container" class, via blog-single-body.html's own
+                container), not a narrower one of its own.
+            -->
+            <div class="text-center mb-10">
+                {{ partial "brand-heading.html" (dict
+                    "lines" ($heading.lines | default slice)
+                    "size" $heading.size
+                    "baseColor" $heading.baseColor
+                    "baseColorDark" $heading.baseColorDark
+                    "accentColor" $heading.accentColor
+                    "accentColorDark" $heading.accentColorDark
+                ) }}
+
+                {{ with $intro.description }}
+                    <div class="prose prose-lg !max-w-none mx-auto mt-6 {{ $descriptionColor }}">
+                        {{ . | markdownify }}
+                    </div>
+                {{ end }}
+            </div>
+
+            {{ with $intro.image }}
+                <div class="rounded-2xl overflow-hidden">
+                    <img src="{{ . }}" alt="" class="w-full h-auto object-cover" loading="lazy">
+                </div>
+            {{ end }}
+        </div>
+    </section>
+{{ end }}

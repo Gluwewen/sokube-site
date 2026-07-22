@@ -290,6 +290,11 @@ Read on to find out how the Cloud Native can expand your development horizons.
       sidebarEnable = false
       # See the comment on params.blog.layout.bannerImageEnable above.
       bannerImageEnable = true
+      # Hide the "separator + previous/next post" navigation block at the
+      # bottom of individual training pages (layouts/_default/training.html,
+      # via layouts/partials/blog-single-body.html). Defaults to true (shown)
+      # when not set, so /blog/ keeps its current behaviour unchanged.
+      prevNextNavEnable = false
 
     # See the comment on params.blog.hero above.
     [params.trainings.hero]
@@ -317,6 +322,44 @@ Read on to find out how the Cloud Native can expand your development horizons.
         text = "Back to trainings"
         text_color = "text-white"
         hover_text = "hover:text-neurokube-100"
+
+    # Section 1, appended by layouts/partials/trainings-extra-sections.html
+    # at the end of every individual training page (layout "training", e.g.
+    # git.md) - NOT on the /trainings/ list page. Not part of any page's
+    # Markdown content - fully driven from here.
+    # Override the text under [languages.fr.params.trainings.introSection].
+    [params.trainings.introSection]
+      enable = true
+
+      # Supports multiple paragraphs (blank line = new paragraph) and
+      # **bold**/*italic* Markdown - passed through markdownify.
+      description = """
+At SoKube, we believe it's important to focus on hands-on practice and individual coaching throughout our training courses, so you can learn at your own pace and in a way that suits your abilities.
+
+Our learning methods also help you acquire the skills you need to put them into practice successfully in your day-to-day missions and projects.
+
+**We can't wait to work with you!**
+"""
+
+      # Full-width banner image below the heading/description. Shared across languages (add a "static/" path here once the asset exists).
+      image = "/images/trainings/intro-banner.jpg"
+
+      # Rendered via layouts/partials/brand-heading.html: one <span> per line, wrap a part (or the whole line) in *asterisks* to highlight it in the accent color.
+      [params.trainings.introSection.heading]
+        lines = [
+          "At SoKube, we are committed to giving you the",
+          "*best possible learning experience!*",
+        ]
+
+      # Section background color, light + dark mode, so it stands out from
+      # the rest of the page (the plain page background above/below it).
+      [params.trainings.introSection.style]
+        # Plain Tailwind classes, no "dark:" prefix - layouts/partials/
+        # trainings-extra-sections.html adds "dark:" to each class in
+        # backgroundDark itself (and clears the light-mode gradient's
+        # background-image in dark mode automatically).
+        backgroundLight = "bg-gradient-to-b from-neurokube-100 to-neurokube-50"
+        backgroundDark = "bg-neurokube-800"
 
     # Article header info (single training page): reading time, publication
     # date and tags.
@@ -720,6 +763,22 @@ Poursuivez votre lecture pour découvrir comment le Cloud Native peut élargir v
 
     [languages.fr.params.trainings.hero.backLink]
       text = "Retour aux formations"
+
+    # French language for Trainings introSection (Section 1, appended to every page using layout "trainings")
+    [languages.fr.params.trainings.introSection.heading]
+      lines = [
+        "Chez SoKube, nous nous engageons à vous offrir la",
+        "*meilleure expérience d'apprentissage possible* !",
+      ]
+
+    [languages.fr.params.trainings.introSection]
+      description = """
+Nous pensons qu'il est important de mettre l'accent sur l'aspect pratique et l'accompagnement individuel lors de nos formations afin que vous puissiez apprendre à votre rythme et d'une manière adaptée à vos capacités.
+
+Nos méthodes d'apprentissage vous permettront également d'acquérir les compétences nécessaires pour les mettre en œuvre, avec succès, lors de vos missions et projets, au quotidien.
+
+**Nous sommes impatients de collaborer avec vous !**
+"""
 
     [languages.fr.params.cta.primary_button]
       text = "Contactez-nous"

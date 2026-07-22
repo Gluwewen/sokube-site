@@ -1,5 +1,6 @@
 ---
 title: "Git"
+layout: "training"
 description: "This training course introduces Git, the world's leading version control system. Through a series of hands-on exercises and practical workshops, participants will learn Git's core concepts and commands using a progressive, step-by-step approach. The course starts by demonstrating version control in a standalone, single-user environment before moving on to remote repositories and collaborative workflows, showing how teams can efficiently work together on shared projects."
 categories: ["Infra As Code"]
 tags: ["Infra As Code"]

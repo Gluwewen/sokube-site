@@ -1,5 +1,6 @@
 ---
 title: "Scrum Team Bootstrap"
+layout: "training"
 description: "You have a product to build or a major evolution to deliver. You have a team ready to take on the challenge. You want to use the Scrum framework to get there, but your team doesn't yet master it well enough. This training is for you. SoKube's Agile coaches drew heavily on Scrum.org's Scrum Master and Product Owner courses to design this course, which launches a team by using their own product directly as the class project. Students leave this training with a solid understanding of the agile mindset and the value of an empirical approach to solving the many complex challenges they will need to face."
 categories: ["Agility"]
 tags: ["Agility"]

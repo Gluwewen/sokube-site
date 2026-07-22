@@ -1,18 +1,18 @@
 {{/*
     trainings
 
-    Hybrid layout for /trainings/, mixing:
-      - layouts/_default/simple.html's freeform content area: an optional
-        auto <h1> (skipped when front matter sets hideTitle: true, e.g. to
-        use your own sokube-brand-heading shortcode instead) followed by
-        .Content rendered inside a "prose" wrapper, so the page author has
-        full Markdown/shortcode freedom above the training grid.
-      - layouts/_default/list.html's blog-listing machinery: the category
-        filter pills, a paginated grid of training cards (post-card.html)
-        whose column count comes from params.<section>.layout.columns, and
-        the pagination controls.
+    Layout for the /trainings/ SECTION LIST PAGE ONLY (_index.md). A hybrid
+    of layouts/_default/simple.html's freeform content area (optional auto
+    <h1>, skipped when front matter sets hideTitle: true) and
+    layouts/_default/list.html's blog-listing machinery (category filter,
+    paginated grid of training cards, pagination controls).
 
-    Enable it on a section's _index.md via front matter:
+    Individual training pages (git.md, scrum-team-bootstrap.md, ...) use
+    layouts/_default/training.html (singular) instead - see that file's
+    comment for why this is a separate template rather than one layout
+    branching on .IsPage.
+
+    Enable it via front matter:
 
         ---
         title: "Formations"

@@ -228,7 +228,16 @@ module.exports = {
     'hover:bg-hr-800',
     'hover:bg-hr-900',
 
+    // layouts/partials/trainings-extra-sections.html intro section: bg
+    // built from params.trainings.introSection.style.background (hugo.toml)
+    // rather than a literal class in the .html file, so it needs to be
+    // safelisted explicitly. Add any new color you set there.
+    'dark:bg-none',
+    'dark:bg-neurokube-300',
+    'dark:bg-neurokube-400',
+
     // Gradients
+    'bg-gradient-to-b',
     'bg-gradient-to-br',
     'bg-gradient-to-r',
     'from-neurokube-50',

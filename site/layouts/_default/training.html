@@ -1,0 +1,30 @@
+{{/*
+    training (singular)
+
+    Layout for an INDIVIDUAL training page (git.md, scrum-team-bootstrap.md,
+    and any future training). Deliberately kept as its own file rather than
+    branching on .IsPage inside layouts/_default/trainings.html (which
+    handles the /trainings/ section LIST page, _index.md): each file then
+    has a single, obvious responsibility, and hugo.toml's "layout:" front
+    matter value maps 1:1 to intent instead of requiring readers to trace
+    a conditional to know what renders where.
+
+    Enable it via front matter:
+
+        ---
+        title: "Git"
+        layout: "training"
+        ---
+
+    Body: the same hero/content/sidebar/nav/CTA as a blog post, via
+    layouts/partials/blog-single-body.html (the same partial
+    layouts/_default/single.html uses for /blog/), followed by
+    layouts/partials/trainings-extra-sections.html - toggleable sections
+    (params.trainings.<name> in hugo.toml) appended at the end of every
+    training page. Those extra sections are NOT shown on the /trainings/
+    list page (layouts/_default/trainings.html doesn't call that partial).
+*/}}
+{{ define "main" }}
+{{ partial "blog-single-body.html" . }}
+{{ partial "trainings-extra-sections.html" . }}
+{{ end }}
