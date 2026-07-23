@@ -361,6 +361,56 @@ Our learning methods also help you acquire the skills you need to put them into 
         backgroundLight = "bg-gradient-to-b from-neurokube-100 to-neurokube-50"
         backgroundDark = "bg-neurokube-800"
 
+    # Section 2, appended right after introSection above, on the same
+    # individual training pages (never on /trainings/_index.md). Renders a
+    # "sokube-cta" instance via layouts/partials/cta-block.html (called
+    # directly - see layouts/partials/trainings-extra-sections.html):
+    # title/description on the left over a blended banner image, and a
+    # "Contact us" card on the right.
+    # Override the text under [languages.fr.params.trainings.ctaSection].
+    [params.trainings.ctaSection]
+      enable = true
+      title = "Let's talk about your project!"
+      description = "Based in Switzerland, France or elsewhere in Europe? Schedule a call with one of our experts to learn more about SoKube's services and training offerings."
+
+      # Full-width banner image, blended into the background on the left
+      # (imagePosition). Shared across languages (add a "static/" path here
+      # once the asset exists).
+      image = "/images/trainings/cta-training-banner.jpg"
+      imagePosition = "left"
+
+      [params.trainings.ctaSection.style]
+        # Same convention as introSection.style above: plain classes, no
+        # "dark:" prefix on backgroundDark.
+        backgroundLight = "bg-neurokube-900"
+        backgroundDark = "bg-neurokube-900"
+
+      [params.trainings.ctaSection.contact]
+        title = "Contact us"
+        description = "Feel free to reach out for any request"
+        buttonText = "Contact us"
+        buttonLink = "/demo"
+
+        # Card background, light + dark mode. Same convention as
+        # ctaSection.style above: plain classes, no "dark:" prefix on
+        # backgroundDark - layouts/partials/cta-block.html adds it.
+        backgroundLight = "bg-white"
+        backgroundDark = "bg-neurokube-800"
+
+        [[params.trainings.ctaSection.contact.items]]
+          icon = "phone"
+          text = "+41 79 749 63 86"
+          link = "tel:+41797496386"
+
+        [[params.trainings.ctaSection.contact.items]]
+          icon = "email"
+          text = "contact@sokube.io"
+          link = "mailto:contact@sokube.io"
+
+        [[params.trainings.ctaSection.contact.items]]
+          icon = "location"
+          text = "Rue Adrien-Lachenal 20-1207 Genève, Suisse"
+
     # Article header info (single training page): reading time, publication
     # date and tags.
     [params.trainings.postMeta]
@@ -779,6 +829,16 @@ Nos méthodes d'apprentissage vous permettront également d'acquérir les compé
 
 **Nous sommes impatients de collaborer avec vous !**
 """
+
+    # French language for Trainings ctaSection (Section 2)
+    [languages.fr.params.trainings.ctaSection]
+      title = "Parlons de votre projet !"
+      description = "Vous êtes basés en Suisse, en France ou en Europe, planifiez un entretien avec l'un de nos experts pour en savoir plus sur l'offre de services ou de formation Sokube."
+
+      [languages.fr.params.trainings.ctaSection.contact]
+        title = "Contactez-nous"
+        description = "N'hésitez pas à nous contacter pour tous vos besoins"
+        buttonText = "Contactez-nous"
 
     [languages.fr.params.cta.primary_button]
       text = "Contactez-nous"

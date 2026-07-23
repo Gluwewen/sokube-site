@@ -28,6 +28,14 @@
     Remember to safelist in tailwind.config.js any new color/gradient class
     used here (and its "dark:"-prefixed form), since these values come from
     hugo.toml rather than a literal class in an .html file.
+
+    Section 2 ("ctaSection"): a sokube-cta instance (see
+    layouts/partials/cta-block.html - called directly here since shortcodes
+    can't be invoked from a Go template) with a title/description, a banner
+    image blended into the background on the left, and a "Contact us" card
+    on the right. Toggle with params.trainings.ctaSection.enable, fully
+    configured under params.trainings.ctaSection in hugo.toml (background,
+    image, contact.items, ...).
 */}}
 {{ $cfg := partial "blog-section-config.html" . }}
 
@@ -79,4 +87,40 @@
             {{ end }}
         </div>
     </section>
+{{ end }}
+
+<!-- Section 2: sokube-cta instance (title/description + blended banner
+     image on the left + "Contact us" card on the right) -->
+{{ $ctaSection := $cfg.ctaSection | default dict }}
+{{ if $ctaSection.enable }}
+    {{ $ctaStyle := $ctaSection.style | default dict }}
+    {{ $contact := $ctaSection.contact | default dict }}
+
+    {{ partial "cta-block.html" (dict
+        "title" $ctaSection.title
+        "showTitle" (ne $ctaSection.title "")
+        "description" $ctaSection.description
+        "showDescription" (ne $ctaSection.description "")
+        "titleColor" $ctaStyle.title
+        "descriptionColor" $ctaStyle.description
+
+        "backgroundLight" $ctaStyle.backgroundLight
+        "backgroundDark" $ctaStyle.backgroundDark
+
+        "showButtons" false
+
+        "showImage" (ne $ctaSection.image "")
+        "image" $ctaSection.image
+        "imagePosition" ($ctaSection.imagePosition | default "left")
+
+        "showContactBlock" true
+        "contactTitle" $contact.title
+        "contactDescription" $contact.description
+        "contactItems" ($contact.items | default slice)
+        "contactButtonText" $contact.buttonText
+        "contactButtonLink" $contact.buttonLink
+        "contactButtonClass" $contact.buttonClass
+        "contactBackgroundLight" $contact.backgroundLight
+        "contactBackgroundDark" $contact.backgroundDark
+    ) }}
 {{ end }}

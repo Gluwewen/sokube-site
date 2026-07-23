@@ -240,6 +240,16 @@ module.exports = {
     'bg-gradient-to-b',
     'bg-gradient-to-br',
     'bg-gradient-to-r',
+    'bg-gradient-to-l',
+    // layouts/partials/cta-block.html (sokube-cta shortcode / trainings
+    // ctaSection): gradient built at render time from
+    // params.trainings.ctaSection.style.background{Light,Dark} (default
+    // "bg-neurokube-900" both modes). Add any new bg-x you set there as
+    // matching from-x/via-x (and dark: variants) below.
+    'from-neurokube-900',
+    'via-neurokube-900',
+    'dark:from-neurokube-900',
+    'dark:via-neurokube-900',
     'from-neurokube-50',
     'from-neurokube-100',
     'from-neurokube-200',

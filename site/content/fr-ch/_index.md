@@ -267,4 +267,4 @@ testimonials:
     background-color="#f1f5f9"
 >}}
 
-{{< sokube-cta >}}
+{{< sokube-cta />}}

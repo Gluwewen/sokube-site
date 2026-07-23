@@ -1,58 +1,93 @@
-<section class="cta-section">
-    <div class="container">
+{{/*
+    NeuroKube CTA Shortcode
 
-        <div class="
-            relative
-            rounded-2xl
-            overflow-hidden
-            {{ .Site.Params.cta.style.background }}
-        ">
+    Thin wrapper around layouts/partials/cta-block.html (the shared
+    rendering logic, also called directly by layouts/partials/
+    trainings-extra-sections.html for the trainings pages' CTA section).
 
-            <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
+    Backwards compatible: {{< sokube-cta >}} with no parameters at all still
+    renders exactly as before - a centered title/description/buttons block
+    on a solid background - because every parameter here defaults to the
+    existing global params.cta.* values from hugo.toml.
 
-                <h2 class="
-                    text-3xl
-                    md:text-4xl
-                    font-bold
-                    mb-6
-                    {{ .Site.Params.cta.style.title }}
-                ">
-                    {{ .Site.Params.cta.title }}
-                </h2>
+    To get a richer instance (own background, a blended banner image, and/or
+    a "Contact us" card) instead of the site-wide defaults, pass parameters
+    directly to this shortcode - they no longer have to live in hugo.toml:
 
-                <p class="
-                    text-xl
-                    mb-8
-                    {{ .Site.Params.cta.style.description }}
-                ">
-                    {{ .Site.Params.cta.description }}
-                </p>
+    {{</* sokube-cta
+        title="Parlons de votre projet !"
+        description="Vous êtes basés en Suisse, en France ou en Europe, planifiez un entretien avec l'un de nos experts pour en savoir plus sur l'offre de services ou de formation Sokube."
+        showButtons="false"
+        backgroundLight="bg-neurokube-900"
+        backgroundDark="bg-neurokube-900"
+        image="/images/contact/contact-banner.jpg"
+        showImage="true"
+        imagePosition="left"
+        showContactBlock="true"
+    >}}
+    title: "Contactez-nous"
+    description: "N'hésitez pas à nous contacter pour tous vos besoins"
+    items:
+      - icon: "phone"
+        text: "+41 79 749 63 86"
+        link: "tel:+41797496386"
+      - icon: "email"
+        text: "contact@sokube.io"
+        link: "mailto:contact@sokube.io"
+      - icon: "location"
+        text: "Rue Adrien-Lachenal 20-1207 Genève, Suisse"
+    buttonText: "Contactez-nous"
+    buttonLink: "/demo"
+    backgroundLight: "bg-white"
+    backgroundDark: "bg-neurokube-900"
+    {{</* /sokube-cta >}}
 
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
+    The YAML block above (.Inner) is only read when showContactBlock="true";
+    every one of its keys is optional. Booleans are the strings "true"/"false".
+*/}}
 
-                    {{ with .Site.Params.cta.primary_button }}
-                    <a
-                        href="{{ .url }}"
-                        class="btn {{ .class }}"
-                    >
-                        {{ .text }}
-                    </a>
-                    {{ end }}
+{{ $siteCta := .Site.Params.cta | default dict }}
+{{ $siteCtaStyle := $siteCta.style | default dict }}
+{{ $sitePrimary := $siteCta.primary_button | default dict }}
+{{ $siteSecondary := $siteCta.secondary_button | default dict }}
 
-                    {{ with .Site.Params.cta.secondary_button }}
-                    <a
-                        href="{{ .url }}"
-                        class="btn border-2 {{ .class }}"
-                    >
-                        {{ .text }}
-                    </a>
-                    {{ end }}
+{{ $showContactBlock := eq (.Get "showContactBlock" | default "false") "true" }}
+{{ $contact := dict }}
+{{ if and $showContactBlock (strings.TrimSpace .Inner) }}
+    {{ $contact = .Inner | transform.Unmarshal }}
+{{ end }}
+{{ $contactItems := $contact.items | default slice }}
 
-                </div>
+{{ partial "cta-block.html" (dict
+    "title" (.Get "title" | default $siteCta.title)
+    "showTitle" (eq (.Get "showTitle" | default "true") "true")
+    "description" (.Get "description" | default $siteCta.description)
+    "showDescription" (eq (.Get "showDescription" | default "true") "true")
+    "titleColor" (.Get "titleColor" | default $siteCtaStyle.title)
+    "descriptionColor" (.Get "descriptionColor" | default $siteCtaStyle.description)
 
-            </div>
+    "backgroundLight" (.Get "backgroundLight" | default $siteCtaStyle.background)
+    "backgroundDark" (.Get "backgroundDark")
 
-        </div>
+    "showButtons" (eq (.Get "showButtons" | default "true") "true")
+    "primaryText" (.Get "primaryText" | default $sitePrimary.text)
+    "primaryLink" (.Get "primaryLink" | default $sitePrimary.url)
+    "primaryClass" (.Get "primaryClass" | default $sitePrimary.class)
+    "secondaryText" (.Get "secondaryText" | default $siteSecondary.text)
+    "secondaryLink" (.Get "secondaryLink" | default $siteSecondary.url)
+    "secondaryClass" (.Get "secondaryClass" | default $siteSecondary.class)
 
-    </div>
-</section>
+    "showImage" (eq (.Get "showImage" | default "false") "true")
+    "image" (.Get "image")
+    "imagePosition" (.Get "imagePosition" | default "right")
+
+    "showContactBlock" $showContactBlock
+    "contactTitle" $contact.title
+    "contactDescription" $contact.description
+    "contactItems" $contactItems
+    "contactButtonText" $contact.buttonText
+    "contactButtonLink" $contact.buttonLink
+    "contactButtonClass" (.Get "contactButtonClass")
+    "contactBackgroundLight" $contact.backgroundLight
+    "contactBackgroundDark" $contact.backgroundDark
+) }}

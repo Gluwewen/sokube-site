@@ -1,0 +1,217 @@
+{{/*
+    cta-block
+
+    Shared rendering logic behind the "sokube-cta" shortcode. Extracted into
+    a partial (per the project's established pattern - see brand-heading.html
+    and blog-category-filter.html) so it can ALSO be called directly from a
+    Go template, e.g. layouts/partials/trainings-extra-sections.html, since
+    shortcodes cannot be invoked from layouts.
+
+    Every value must already be fully resolved by the caller (this partial
+    does not read .Site/.Page) - see layouts/shortcodes/sokube-cta.html for
+    how defaults are computed from params.cta in hugo.toml.
+
+    Expected dict keys (all optional unless noted):
+      title, showTitle
+      description, showDescription
+      backgroundLight (required - plain Tailwind class(es), e.g. "bg-neurokube-600"
+        or a "bg-gradient-to-b from-... to-..." gradient)
+      backgroundDark (plain class(es), WITHOUT "dark:" prefix - this partial
+        adds "dark:" to each one itself, same convention as
+        trainings-extra-sections.html's introSection.style.backgroundDark)
+      titleColor, descriptionColor
+      showButtons, primaryText, primaryLink, primaryClass,
+        secondaryText, secondaryLink, secondaryClass
+      showImage, image, imagePosition ("left" or "right", default "right")
+      showContactBlock, contactTitle, contactDescription,
+        contactItems (slice of {icon, text, link}), contactButtonText,
+        contactButtonLink, contactButtonClass,
+        contactBackgroundLight, contactBackgroundDark (same convention as
+        backgroundLight/backgroundDark above - plain class, no "dark:"
+        prefix; default "bg-white" / "bg-neurokube-900")
+
+    Any new background color/gradient combination used here must be added to
+    the safelist in tailwind.config.js, since these classes are built from
+    hugo.toml / shortcode parameters rather than being literal strings in an
+    .html file.
+*/}}
+{{ $title := .title }}
+{{ $showTitle := .showTitle }}
+{{ $description := .description }}
+{{ $showDescription := .showDescription }}
+{{ $titleColor := .titleColor | default "text-white" }}
+{{ $descriptionColor := .descriptionColor | default "text-neurokube-100" }}
+
+{{ $showButtons := .showButtons }}
+{{ $primaryText := .primaryText }}
+{{ $primaryLink := .primaryLink | default "#" }}
+{{ $primaryClass := .primaryClass | default "bg-white text-neurokube-600 hover:bg-neurokube-200" }}
+{{ $secondaryText := .secondaryText }}
+{{ $secondaryLink := .secondaryLink | default "#" }}
+{{ $secondaryClass := .secondaryClass | default "border-2 border-white text-white hover:bg-white/10" }}
+
+{{ $showImage := .showImage }}
+{{ $image := .image }}
+{{ $imagePosition := .imagePosition | default "right" }}
+
+{{ $showContactBlock := .showContactBlock }}
+{{ $contactTitle := .contactTitle | default "Contact us" }}
+{{ $contactDescription := .contactDescription }}
+{{ $contactItems := .contactItems | default slice }}
+{{ $contactButtonText := .contactButtonText | default "Contact us" }}
+{{ $contactButtonLink := .contactButtonLink | default "#" }}
+{{ $contactButtonClass := .contactButtonClass | default "bg-kube-600 text-white hover:bg-kube-700" }}
+
+{{/* Contact card background: same "plain class + this partial adds dark:"
+     convention as the section's own backgroundLight/backgroundDark. */}}
+{{ $contactBgLight := .contactBackgroundLight | default "bg-white" }}
+{{ $contactBgDark := .contactBackgroundDark | default "bg-neurokube-900" }}
+{{ $contactDarkBgClasses := slice }}
+{{ range (split $contactBgDark " ") }}
+    {{ if . }}{{ $contactDarkBgClasses = $contactDarkBgClasses | append (printf "dark:%s" .) }}{{ end }}
+{{ end }}
+{{ $contactBgClasses := printf "%s %s" $contactBgLight (delimit $contactDarkBgClasses " ") }}
+
+{{/* Background: backgroundLight as-is + backgroundDark with "dark:" added
+     to each of its classes (so callers can pass a plain color/gradient
+     class in hugo.toml/shortcode params without typing "dark:" themselves). */}}
+{{ $bgLight := .backgroundLight | default "bg-neurokube-600" }}
+{{ $bgDark := .backgroundDark }}
+{{ $darkBgClasses := slice }}
+{{ if $bgDark }}
+    {{ range (split $bgDark " ") }}
+        {{ if . }}{{ $darkBgClasses = $darkBgClasses | append (printf "dark:%s" .) }}{{ end }}
+    {{ end }}
+{{ end }}
+{{ $bgClasses := printf "%s %s" $bgLight (delimit $darkBgClasses " ") }}
+
+{{/* Image + gradient blend: same technique as blog-single-body.html's hero,
+     mirrored when imagePosition is "left" (solid color on the right,
+     fading into the photo on the left) instead of the hero's default
+     (solid on the left, fading into the photo on the right). */}}
+{{ $gradientDir := "bg-gradient-to-r" }}
+{{ if eq $imagePosition "left" }}{{ $gradientDir = "bg-gradient-to-l" }}{{ end }}
+{{ $fromLight := replace $bgLight "bg-" "from-" }}
+{{ $viaLight := replace $bgLight "bg-" "via-" }}
+{{ $darkGradientClasses := slice }}
+{{ if $bgDark }}
+    {{ range (split $bgDark " ") }}
+        {{ if . }}
+            {{ $darkGradientClasses = $darkGradientClasses | append (printf "dark:%s" (replace . "bg-" "from-")) }}
+            {{ $darkGradientClasses = $darkGradientClasses | append (printf "dark:%s" (replace . "bg-" "via-")) }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ $gradientClasses := printf "%s %s %s %s to-transparent" $gradientDir $fromLight $viaLight (delimit $darkGradientClasses " ") }}
+
+<section class="cta-section">
+    <div class="container">
+        <div class="relative rounded-2xl overflow-hidden {{ $bgClasses }}">
+
+            {{ if $showImage }}
+                {{ with $image }}
+                    <img src="{{ . | relURL }}"
+                         alt=""
+                         class="absolute inset-0 w-full h-full object-cover"
+                         loading="lazy">
+                    <div class="absolute inset-0 {{ $gradientClasses }}" aria-hidden="true"></div>
+                {{ end }}
+            {{ end }}
+
+            {{ if or $showImage $showContactBlock }}
+                <!-- Rich layout: text column + optional contact card, side by side -->
+                <div class="relative z-10 flex flex-col {{ if $showContactBlock }}lg:flex-row lg:items-center{{ end }} gap-8 p-8 lg:p-12">
+
+                    <div class="flex-1 {{ if not $showContactBlock }}max-w-xl{{ end }}">
+                        {{ if $showTitle }}
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title }}</h2>
+                        {{ end }}
+
+                        {{ if $showDescription }}
+                            <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description }}</p>
+                        {{ end }}
+
+                        {{ if $showButtons }}
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                {{ if $primaryText }}
+                                    <a href="{{ $primaryLink }}" class="btn {{ $primaryClass }}">{{ $primaryText }}</a>
+                                {{ end }}
+                                {{ if $secondaryText }}
+                                    <a href="{{ $secondaryLink }}" class="btn {{ $secondaryClass }}">{{ $secondaryText }}</a>
+                                {{ end }}
+                            </div>
+                        {{ end }}
+                    </div>
+
+                    {{ if $showContactBlock }}
+                        <div class="{{ $contactBgClasses }} rounded-2xl shadow-elevation p-8 lg:w-[420px] shrink-0">
+                            <h3 class="text-2xl font-bold text-neurokube-900 dark:text-white mb-2">{{ $contactTitle }}</h3>
+
+                            {{ with $contactDescription }}
+                                <p class="text-gray-600 dark:text-neurokube-200 mb-6">{{ . }}</p>
+                            {{ end }}
+
+                            {{ if gt (len $contactItems) 0 }}
+                                <ul class="space-y-4 mb-8">
+                                    {{ range $contactItems }}
+                                        <li class="flex items-center gap-3">
+                                            <span class="text-kube-600 dark:text-kube-300 shrink-0">
+                                                {{ if eq .icon "phone" }}
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                                    </svg>
+                                                {{ else if eq .icon "email" }}
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                {{ else if eq .icon "location" }}
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    </svg>
+                                                {{ end }}
+                                            </span>
+                                            {{ if .link }}
+                                                <a href="{{ .link }}" class="text-neurokube-900 dark:text-white hover:text-kube-600 dark:hover:text-kube-300">{{ .text }}</a>
+                                            {{ else }}
+                                                <span class="text-neurokube-900 dark:text-white">{{ .text }}</span>
+                                            {{ end }}
+                                        </li>
+                                    {{ end }}
+                                </ul>
+                            {{ end }}
+
+                            <a href="{{ $contactButtonLink }}" class="btn inline-block {{ $contactButtonClass }}">{{ $contactButtonText }}</a>
+                        </div>
+                    {{ end }}
+
+                </div>
+            {{ else }}
+                <!-- Simple layout: centered title/description/buttons on a
+                     solid background, unchanged from the original shortcode
+                     markup (no image, no contact card). -->
+                <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
+                    {{ if $showTitle }}
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title }}</h2>
+                    {{ end }}
+
+                    {{ if $showDescription }}
+                        <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description }}</p>
+                    {{ end }}
+
+                    {{ if $showButtons }}
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            {{ if $primaryText }}
+                                <a href="{{ $primaryLink }}" class="btn {{ $primaryClass }}">{{ $primaryText }}</a>
+                            {{ end }}
+                            {{ if $secondaryText }}
+                                <a href="{{ $secondaryLink }}" class="btn border-2 {{ $secondaryClass }}">{{ $secondaryText }}</a>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
+            {{ end }}
+
+        </div>
+    </div>
+</section>
