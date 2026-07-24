@@ -1,31 +1,69 @@
 {{/*
-    NeuroKube Feature Shortcode
+    Feature Shortcode
 
-    The "Learn More" button is now opt-in, per shortcode call, via a
-    showButton parameter (defaults to "false"):
+    Bloc image + texte, utilisé en série (page d'accueil, pages de
+    formation individuelles) pour présenter une fonctionnalité ou un thème.
 
-        {{</* sokube-feature
-            ...
-            buttonText="S'inscrire"
-            buttonLink="/contact"
-            showButton="true"
-        >}}
+    Répété plusieurs fois sur une même page : le badge fonctionne par
+    palette nommée, comme sokube-card - la palette (couleurs du badge) vit
+    dans [params.feature.<nom>] (hugo.toml, y compris la palette "default"),
+    le template ne fait que la sélectionner et vérifier qu'elle existe
+    (erreur explicite sinon). Les couleurs du titre et de la description,
+    elles, ne varient pas selon la palette : défaut unique dans
+    [params.feature.style].
 
-    This lets you show the button only on the feature blocks where it makes
-    sense (e.g. a "Prérequis" block linking to a contact form) instead of on
-    every sokube-feature call on the page.
+    Paramètres :
+      palette      - nom de la palette du badge : "default", "kube" ou "hr"
+      badge        - texte du badge au-dessus du titre
+      title        - titre
+      description  - texte (Markdown supporté). Pour un saut de ligne, ne
+                     tapez pas de vrai retour à la ligne dans la valeur
+                     (rejeté par Hugo) : utilisez le texte littéral \n à la
+                     place, sur une seule ligne physique - \n\n démarre un
+                     nouveau paragraphe.
+      features     - liste à puces, séparée par des virgules (optionnel)
+      image        - image en mode clair; la variante sombre est déduite en
+                     remplaçant "-light" par "-dark" dans le nom de fichier
+      imagePosition - "left" ou "right" (défaut "right")
+      showButton   - "true"/"false" (défaut "false")
+      buttonText   - texte du bouton (défaut "Learn More")
+      buttonLink   - lien du bouton (défaut "#")
 
-    "description" supports line breaks, but NOT as an actual newline typed
-    inside the quoted value - Hugo's shortcode parser rejects a real line
-    break inside a quoted string ("unterminated quoted string in shortcode
-    parameter-argument"). Instead, type the literal two characters \n
-    (backslash + n) where you want a line break, on a single physical line:
-
-        description="Some intro text. \n*A second line, on its own.*"
-
-    Two of them in a row (\n\n) start a new paragraph instead of just
-    breaking the line.
+    Appel minimal :
+      {{</* sokube-feature
+          palette="kube"
+          badge="Investigation"
+          title="AI-Powered Incident Investigation"
+          description="Speed up incident resolution..."
+          image="/images/features/incident-investigation-light.webp"
+          imagePosition="right"
+      >}}
 */}}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $badgeStyle := index site.Params.feature $paletteName }}
+{{ if not $badgeStyle }}
+    {{ errorf "sokube-feature: palette %q introuvable dans [params.feature] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $badgeStyle = site.Params.feature.default }}
+{{ end }}
+{{ $style := site.Params.feature.style | default dict }}
+
+{{/* [&_a]: (and [&_a]:hover:) must prefix every class in the combined
+     light+dark string individually, same technique as faq's accent hover -
+     otherwise only the first token is actually scoped to links inside the
+     description, and the rest (typically the dark: variant) would apply
+     globally instead. */}}
+{{ $linkParts := slice }}
+{{ range (split $style.descriptionLink " ") }}
+    {{ if . }}{{ $linkParts = $linkParts | append (printf "[&_a]:%s" .) }}{{ end }}
+{{ end }}
+{{ $descriptionLink := delimit $linkParts " " }}
+
+{{ $linkHoverParts := slice }}
+{{ range (split $style.descriptionLinkHover " ") }}
+    {{ if . }}{{ $linkHoverParts = $linkHoverParts | append (printf "[&_a]:%s" .) }}{{ end }}
+{{ end }}
+{{ $descriptionLinkHover := delimit $linkHoverParts " " }}
 
 {{ $title := .Get "title" }}
 {{ $description := .Get "description" }}
@@ -35,8 +73,6 @@
 {{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
 {{ $description = $description | replaceRE `\\n` "  \n" }}
 {{ $badge := .Get "badge" }}
-{{ $badgeTextColor := .Get "badgeTextColor" | default "text-neurokube-600" }}
-{{ $badgeBgColor := .Get "badgeBgColor" | default "bg-neurokube-100" }}
 {{ $image := .Get "image" }}
 {{ $imageDark := replace $image "-light" "-dark" }}
 {{ $buttonText := .Get "buttonText" | default "Learn More" }}
@@ -79,18 +115,18 @@
                 px-4 py-2
                 rounded-full
                 font-semibold
-                {{ $badgeBgColor }}
-                {{ $badgeTextColor }}
+                {{ $badgeStyle.badgeBackground }}
+                {{ $badgeStyle.badgeText }}
             "
         >
             {{ $badge }}
         </div>
 
-        <h3 class="text-2xl md:text-3xl font-bold text-neurokube-900">
+        <h3 class="text-2xl md:text-3xl font-bold {{ $style.title }}">
             {{ $title }}
         </h3>
 
-        <div class="text-lg text-gray-600 [&_a]:text-neurokube-600 [&_a]:underline [&_a]:hover:text-neurokube-700">
+        <div class="text-lg {{ $style.description }} {{ $descriptionLink }} [&_a]:underline {{ $descriptionLinkHover }}">
             {{ $description | markdownify }}
         </div>
 
@@ -101,7 +137,7 @@
             <li class="flex items-center space-x-3">
 
                 <svg
-                    class="w-5 h-5 {{ $badgeTextColor }}"
+                    class="w-5 h-5 {{ $badgeStyle.badgeText }}"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     >

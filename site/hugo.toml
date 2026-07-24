@@ -809,6 +809,31 @@ Our learning methods also help you acquire the skills you need to put them into 
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-hr-600 dark:marker:text-hr-300"
 
+# Feature shortcode (see layouts/shortcodes/sokube-feature.html). Repeated
+# several times per page - works by named palette for the badge, same
+# convention as [params.cards] above (including validation, rule 8). Title
+# and description colors are NOT part of the palette: they stay the same
+# regardless of which badge palette is used (matches the current site
+# design, where only the badge accent changes between features).
+[params.feature]
+  [params.feature.style]
+    title = "text-neurokube-900 dark:text-white"
+    description = "text-gray-600 dark:text-neurokube-200"
+    descriptionLink = "text-neurokube-600 dark:text-neurokube-300"
+    descriptionLinkHover = "hover:text-neurokube-700 dark:hover:text-neurokube-200"
+
+  [params.feature.default]
+    badgeBackground = "bg-neurokube-100 dark:bg-neurokube-800"
+    badgeText = "text-neurokube-600 dark:text-neurokube-100"
+
+  [params.feature.kube]
+    badgeBackground = "bg-kube-100 dark:bg-kube-800"
+    badgeText = "text-kube-600 dark:text-kube-100"
+
+  [params.feature.hr]
+    badgeBackground = "bg-hr-100 dark:bg-hr-800"
+    badgeText = "text-hr-600 dark:text-hr-100"
+
 # Forms Configuration
 [params.forms]
 

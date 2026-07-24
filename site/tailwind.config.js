@@ -390,6 +390,17 @@ module.exports = {
 
     // === AJOUTS sokube-testimonials shortcode ([params.testimonials.style], hugo.toml) ===
     'dark:!bg-neurokube-900',
+
+    // === AJOUTS sokube-feature shortcode ([params.feature.style], hugo.toml) ===
+    // Link colors inside the description, scoped via the "[&_a]:" arbitrary
+    // variant - built dynamically from hugo.toml, so the exact prefixed
+    // class names must be safelisted (Tailwind never sees them literally).
+    '[&_a]:text-neurokube-600',
+    '[&_a]:dark:text-neurokube-300',
+    '[&_a]:hover:text-neurokube-700',
+    '[&_a]:dark:hover:text-neurokube-200',
+    'dark:bg-hr-900',
+    'dark:hover:text-neurokube-200',
   ],
 
   theme: {
