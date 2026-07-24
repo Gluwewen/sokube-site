@@ -387,6 +387,9 @@ module.exports = {
 
     // === AJOUTS sokube-cta-image shortcode ([params.ctaImage.style], hugo.toml) ===
     'dark:bg-kube-600',
+
+    // === AJOUTS sokube-testimonials shortcode ([params.testimonials.style], hugo.toml) ===
+    'dark:!bg-neurokube-900',
   ],
 
   theme: {

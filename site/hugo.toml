@@ -748,11 +748,24 @@ Our learning methods also help you acquire the skills you need to put them into 
     value = "text-kube-600 dark:text-kube-300"
     label = "text-gray-700 dark:text-gray-300"
 
+# Testimonials shortcode default style (see layouts/shortcodes/sokube-testimonials.html).
+# Toggle with [params.sections].testimonials.
+[params.testimonials]
+  [params.testimonials.style]
+    sectionBackground = "bg-gray-50 dark:!bg-neurokube-900"
+    description = "text-gray-600 dark:text-neurokube-200"
+    personTitle = "text-gray-600 dark:text-neurokube-200"
+    quote = "text-gray-600 dark:text-neurokube-100"
+    cardBackground = "bg-white dark:bg-neurokube-800"
+    # Card border - only shown in dark mode (light mode uses a shadow instead)
+    cardBorder = "dark:border-neurokube-700"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"
 
   [params.pricing.style]
+    sectionBackground = "bg-white dark:bg-neurokube-900"
     card_background = "bg-neurokube-50 dark:bg-neurokube-800"
     card_border = "border-neurokube-300 dark:border-neurokube-700"
     featured_border = "border-neurokube-600 dark:border-neurokube-300"
@@ -761,7 +774,6 @@ Our learning methods also help you acquire the skills you need to put them into 
     title_color = "text-gray-900 dark:text-white"
     description_color = "text-gray-500 dark:text-neurokube-200"
     price_color = "text-gray-900 dark:text-white"
-    button_class = "btn-primary"
 
 # Cards Configuration
 [params.cards]

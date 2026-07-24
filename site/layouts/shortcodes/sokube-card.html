@@ -1,3 +1,28 @@
+{{/*
+    Card Shortcode
+
+    Une carte titre + texte, avec un label optionnel au-dessus, à utiliser à
+    l'intérieur d'un sokube-card-grid.
+
+    Répété plusieurs fois sur une même page : fonctionne par palette nommée
+    - la palette (couleurs) vit dans [params.cards.<nom>] (hugo.toml, y
+    compris la palette "default"), le template ne fait que la sélectionner
+    et vérifier qu'elle existe (erreur explicite sinon, voir règle 8).
+
+    Paramètres :
+      palette - nom de la palette à utiliser (défaut "default"; voir aussi
+                "kube" et "hr" dans hugo.toml)
+      label   - petit texte au-dessus du titre (optionnel)
+      title   - titre de la carte
+      .Inner  - texte de la carte, en Markdown
+
+    Appel minimal :
+      {{</* sokube-card label="PROBLEM 01" title="Scattered signals" palette="kube" >}}
+      Metrics, logs, Kubernetes state, Git history: with no link between
+      them, correlating everything by hand takes time.
+      {{</* /sokube-card >}}
+*/}}
+
 {{ $paletteName := .Get "palette" | default "default" }}
 {{ $style := index site.Params.cards $paletteName }}
 {{ if not $style }}

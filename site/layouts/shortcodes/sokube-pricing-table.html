@@ -1,21 +1,37 @@
+{{/*
+    Pricing-table Shortcode
+
+    Grille de 3 offres tarifaires (ou plus), contenu passé en JSON/YAML dans
+    .Inner : titre/description de la section, puis une liste "plans", chacun
+    avec name/description/price/features/button, et en option featured
+    (mise en avant) + badge.
+
+    Site-wide pour les couleurs de structure (fond de section, fond/bordure
+    des cartes, icônes, textes) : défauts dans [params.pricing.style]
+    (hugo.toml). Les couleurs du bouton et du badge de chaque offre sont, elles,
+    propres à l'instance (règle 7) : à définir directement dans le JSON/YAML
+    de chaque plan (button.style.*, badge.*).
+
+    Appel minimal : voir content/en-us/offers.md pour un exemple complet.
+*/}}
+
 {{ $json := .Inner | transform.Unmarshal }}
 {{ $style := site.Params.pricing.style | default dict }}
 
-{{ $cardBackground := $style.card_background | default "bg-white" }}
-{{ $cardBorder := $style.card_border | default "border-gray-200" }}
+{{ $sectionBackground := $style.sectionBackground }}
+{{ $cardBackground := $style.card_background }}
+{{ $cardBorder := $style.card_border }}
 
-{{ $featuredBorder := $style.featured_border | default "border-neurokube-600" }}
-{{ $featuredShadow := $style.featured_shadow | default "shadow-xl" }}
+{{ $featuredBorder := $style.featured_border }}
+{{ $featuredShadow := $style.featured_shadow }}
 
-{{ $iconColor := $style.icon_color | default "text-blue-500" }}
+{{ $iconColor := $style.icon_color }}
 
-{{ $titleColor := $style.title_color | default "text-gray-900" }}
-{{ $descriptionColor := $style.description_color | default "text-gray-500" }}
-{{ $priceColor := $style.price_color | default "text-gray-900" }}
+{{ $titleColor := $style.title_color }}
+{{ $descriptionColor := $style.description_color }}
+{{ $priceColor := $style.price_color }}
 
-{{ $buttonClass := $style.button_class | default "btn-primary" }}
-
-<section class="py-16 bg-white dark:bg-neurokube-900">
+<section class="py-16 {{ $sectionBackground }}">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {{ with $json.title }}
