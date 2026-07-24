@@ -661,6 +661,22 @@ Our learning methods also help you acquire the skills you need to put them into 
     # Category nav text, active state
     menuActiveText = "text-gray-900 dark:text-white"
 
+# Callout shortcode default style (see layouts/shortcodes/sokube-callout.html).
+# One style for the whole site, same convention as [params.faq.style] above.
+# A page can still override any of these via shortcode parameters for an
+# exceptional case (see the "full call" example in the shortcode's own
+# doc comment).
+[params.callout]
+  [params.callout.style]
+    # Section background
+    background = "bg-gray-50 dark:bg-neurokube-800"
+    # Description text
+    description = "text-gray-600 dark:text-neurokube-200"
+    # Primary button: background + text + hover
+    primaryButton = "bg-neurokube-600 text-white hover:bg-neurokube-700"
+    # Secondary button: background + text + border + hover
+    secondaryButton = "bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"

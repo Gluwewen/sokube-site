@@ -1,9 +1,55 @@
-{{/* NeuroKube Callout Shortcode (site/layouts/shortcodes/neurokube-callout.html)
-     Bandeau à fond neutre (gris clair / neurokube-800 en sombre), pour mettre en
-     avant un message secondaire (ex: renvoi vers un site externe) avec un aspect
-     légèrement différent des sections standards, sans couleur de marque flashy.
-     À ne pas confondre avec neurokube-highlight-section.html (bloc hero + carte,
-     ex: "Our mission" en haut de la page About) — nom volontairement différent. */}}
+{{/*
+    Callout Shortcode
+
+    Bandeau à fond neutre (gris clair / neurokube-800 en sombre), pour mettre
+    en avant un message secondaire (ex: renvoi vers un site externe) avec un
+    aspect légèrement différent des sections standards, sans couleur de
+    marque flashy. À ne pas confondre avec sokube-highlight-section.html
+    (bloc hero + carte, ex: "Our mission" en haut de la page About) — nom
+    volontairement différent.
+
+    Site-wide : les couleurs par défaut vivent dans [params.callout.style]
+    (hugo.toml), pas dans ce fichier - une page peut toujours en surcharger
+    une ponctuellement en la passant en paramètre. Combine une classe claire
+    et sa variante sombre dans la même string (aucune dark: si le rendu
+    d'origine est identique dans les deux modes).
+
+    Paramètres :
+      id                     - ancre de la section (optionnel)
+      title                  - titre (optionnel)
+      description            - texte (optionnel)
+      primaryButtonText/Url/External   - bouton principal (External: "true"/"false", défaut "false")
+      secondaryButtonText/Url/External - bouton secondaire (External: "true"/"false", défaut "false")
+      background             - fond de la section (défaut: params.callout.style.background)
+      descriptionColor       - couleur du texte de description (défaut: params.callout.style.description)
+      primaryButtonColor     - fond + texte + hover du bouton principal (défaut: params.callout.style.primaryButton)
+      secondaryButtonColor   - fond + texte + bordure + hover du bouton secondaire (défaut: params.callout.style.secondaryButton)
+
+    Appel minimal :
+      {{</* sokube-callout
+          title="Une solution SoKube, née du terrain"
+          description="..."
+          primaryButtonText="Découvrir SoKube"
+          primaryButtonUrl="https://www.sokube.io"
+      >}}
+
+    Appel complet, avec une variante de couleurs différente du défaut :
+      {{</* sokube-callout
+          id="a-sokube-solution"
+          title="..."
+          description="..."
+          primaryButtonText="Discover SoKube"
+          primaryButtonUrl="https://www.sokube.io"
+          primaryButtonExternal="true"
+          secondaryButtonText="Read the SoKube blog"
+          secondaryButtonUrl="https://www.sokube.io/blog/"
+          secondaryButtonExternal="true"
+          background="bg-kube-50 dark:bg-kube-900"
+          descriptionColor="text-gray-600 dark:text-kube-200"
+          primaryButtonColor="bg-kube-600 text-white hover:bg-kube-700"
+          secondaryButtonColor="bg-white dark:bg-kube-900 text-kube-600 dark:text-kube-100 hover:bg-kube-100 dark:hover:bg-kube-800 border-kube-600 dark:border-kube-400"
+      >}}
+*/}}
 
 {{ $id := .Get "id" }}
 {{ $title := .Get "title" }}
@@ -17,7 +63,13 @@
 {{ $secondaryUrl := .Get "secondaryButtonUrl" }}
 {{ $secondaryExternal := .Get "secondaryButtonExternal" | default "false" }}
 
-<section {{ with $id }}id="{{ . }}"{{ end }} class="bg-gray-50 dark:bg-neurokube-800 -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
+{{ $style := .Site.Params.callout.style | default dict }}
+{{ $background := .Get "background" | default $style.background }}
+{{ $descriptionColor := .Get "descriptionColor" | default $style.description }}
+{{ $primaryButtonColor := .Get "primaryButtonColor" | default $style.primaryButton }}
+{{ $secondaryButtonColor := .Get "secondaryButtonColor" | default $style.secondaryButton }}
+
+<section {{ with $id }}id="{{ . }}"{{ end }} class="{{ $background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
   <div class="container text-center max-w-3xl mx-auto">
 
     {{ with $title }}
@@ -27,7 +79,7 @@
     {{ end }}
 
     {{ with $description }}
-    <p class="text-xl text-gray-600 dark:text-neurokube-200 mb-10">
+    <p class="text-xl {{ $descriptionColor }} mb-10">
       {{ . }}
     </p>
     {{ end }}
@@ -37,7 +89,7 @@
       {{ with $primaryText }}
       <a href="{{ $primaryUrl }}"
          {{ if eq $primaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
-         class="btn text-center bg-neurokube-600 text-white hover:bg-neurokube-700">
+         class="btn text-center {{ $primaryButtonColor }}">
         {{ . }}
       </a>
       {{ end }}
@@ -45,7 +97,7 @@
       {{ with $secondaryText }}
       <a href="{{ $secondaryUrl }}"
          {{ if eq $secondaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
-         class="btn text-center border-2 bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400">
+         class="btn text-center border-2 {{ $secondaryButtonColor }}">
         {{ . }}
       </a>
       {{ end }}

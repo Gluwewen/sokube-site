@@ -26,8 +26,12 @@ Pas de paramètres séparés type `backgroundLight`/`backgroundDark`. Toute nouv
 
 ## Règle 5 — Où mettre les valeurs par défaut
 
-- **Shortcodes de type "section", instanciés une fois par page** (hero, cta, highlight-section...) : la valeur par défaut vit dans `hugo.toml`, sous `[params.<nom>]`, avec override possible par langue dans `[languages.xx.params.<nom>]`.
-- **Shortcodes répétés plusieurs fois sur une même page** (card, feature, testimonial...) : la valeur par défaut est codée en dur dans le template du shortcode (ex. palette `default` de `sokube-card`), et seule une config nommée explicite (`palette="kube"`) vient de `hugo.toml`.
+Toute valeur par défaut de style (couleur, palette...) vit dans `hugo.toml`, jamais codée en dur dans le template du shortcode. Objectif : pouvoir reconfigurer entièrement l'aspect du site (ou en extraire un thème réutilisable pour un autre site) sans toucher au code des shortcodes.
+
+- **Shortcodes de type "section", instanciés une fois par page** (hero, cta, callout, highlight-section...) : la valeur par défaut vit dans `hugo.toml`, sous `[params.<nom>.style]`, avec override possible par langue dans `[languages.xx.params.<nom>]` et par instance via les paramètres du shortcode.
+- **Shortcodes répétés plusieurs fois sur une même page** (card, feature, testimonial...) : fonctionnent par palettes nommées, toutes définies dans `hugo.toml` (y compris la palette `default`, ex. `[params.cards.default]` pour `sokube-card`) — le template ne fait que sélectionner la palette demandée (`palette="kube"`) et valider son existence (règle 8), il ne contient aucune couleur en dur.
+
+Le template d'un shortcode ne doit donc contenir aucune classe Tailwind de couleur de marque en dur : seules les classes structurelles (règle 3) peuvent l'être.
 
 ## Règle 6 — Activation d'un shortcode
 
