@@ -112,6 +112,25 @@ other = "Changer de langue"
 [seeItInAction]
 other = "Voyez-le en action"
 
+# Job Listing
+[jobDescriptionTitle]
+other = "Description du poste"
+
+[jobMissionsTitle]
+other = "Vos missions"
+
+[jobSkillsTitle]
+other = "Vos compétences"
+
+[jobOfferTitle]
+other = "Notre offre"
+
+[backToJobListings]
+other = "Retour aux offres d'emploi"
+
+[apply]
+other = "Postuler"
+
 # Pricing
 [popular]
 other = "Populaire"

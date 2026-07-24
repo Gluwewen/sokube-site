@@ -24,6 +24,26 @@
         imagePosition="left"
         showContactBlock="true"
     >}}
+
+    imagePosition also accepts "top": a full-width photo banner stacked above
+    a plain, centered title/description/buttons block (no gradient blend, no
+    contact card) - use this for a "join us" / recruitment-style CTA:
+
+    {{</* sokube-cta
+        title="Vous êtes un super héros et ne trouvez pas votre emploi idéal ?<br>Laissez-nous <span class=\"text-secondary-500\">vos coordonnées</span>"
+        showDescription="false"
+        background="bg-neurokube-900 dark:bg-neurokube-900"
+        image="/images/company/super-heros-sokube.jpg"
+        showImage="true"
+        imagePosition="top"
+        primaryText="Contactez-nous"
+        primaryLink="/contact"
+        showButtons="true"
+    >}}
+
+    title/description accept inline HTML (e.g. the <span> above to highlight
+    part of the text in a different color) - never build this from raw,
+    un-trusted user input.
     title: "Contactez-nous"
     description: "N'hésitez pas à nous contacter pour tous vos besoins"
     items:

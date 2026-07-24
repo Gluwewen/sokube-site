@@ -843,6 +843,38 @@ Our learning methods also help you acquire the skills you need to put them into 
     badgeText = "text-hr-600 dark:text-hr-100"
     colorVar = "--color-hr-600"
 
+# Job Listing (layouts/_default/job-listing.html) - page individuelle
+# d'une offre d'emploi. Palette nommée par type de contrat, même principe
+# que [params.feature] (règle 14) : colorVar référence une variable CSS
+# définie dans assets/css/custom.css, jamais une valeur hex en dur ici.
+[params.jobListing]
+  [params.jobListing.style]
+    heroBackground = "bg-gray-50 dark:bg-neurokube-900"
+    title = "text-neurokube-900 dark:text-white"
+    intro = "text-gray-600 dark:text-neurokube-200"
+    sectionBackgroundA = "bg-white dark:bg-neurokube-900"
+    sectionBackgroundB = "bg-gray-50 dark:bg-neurokube-800"
+    sectionTitle = "text-neurokube-900 dark:text-white"
+    sectionText = "text-gray-600 dark:text-neurokube-200"
+    pillBackground = "bg-gray-100 dark:bg-neurokube-800"
+    pillText = "text-neurokube-700 dark:text-neurokube-100"
+    applyButton = "bg-neurokube-600 text-white hover:bg-neurokube-700 dark:hover:bg-neurokube-500"
+
+  [params.jobListing.cdi]
+    badgeBackground = "bg-kube-100 dark:bg-kube-800"
+    badgeText = "text-kube-600 dark:text-kube-100"
+    colorVar = "--color-kube-600"
+
+  [params.jobListing.cdd]
+    badgeBackground = "bg-hr-100 dark:bg-hr-800"
+    badgeText = "text-hr-600 dark:text-hr-100"
+    colorVar = "--color-hr-600"
+
+  [params.jobListing.stage]
+    badgeBackground = "bg-neurokube-100 dark:bg-neurokube-800"
+    badgeText = "text-neurokube-600 dark:text-neurokube-100"
+    colorVar = "--color-neurokube-600"
+
 # Forms Configuration
 [params.forms]
 
@@ -923,6 +955,17 @@ Our learning methods also help you acquire the skills you need to put them into 
 #      url = "/demo"
 #      class = "border-white text-white hover:bg-neurokube-800"
 
+    # English language for Job Listing
+    [languages.en.params.jobListing.cdi]
+      label = "Permanent"
+    [languages.en.params.jobListing.cdd]
+      label = "Fixed-term"
+    [languages.en.params.jobListing.stage]
+      label = "Internship"
+    [languages.en.params.jobListing.style]
+      backUrl = "/hiring#jobs"
+      applyUrl = "/contact"
+
   # French language
   [languages.fr]
     locale = "fr-ch"
@@ -943,6 +986,17 @@ Our learning methods also help you acquire the skills you need to put them into 
     [languages.fr.params.cta]
       title = "Prêt à libérer le plein potentiel de votre équipe DevOps ?"
       description = "Rejoignez les entreprises qui utilisent déjà NeuroKube pour réduire la charge cognitive de leurs équipes DevOps."
+
+    # French language for Job Listing
+    [languages.fr.params.jobListing.cdi]
+      label = "CDI"
+    [languages.fr.params.jobListing.cdd]
+      label = "CDD"
+    [languages.fr.params.jobListing.stage]
+      label = "Stage"
+    [languages.fr.params.jobListing.style]
+      backUrl = "/hiring#jobs"
+      applyUrl = "/contact"
 
     # French language for Blog
     [languages.fr.params.blog]

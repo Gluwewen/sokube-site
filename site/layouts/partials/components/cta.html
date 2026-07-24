@@ -1,49 +1,94 @@
+{{/*
+    components/cta.html
+
+    CTA de fin de page, appelée une fois par page depuis les layouts
+    (layouts/_default/feature.html, job-listing.html, et
+    layouts/partials/blog-single-body.html) via
+    {{ partial "components/cta.html" . }}.
+
+    Site-wide par défaut ([params.cta] dans hugo.toml, règle 5), mais
+    instanciable par page : une page peut ajouter un bloc `cta:` dans son
+    front matter pour surcharger tout ou partie des champs pour cette seule
+    page (règle 7). Ne fait que résoudre les valeurs par défaut / surcharges
+    puis délègue tout le rendu à la partial partagée cta-block.html (règle
+    13) - le même moteur que le shortcode sokube-cta, donc tous les formats
+    qui y sont disponibles (image "top"/"left"/"right", description
+    optionnelle, carte de contact...) fonctionnent aussi ici.
+
+    Important : les clés de `cta:` doivent être en snake_case (title,
+    show_description, show_image, image_position, primary_text,
+    primary_link...), jamais en camelCase - Hugo met automatiquement toutes
+    les clés du front matter en minuscules, donc une clé "showDescription"
+    devient "showdescription" et ne serait jamais retrouvée par un lookup
+    exact `.showDescription` côté template (bug observé et corrigé : le
+    titre personnalisé s'affichait, mais showDescription/showImage/
+    imagePosition/primaryText/primaryLink étaient silencieusement ignorés).
+
+    Champs surchargeables dans `cta:` (tous optionnels) :
+      title, show_title, description, show_description,
+      title_color, description_color, background,
+      show_buttons, primary_text, primary_link, primary_class,
+      secondary_text, secondary_link, secondary_class,
+      show_image, image, image_position ("left"/"right"/"top")
+
+    title/description acceptent du HTML inline (ex: un <span> pour
+    surligner un mot dans une autre couleur) - jamais depuis une saisie
+    utilisateur non fiable.
+
+    Exemple (front matter d'une page "recrutement", pour retrouver le format
+    "bandeau photo + bloc couleur" façon page carrières) :
+      cta:
+        title: "Vous êtes un super héros et ne trouvez pas votre emploi idéal ?<br>Laissez-nous <span class=\"text-secondary-500\">vos coordonnées</span>"
+        show_description: false
+        show_image: true
+        image: "/images/company/super-heros-sokube.jpg"
+        image_position: "top"
+        primary_text: "Contactez-nous"
+        primary_link: "/contact"
+*/}}
 {{ if .Site.Params.cta.enable }}
 
-{{ $style := .Site.Params.cta.style | default dict }}
+{{ $siteCta := .Site.Params.cta | default dict }}
+{{ $siteCtaStyle := $siteCta.style | default dict }}
+{{ $sitePrimary := $siteCta.primary_button | default dict }}
+{{ $siteSecondary := $siteCta.secondary_button | default dict }}
+{{ $override := .Params.cta | default dict }}
 
-{{ $background := $style.background | default "bg-primary-600" }}
-{{ $titleColor := $style.title | default "text-white" }}
-{{ $descriptionColor := $style.description | default "text-primary-100" }}
+{{/* Hugo's "default" treats `false` as unset, so boolean overrides need an
+     explicit isset check to tell "not provided" apart from "set to false". */}}
+{{ $showTitle := true }}
+{{ if isset $override "show_title" }}{{ $showTitle = $override.show_title }}{{ end }}
 
-{{ $primaryBtn := site.Params.cta.primary_button }}
-{{ $secondaryBtn := site.Params.cta.secondary_button }}
+{{ $showDescription := true }}
+{{ if isset $override "show_description" }}{{ $showDescription = $override.show_description }}{{ end }}
 
-{{ $primaryBackground := $primaryBtn.background | default "bg-white" }}
-{{ $primaryTextColor := $primaryBtn.text_color | default "text-neurokube-600" }}
-{{ $primaryHover := $primaryBtn.hover | default "hover:bg-neurokube-200" }}
+{{ $showButtons := true }}
+{{ if isset $override "show_buttons" }}{{ $showButtons = $override.show_buttons }}{{ end }}
 
-{{ $secondaryBackground := $secondaryBtn.background | default "bg-neurokube-600" }}
-{{ $secondaryTextColor := $secondaryBtn.text_color | default "text-white" }}
-{{ $secondaryHover := $secondaryBtn.hover | default "hover:bg-neurokube-800" }}
-{{ $secondaryBorder := $secondaryBtn.border | default "border-white" }}
+{{ $showImage := false }}
+{{ if isset $override "show_image" }}{{ $showImage = $override.show_image }}{{ end }}
 
-<section class="cta-section">
-    <div class="container">
-        {{ $angle := .Site.Params.cta.gradient_angle | default 45 }}
-        {{ $from := .Site.Params.cta.gradient_from }}
-        {{ $to := .Site.Params.cta.gradient_to }}
-        <div class="relative rounded-2xl overflow-hidden {{ $background }} cta-gradient" style="--gradient-angle: {{ $angle }}; --gradient-from: {{ $from }}; --gradient-to: {{ $to }}">
-            <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
-                <h2 class="text-3xl md:text-4xl font-bold {{ $titleColor }} mb-6">{{ .Site.Params.cta.title }}</h2>
-                <p class="text-xl {{ $descriptionColor }} mb-8">{{ .Site.Params.cta.description }}</p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    {{ with $primaryBtn }}
-                    <a href="{{ .url }}"
-                    class="btn text-center {{ $primaryBackground }} {{ $primaryTextColor }} {{ $primaryHover }}">
-                        {{ .text }}
-                    </a>
-                    {{ end }}
+{{ partial "cta-block.html" (dict
+    "title" ($override.title | default $siteCta.title)
+    "showTitle" $showTitle
+    "description" ($override.description | default $siteCta.description)
+    "showDescription" $showDescription
+    "titleColor" ($override.title_color | default $siteCtaStyle.title)
+    "descriptionColor" ($override.description_color | default $siteCtaStyle.description)
 
-                    {{ with $secondaryBtn }}
-                    <a href="{{ .url }}"
-                    class="btn text-center border-2 {{ $secondaryBackground }} {{ $secondaryTextColor }} {{ $secondaryHover }} {{ $secondaryBorder }}">
-                        {{ .text }}
-                    </a>
-                    {{ end }}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    "background" ($override.background | default $siteCtaStyle.background)
+
+    "showButtons" $showButtons
+    "primaryText" ($override.primary_text | default $sitePrimary.text)
+    "primaryLink" ($override.primary_link | default $sitePrimary.url)
+    "primaryClass" ($override.primary_class | default $sitePrimary.class)
+    "secondaryText" ($override.secondary_text | default $siteSecondary.text)
+    "secondaryLink" ($override.secondary_link | default $siteSecondary.url)
+    "secondaryClass" ($override.secondary_class | default $siteSecondary.class)
+
+    "showImage" $showImage
+    "image" $override.image
+    "imagePosition" ($override.image_position | default "right")
+) }}
+
 {{ end }}

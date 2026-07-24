@@ -21,7 +21,14 @@
       titleColor, descriptionColor
       showButtons, primaryText, primaryLink, primaryClass,
         secondaryText, secondaryLink, secondaryClass
-      showImage, image, imagePosition ("left" or "right", default "right")
+      showImage, image, imagePosition ("left", "right" or "top", default "right") -
+        "left"/"right": photo fills the whole block, fading into "background"
+        via a gradient, text on top (see blog-single-body.html's hero) -
+        "top": full-width photo banner stacked above a solid "background"
+        block containing title/description/buttons (no gradient blend)
+      title/description accept inline HTML (e.g. a <span> to highlight part
+        of the text in a different color, as sokube-hero already allows for
+        headline/sub_headline) - never pass raw user input here unescaped.
       showContactBlock, contactTitle, contactDescription,
         contactItems (slice of {icon, text, link}), contactButtonText,
         contactButtonLink, contactButtonClass,
@@ -72,38 +79,72 @@
      (solid on the left, fading into the photo on the right). Derived from
      $background by replacing every "bg-" occurrence with "from-"/"via-" -
      this also correctly turns a "dark:bg-..." token into "dark:from-..."/
-     "dark:via-...", since "bg-" still appears as a substring inside it. */}}
+     "dark:via-...", since "bg-" still appears as a substring inside it.
+     Only used for imagePosition "left"/"right" - "top" stacks the photo
+     above a plain (non-blended) background block instead. */}}
 {{ $gradientDir := "bg-gradient-to-r" }}
 {{ if eq $imagePosition "left" }}{{ $gradientDir = "bg-gradient-to-l" }}{{ end }}
 {{ $fromClasses := replace $background "bg-" "from-" }}
 {{ $viaClasses := replace $background "bg-" "via-" }}
 {{ $gradientClasses := printf "%s %s %s to-transparent" $gradientDir $fromClasses $viaClasses }}
 
+{{ $isTopImage := and $showImage $image (eq $imagePosition "top") }}
+{{ $isBlendImage := and $showImage $image (not $isTopImage) }}
+
 <section class="cta-section">
     <div class="container">
         <div class="relative rounded-2xl overflow-hidden {{ $bgClasses }}">
 
-            {{ if $showImage }}
-                {{ with $image }}
-                    <img src="{{ . | relURL }}"
-                         alt=""
-                         class="absolute inset-0 w-full h-full object-cover"
-                         loading="lazy">
-                    <div class="absolute inset-0 {{ $gradientClasses }}" aria-hidden="true"></div>
-                {{ end }}
+            {{ if $isTopImage }}
+                <img src="{{ $image | relURL }}"
+                     alt=""
+                     class="w-full h-64 sm:h-80 lg:h-96 object-cover"
+                     loading="lazy">
             {{ end }}
 
-            {{ if or $showImage $showContactBlock }}
+            {{ if $isBlendImage }}
+                <img src="{{ $image | relURL }}"
+                     alt=""
+                     class="absolute inset-0 w-full h-full object-cover"
+                     loading="lazy">
+                <div class="absolute inset-0 {{ $gradientClasses }}" aria-hidden="true"></div>
+            {{ end }}
+
+            {{ if $isTopImage }}
+                <!-- Top-image layout: photo banner above a plain centered
+                     title/description/buttons block, no gradient blend, no
+                     contact card (kept simple to match this specific format). -->
+                <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
+                    {{ if $showTitle }}
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title | safeHTML }}</h2>
+                    {{ end }}
+
+                    {{ if $showDescription }}
+                        <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description | safeHTML }}</p>
+                    {{ end }}
+
+                    {{ if $showButtons }}
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            {{ if $primaryText }}
+                                <a href="{{ $primaryLink }}" class="btn {{ $primaryClass }}">{{ $primaryText }}</a>
+                            {{ end }}
+                            {{ if $secondaryText }}
+                                <a href="{{ $secondaryLink }}" class="btn border-2 {{ $secondaryClass }}">{{ $secondaryText }}</a>
+                            {{ end }}
+                        </div>
+                    {{ end }}
+                </div>
+            {{ else if or $isBlendImage $showContactBlock }}
                 <!-- Rich layout: text column + optional contact card, side by side -->
                 <div class="relative z-10 flex flex-col {{ if $showContactBlock }}lg:flex-row lg:items-center{{ end }} gap-8 p-8 lg:p-12">
 
                     <div class="flex-1 {{ if not $showContactBlock }}max-w-xl{{ end }}">
                         {{ if $showTitle }}
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title }}</h2>
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title | safeHTML }}</h2>
                         {{ end }}
 
                         {{ if $showDescription }}
-                            <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description }}</p>
+                            <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description | safeHTML }}</p>
                         {{ end }}
 
                         {{ if $showButtons }}
@@ -167,11 +208,11 @@
                      markup (no image, no contact card). -->
                 <div class="relative text-center max-w-3xl mx-auto px-6 py-10">
                     {{ if $showTitle }}
-                        <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title }}</h2>
+                        <h2 class="text-3xl md:text-4xl font-bold mb-6 {{ $titleColor }}">{{ $title | safeHTML }}</h2>
                     {{ end }}
 
                     {{ if $showDescription }}
-                        <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description }}</p>
+                        <p class="text-xl mb-8 {{ $descriptionColor }}">{{ $description | safeHTML }}</p>
                     {{ end }}
 
                     {{ if $showButtons }}

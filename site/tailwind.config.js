@@ -401,6 +401,9 @@ module.exports = {
     '[&_a]:dark:hover:text-neurokube-200',
     'dark:bg-hr-900',
     'dark:hover:text-neurokube-200',
+
+    // === AJOUTS layout job-listing ([params.jobListing.style], hugo.toml) ===
+    'dark:hover:bg-neurokube-500',
   ],
 
   theme: {
