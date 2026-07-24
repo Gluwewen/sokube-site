@@ -1,3 +1,18 @@
+{{/*
+    Map Shortcode
+
+    Carte Google Maps intégrée (iframe), pleine largeur.
+
+    Paramètres :
+      address - adresse à afficher (défaut : adresse du bureau de Genève)
+      zoom    - niveau de zoom (défaut "15")
+      height  - hauteur en pixels (défaut "400")
+      title   - attribut title de l'iframe, pour l'accessibilité (défaut "SoKube")
+
+    Appel minimal :
+      {{</* sokube-map address="Rue Adrien-Lachenal 20, 1207 Genève, Suisse" title="SoKube Geneva Office" >}}
+*/}}
+
 {{ $address := .Get "address" | default "Rue Adrien-Lachenal 20, 1207 Genève, Suisse" }}
 {{ $zoom := .Get "zoom" | default "15" }}
 {{ $height := .Get "height" | default "400" }}

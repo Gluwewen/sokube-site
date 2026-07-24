@@ -1,9 +1,28 @@
+{{/*
+    Form Shortcode
+
+    Enveloppe <form> : conteneur + bouton d'envoi. Le contenu (.Inner) est
+    typiquement une série de sokube-form-field / sokube-form-textarea /
+    sokube-form-checkbox.
+
+    Site-wide : tous les styles par défaut vivent dans [params.forms.style]
+    (hugo.toml), partagés par tout le groupe de shortcodes sokube-form-*.
+
+    Paramètres :
+      action     - URL de soumission du formulaire
+      buttonText - texte du bouton d'envoi (défaut "Submit")
+      .Inner     - contenu du formulaire
+
+    Appel minimal :
+      {{</* sokube-form action="https://formspree.io/f/xxx" buttonText="Send" >}}
+        {{</* sokube-form-field label="Email" name="email" type="email" required="true" >}}
+      {{</* /sokube-form >}}
+*/}}
+
 {{ $style := site.Params.forms.style | default dict }}
 
-{{ $container := $style.container | default "max-w-3xl mx-auto" }}
-{{ $input := $style.input | default "w-full rounded-xl border border-gray-300 px-4 py-3" }}
-{{ $label := $style.label | default "block text-sm font-medium mb-2 text-gray-700" }}
-{{ $button := $style.button | default "btn btn-primary w-full" }}
+{{ $container := $style.container }}
+{{ $button := $style.button }}
 
 {{ $action := .Get "action" }}
 {{ $buttonText := .Get "buttonText" | default "Submit" }}

@@ -727,6 +727,13 @@ Our learning methods also help you acquire the skills you need to put them into 
     buttonBackground = "bg-kube-600 dark:bg-kube-600"
     buttonTextColor = "text-white dark:text-white"
 
+# Client-logos shortcode default style (see layouts/shortcodes/sokube-client-logos.html).
+# Toggle with [params.sections].clientLogos.
+[params.clientLogos]
+  [params.clientLogos.style]
+    border = "border-gray-100 dark:border-neurokube-800"
+    title = "dark:text-white"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"
@@ -784,6 +791,10 @@ Our learning methods also help you acquire the skills you need to put them into 
     input = "w-full rounded-xl border border-gray-300 dark:border-neurokube-700 dark:bg-neurokube-900 dark:text-white px-4 py-3"
     label = "block text-sm font-medium mb-2 text-gray-700 dark:text-neurokube-100"
     button = "btn btn-primary w-full"
+    # Label of a sokube-form-checkbox field
+    checkboxLabel = "text-sm text-gray-600 dark:text-neurokube-200"
+    # The "*" marker next to a required field's label (sokube-form-field, sokube-form-textarea)
+    requiredColor = "text-kube-600 dark:text-kube-600"
 
 [module]
   [module.hugoVersion]

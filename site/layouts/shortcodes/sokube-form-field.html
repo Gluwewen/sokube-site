@@ -1,17 +1,38 @@
+{{/*
+    Form-field Shortcode
+
+    Un champ <input> avec son <label>, à utiliser à l'intérieur d'un
+    sokube-form.
+
+    Site-wide : les styles par défaut vivent dans [params.forms.style]
+    (hugo.toml), partagés par tout le groupe de shortcodes sokube-form-*.
+
+    Paramètres :
+      label         - texte du label
+      name          - attribut "name" du champ
+      type          - type HTML de l'input (défaut "text")
+      required      - "true"/"false" (défaut "false")
+      requiredColor - couleur du "*" affiché si required="true"
+                      (défaut: params.forms.style.requiredColor)
+
+    Appel minimal :
+      {{</* sokube-form-field label="Email" name="email" type="email" required="true" >}}
+*/}}
+
 {{ $style := site.Params.forms.style | default dict }}
 
-{{ $input := $style.input | default "w-full rounded-xl border border-gray-300 px-4 py-3" }}
-{{ $labelStyle := $style.label | default "block text-sm font-medium mb-2 text-gray-700" }}
+{{ $input := $style.input }}
+{{ $labelStyle := $style.label }}
 
 {{ $label := .Get "label" }}
 {{ $name := .Get "name" }}
 {{ $type := .Get "type" | default "text" }}
 {{ $required := .Get "required" }}
-{{ $requiredColor := .Get "requiredColor" | default "kube-600" }}
+{{ $requiredColor := .Get "requiredColor" | default $style.requiredColor }}
 
 <div>
     <label class="{{ $labelStyle }}">
-        {{ $label }}{{ if eq $required "true" }}<sup class="text-{{ $requiredColor }}">*</sup>{{ end }}
+        {{ $label }}{{ if eq $required "true" }}<sup class="{{ $requiredColor }}">*</sup>{{ end }}
     </label>
 
     <input

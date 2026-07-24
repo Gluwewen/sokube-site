@@ -1,8 +1,28 @@
+{{/*
+    Client-logos Shortcode
+
+    Bandeau de logos clients défilant horizontalement (ou statique si
+    animate="false"), lit .Page.Params.client_logos (liste de {logo, name}
+    définie dans le front matter de la page).
+
+    Site-wide : les couleurs par défaut vivent dans [params.clientLogos.style]
+    (hugo.toml). Activation via [params.sections].clientLogos.
+
+    Paramètres :
+      title   - texte au-dessus des logos (défaut : traduction "trustedByCompanies")
+      animate - "true" (défaut) ou "false" pour un rendu statique centré
+
+    Appel minimal :
+      {{</* sokube-client-logos animate="true" >}}
+*/}}
+
+{{ $style := site.Params.clientLogos.style | default dict }}
+
 {{ if ne (.Site.Params.sections.clientLogos) false }}
-<section class="border-y border-gray-100 dark:border-neurokube-800 overflow-hidden">
+<section class="border-y {{ $style.border }} overflow-hidden">
     <div class="container mx-auto">
         <div class="py-12">
-            <p class="text-center text-3xl md:text-2xl font-bold mb-6 dark:text-white">{{ .Get "title" | default (i18n "trustedByCompanies") }}</p>
+            <p class="text-center text-3xl md:text-2xl font-bold mb-6 {{ $style.title }}">{{ .Get "title" | default (i18n "trustedByCompanies") }}</p>
             <div class="logo-scroll">
                 <div class="logos-slide{{ if ne (.Get "animate" | default "true") "false" }} animate{{ end }}">
                     {{ range .Page.Params.client_logos }}

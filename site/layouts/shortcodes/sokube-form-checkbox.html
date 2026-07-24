@@ -1,5 +1,26 @@
+{{/*
+    Form-checkbox Shortcode
+
+    Une case à cocher (ex: consentement RGPD), à utiliser à l'intérieur d'un
+    sokube-form. Le label (.Inner) accepte du Markdown (ex. un lien vers la
+    politique de confidentialité).
+
+    Site-wide : le style du label par défaut vit dans [params.forms.style]
+    (hugo.toml), partagé par tout le groupe de shortcodes sokube-form-*.
+
+    Paramètres :
+      name     - attribut "name" du champ (défaut "consent")
+      required - "true"/"false" (défaut "false")
+      .Inner   - texte du label, en Markdown
+
+    Appel minimal :
+      {{</* sokube-form-checkbox name="consent" required="true" >}}
+      J'accepte la [politique de confidentialité](/privacy).
+      {{</* /sokube-form-checkbox >}}
+*/}}
+
 {{ $style := site.Params.forms.style | default dict }}
-{{ $labelStyle := $style.checkboxLabel | default "text-sm text-gray-600" }}
+{{ $labelStyle := $style.checkboxLabel }}
 
 {{ $name := .Get "name" | default "consent" }}
 {{ $required := .Get "required" }}
