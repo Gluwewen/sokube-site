@@ -1,29 +1,64 @@
+{{/*
+    Hero Shortcode
+
+    Site-wide : une seule identité visuelle pour tout le site (couleurs,
+    boutons), défaut dans [params.hero] (hugo.toml) - avec override possible
+    par langue ([languages.xx.params.hero]) et par instance via les
+    paramètres du shortcode. Utilisé une fois par page (page d'accueil,
+    about.md...), seul le contenu (headline, images, liens des boutons)
+    change d'un appel à l'autre.
+
+    Paramètres :
+      headline / sub_headline   - titre et texte (HTML autorisé, non passé dans markdownify)
+      hero_image                - image light; la variante sombre est déduite en remplaçant
+                                   "-light" par "-dark" dans le nom de fichier
+      background_image          - image de fond plein cadre (optionnel, au-dessus de "background")
+      background                - classes de fond de la section (défaut: params.hero.background)
+      primary_button_text/url   - bouton principal (défaut: params.hero.primary_button.text/url,
+                                   surchargeable par instance ; couleurs non paramétrables par
+                                   instance, toujours params.hero.primary_button.*)
+      secondary_button_text/url - bouton secondaire (idem, params.hero.secondary_button)
+
+    Appel minimal :
+      {{</* sokube-hero
+          headline="..."
+          sub_headline="..."
+          primary_button_text="Request a demo"
+          primary_button_url="/demo/"
+          secondary_button_text="Learn more"
+          secondary_button_url="/about/"
+          hero_image="/images/company/example-light.webp"
+      >}}
+*/}}
+
 {{ $headline := .Get "headline" }}
 {{ $sub_headline := .Get "sub_headline" }}
 {{ $hero_image := .Get "hero_image" }}
 {{ $hero_image_dark := replace $hero_image "-light" "-dark" }}
 {{ $background_image := .Get "background_image" }}
-{{ $gradient_from := .Get "gradient-from" }}
-{{ $gradient_to := .Get "gradient-to" }}
-{{ $gradient_angle := .Get "gradient-angle" | default "180" }}
 {{ $background := .Get "background" | default site.Params.hero.background }}
 {{ $style := site.Params.hero.style | default dict }}
-{{ $titleColor := $style.title | default "text-neurokube-900" }}
-{{ $descriptionColor := $style.description | default "text-gray-600" }}
-{{ $decoration1 := $style.decoration_1 | default "bg-neurokube-100" }}
-{{ $decoration2 := $style.decoration_2 | default "bg-neurokube-200" }}
+{{ $titleColor := $style.title }}
+{{ $descriptionColor := $style.description }}
+{{ $decoration1 := $style.decoration_1 }}
+{{ $decoration2 := $style.decoration_2 }}
 
-{{ $primaryBtn := site.Params.hero.primary_button }}
-{{ $secondaryBtn := site.Params.hero.secondary_button }}
+{{ $primaryBtn := site.Params.hero.primary_button | default dict }}
+{{ $secondaryBtn := site.Params.hero.secondary_button | default dict }}
 
-{{ $primaryBackground := $primaryBtn.background | default "bg-neurokube-600" }}
-{{ $primaryTextColor := $primaryBtn.text_color | default "text-white" }}
-{{ $primaryHover := $primaryBtn.hover | default "hover:bg-neurokube-700" }}
+{{ $primaryText := .Get "primary_button_text" | default $primaryBtn.text }}
+{{ $primaryUrl := .Get "primary_button_url" | default $primaryBtn.url }}
+{{ $secondaryText := .Get "secondary_button_text" | default $secondaryBtn.text }}
+{{ $secondaryUrl := .Get "secondary_button_url" | default $secondaryBtn.url }}
 
-{{ $secondaryBackground := $secondaryBtn.background | default "bg-white" }}
-{{ $secondaryTextColor := $secondaryBtn.text_color | default "text-neurokube-600" }}
-{{ $secondaryHover := $secondaryBtn.hover | default "hover:bg-neurokube-100" }}
-{{ $secondaryBorder := $secondaryBtn.border | default "border-neurokube-600" }}
+{{ $primaryBackground := $primaryBtn.background }}
+{{ $primaryTextColor := $primaryBtn.text_color }}
+{{ $primaryHover := $primaryBtn.hover }}
+
+{{ $secondaryBackground := $secondaryBtn.background }}
+{{ $secondaryTextColor := $secondaryBtn.text_color }}
+{{ $secondaryHover := $secondaryBtn.hover }}
+{{ $secondaryBorder := $secondaryBtn.border }}
 
 <section class="relative overflow-hidden {{ $background }}">
     {{ if $background_image }}
@@ -41,17 +76,17 @@
                     {{ $sub_headline | safeHTML }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    {{ with $primaryBtn }}
-                    <a href="{{ .url }}"
+                    {{ with $primaryText }}
+                    <a href="{{ $primaryUrl }}"
                     class="btn text-center {{ $primaryBackground }} {{ $primaryTextColor }} {{ $primaryHover }}">
-                        {{ .text }}
+                        {{ . }}
                     </a>
                     {{ end }}
 
-                    {{ with $secondaryBtn }}
-                    <a href="{{ .url }}"
+                    {{ with $secondaryText }}
+                    <a href="{{ $secondaryUrl }}"
                     class="btn text-center border-2 {{ $secondaryBackground }} {{ $secondaryTextColor }} {{ $secondaryHover }} {{ $secondaryBorder }}">
-                        {{ .text }}
+                        {{ . }}
                     </a>
                     {{ end }}
                 </div>
