@@ -1,20 +1,68 @@
+{{/*
+    FAQ Shortcode
+
+    Renders an accordion-style FAQ, grouped by category with a sticky side
+    nav when at least one question has a category (falls back to a single
+    flat list otherwise). Site-wide shortcode: one visual identity for the
+    whole site, defaults live in [params.faq.style] (hugo.toml). Toggle the
+    whole shortcode on/off via [params.sections].faq.
+
+    Content (.Inner) is YAML or JSON with a "title", optional "description"
+    and a "questions" list. Each question is:
+      question: "..."      (Markdown supported)
+      answer: "..."        (Markdown supported)
+      category: "..."      (optional - omit to leave the question uncategorized)
+
+    Parameters (all optional, override the hugo.toml default for this one
+    instance - combine a light-mode Tailwind class and a dark: variant in
+    the same string):
+      accentColor      - arrow in the menu + expand/collapse icons
+                         (default: params.faq.style.accent)
+      markerColor      - bullet/number markers inside answers' lists
+                         (default: params.faq.style.marker)
+      menuTextColor    - category nav text, inactive state
+                         (default: params.faq.style.menuText)
+      menuActiveTextColor - category nav text, active state
+                         (default: params.faq.style.menuActiveText)
+
+    Minimal call:
+      {{</* faq >}}
+      title: "Frequently Asked Questions"
+      questions:
+        - question: "..."
+          answer: "..."
+      {{</* /faq >}}
+
+    Full call with categories and a one-off color override:
+      {{</* faq accentColor="text-kube-600 dark:text-kube-600" >}}
+      title: "Most frequently asked questions"
+      description: "Find answers to frequently asked questions."
+      questions:
+        - category: "DevOps"
+          question: "..."
+          answer: "..."
+      {{</* /faq >}}
+*/}}
+
 {{ $data := .Inner | transform.Unmarshal }}
 {{ if ne (.Site.Params.sections.faq) false }}
 
-{{/* --- Colors (fully parameterizable, light + dark) --- */}}
-{{/* Accent color: arrow in the menu + expand/collapse icons */}}
-{{ $accentColor := .Get "accentColor" | default "text-kube-600" }}
-{{ $accentColorDark := .Get "accentColorDark" | default "dark:text-kube-300" }}
+{{ $style := .Site.Params.faq.style | default dict }}
+{{ $accentColor := .Get "accentColor" | default $style.accent }}
+{{ $markerColor := .Get "markerColor" | default $style.marker }}
+{{ $menuTextColor := .Get "menuTextColor" | default $style.menuText }}
+{{ $menuActiveTextColor := .Get "menuActiveTextColor" | default $style.menuActiveText }}
 
-{{/* Bullet / number markers used inside the answers' lists */}}
-{{ $markerColor := .Get "markerColor" | default "marker:text-kube-600" }}
-{{ $markerColorDark := .Get "markerColorDark" | default "dark:marker:text-kube-300" }}
-
-{{/* Menu (category nav) text color, inactive vs active state */}}
-{{ $menuTextColor := .Get "menuTextColor" | default "text-gray-400" }}
-{{ $menuTextColorDark := .Get "menuTextColorDark" | default "dark:text-neurokube-300" }}
-{{ $menuActiveTextColor := .Get "menuActiveTextColor" | default "text-gray-900" }}
-{{ $menuActiveTextColorDark := .Get "menuActiveTextColorDark" | default "dark:text-white" }}
+{{/* Hover variant of accentColor (nav link hover state) - prefixes every
+     class in the combined light/dark string with "hover:", so a two-token
+     value like "text-kube-600 dark:text-kube-600" correctly becomes
+     "hover:text-kube-600 hover:dark:text-kube-600" instead of only
+     prefixing the first token. */}}
+{{ $accentHoverParts := slice }}
+{{ range (split $accentColor " ") }}
+    {{ $accentHoverParts = $accentHoverParts | append (printf "hover:%s" .) }}
+{{ end }}
+{{ $accentHover := delimit $accentHoverParts " " }}
 
 {{/* Shared body text size: description, questions, answers and menu all match */}}
 {{ $bodyTextSize := "text-base sm:text-xl" }}
@@ -29,10 +77,21 @@
 {{ end }}
 {{ $hasCategories := gt (len $categories) 0 }}
 
-{{/* --- Sections to render: named categories first, then a fallback bucket for uncategorized questions --- */}}
+{{/* --- Sections to render: named categories first, then a fallback bucket for uncategorized questions.
+     Built the same explicit way as $categories above (rather than relying on Hugo's "where" matching
+     a missing "category" key against ""), so a question with no "category" field at all is reliably
+     picked up. Not conditioned on $hasCategories: when no question has a category, $categories is
+     empty and this "" bucket becomes the only section - that's what makes the flat (no-category)
+     case render instead of showing nothing. --- */}}
 {{ $sections := $categories }}
-{{ $uncategorized := where $data.questions "category" "" }}
-{{ if and $hasCategories (gt (len $uncategorized) 0) }}
+{{ $uncategorized := slice }}
+{{ range $data.questions }}
+    {{ $cat := .category | default "" }}
+    {{ if eq $cat "" }}
+        {{ $uncategorized = $uncategorized | append . }}
+    {{ end }}
+{{ end }}
+{{ if gt (len $uncategorized) 0 }}
     {{ $sections = $sections | append "" }}
 {{ end }}
 
@@ -52,8 +111,8 @@
             <aside class="lg:w-56 shrink-0 mb-10 lg:mb-0">
                 <nav class="lg:sticky lg:top-24 space-y-4" id="faq-nav-{{ .Ordinal }}"
                      data-faq-nav
-                     data-active-classes="{{ $menuActiveTextColor }} {{ $menuActiveTextColorDark }} font-semibold"
-                     data-inactive-classes="{{ $menuTextColor }} {{ $menuTextColorDark }} font-medium">
+                     data-active-classes="{{ $menuActiveTextColor }} font-semibold"
+                     data-inactive-classes="{{ $menuTextColor }} font-medium">
                     {{ range $sections }}
                     {{ $label := . }}
                     {{ if eq $label "" }}{{ $label = "Other" }}{{ end }}
@@ -61,8 +120,8 @@
                     <a href="#{{ $slug }}"
                        data-faq-nav-link
                        data-target="{{ $slug }}"
-                       class="faq-nav-link flex items-center gap-2 {{ $bodyTextSize }} {{ $menuTextColor }} {{ $menuTextColorDark }} font-medium hover:{{ $accentColor }} transition-colors duration-150">
-                        <span class="faq-nav-arrow {{ $accentColor }} {{ $accentColorDark }} opacity-0 transition-opacity duration-150">&rarr;</span>
+                       class="faq-nav-link flex items-center gap-2 {{ $bodyTextSize }} {{ $menuTextColor }} font-medium {{ $accentHover }} transition-colors duration-150">
+                        <span class="faq-nav-arrow {{ $accentColor }} opacity-0 transition-opacity duration-150">&rarr;</span>
                         <span>{{ $label }}</span>
                     </a>
                     {{ end }}
@@ -93,7 +152,7 @@
                                 <div class="faq-question {{ $bodyTextSize }} font-semibold text-gray-900 dark:text-white [&_p]:m-0">
                                     {{ .question | markdownify }}
                                 </div>
-                                <span class="shrink-0 {{ $accentColor }} {{ $accentColorDark }} mt-0.5">
+                                <span class="shrink-0 {{ $accentColor }} mt-0.5">
                                     <svg class="faq-icon-plus w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <circle cx="12" cy="12" r="10" stroke-width="1.5"></circle>
                                         <path stroke-linecap="round" stroke-width="1.5" d="M12 8v8M8 12h8"></path>
@@ -104,7 +163,7 @@
                                     </svg>
                                 </span>
                             </button>
-                            <div class="faq-content hidden mt-4 prose max-w-none {{ $bodyTextSize }} dark:prose-invert {{ $markerColor }} {{ $markerColorDark }}">
+                            <div class="faq-content hidden mt-4 prose max-w-none {{ $bodyTextSize }} dark:prose-invert {{ $markerColor }}">
                                 {{ .answer | markdownify }}
                             </div>
                         </div>

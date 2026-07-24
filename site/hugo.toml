@@ -643,6 +643,24 @@ Our learning methods also help you acquire the skills you need to put them into 
   clientLogos = false
   faq = true
 
+# FAQ shortcode default style (see layouts/shortcodes/faq.html).
+# One style for the whole site: same colors on every page that uses the
+# faq shortcode (faq.md, offers.md...). Each field accepts one or more
+# Tailwind classes; combine a light-mode class and a dark: variant in the
+# same string, same convention as everywhere else in this file. A page can
+# still override any of these via shortcode parameters for an exceptional
+# case, but that should stay the exception, not the rule.
+[params.faq]
+  [params.faq.style]
+    # Arrow in the menu + expand/collapse icons
+    accent = "text-kube-600 dark:text-kube-600"
+    # Bullet / number markers used inside the answers' lists
+    marker = "marker:text-kube-600 dark:marker:text-kube-600"
+    # Category nav text, inactive state
+    menuText = "text-neurokube-600 dark:text-neurokube-600"
+    # Category nav text, active state
+    menuActiveText = "text-gray-900 dark:text-white"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"

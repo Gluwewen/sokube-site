@@ -3,7 +3,7 @@ title: "FAQ"
 layout: "simple"
 ---
 
-{{< faq accentColor="text-kube-600" accentColorDark="dark:text-kube-600" menuTextColor="text-neurokube-600" menuTextColorDark="dark:text-neurokube-600" markerColor="marker:text-kube-600" markerColorDark="dark:marker:text-kube-600">}}
+{{< faq >}}
 title: "Most frequently asked questions"
 description: "Find answers to frequently asked questions about SoKube's activities."
 questions:
@@ -33,7 +33,7 @@ questions:
 
         This is called the DevOps feedback loop or DevOps 8:
 
-        ![The DevOps / DevSecOps infinity loop: plan, code, build, test, release, deploy, operate, monitor](/images/devops-devsecops-loop.png)
+        ![The DevOps / DevSecOps infinity loop: plan, code, build, test, release, deploy, operate, monitor](/images/faq/devops-devsecops-loop.png)
 
   - category: "DevOps"
     question: "What is a DevOps / DevSecOps team?"

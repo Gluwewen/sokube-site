@@ -372,6 +372,12 @@ module.exports = {
     'dark:marker:text-kube-300',
     'marker:text-hr-600',
     'dark:marker:text-hr-300',
+
+    // === AJOUTS faq shortcode ([params.faq.style], hugo.toml) ===
+    'dark:text-kube-600',
+    'hover:dark:text-kube-600',
+    'dark:marker:text-kube-600',
+    'dark:text-neurokube-600',
   ],
 
   theme: {

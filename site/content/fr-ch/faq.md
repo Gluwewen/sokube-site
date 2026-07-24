@@ -3,7 +3,7 @@ title: "FAQ"
 layout: "simple"
 ---
 
-{{< faq accentColor="text-kube-600" accentColorDark="dark:text-kube-600" menuTextColor="text-neurokube-600" menuTextColorDark="dark:text-neurokube-600" markerColor="marker:text-kube-600" markerColorDark="dark:marker:text-kube-600">}}
+{{< faq >}}
 title: "Questions fréquemment posées"
 description: "Retrouvez les réponses aux questions les plus fréquentes sur les activités de SoKube."
 questions:
@@ -33,7 +33,7 @@ questions:
 
       C'est ce qu'on appelle la boucle de rétroaction DevOps, ou boucle infinie DevOps :
 
-      ![Boucle infinie DevOps / DevSecOps : plan, code, build, test, release, deploy, operate, monitor](/images/devops-devsecops-loop.png)
+      ![Boucle infinie DevOps / DevSecOps : plan, code, build, test, release, deploy, operate, monitor](/images/faq/devops-devsecops-loop.png)
 
   - category: "DevOps"
     question: "Qu'est-ce qu'une équipe DevOps / DevSecOps ?"
