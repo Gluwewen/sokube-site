@@ -2,6 +2,10 @@
     Thin wrapper around layouts/partials/brand-heading.html, for placing
     this heading by hand inside Markdown content.
 
+    Site-wide : les couleurs par défaut vivent dans [params.brandHeading.style]
+    (hugo.toml), pas dans ce fichier - surchargeables ponctuellement via
+    baseColor/accentColor.
+
     Usage: wrap the part(s) to highlight between single asterisks on each
     line, inside the YAML block passed as .Inner:
 
@@ -11,6 +15,9 @@
       - "*S*isters *O*f *KUBE*rnetes"
     {{< /sokube-brand-heading >}}
 
+    Paramètres (optionnels) : baseColor, accentColor - voir
+    layouts/partials/brand-heading.html.
+
     (layouts/_default/trainings.html calls the partial directly with lines
     from hugo.toml instead, via layouts/partials/trainings-extra-sections.html)
 */}}
@@ -19,9 +26,6 @@
 
 {{ partial "brand-heading.html" (dict
     "lines" $data.lines
-    "size" (.Get "size")
     "baseColor" (.Get "baseColor")
-    "baseColorDark" (.Get "baseColorDark")
     "accentColor" (.Get "accentColor")
-    "accentColorDark" (.Get "accentColorDark")
 ) }}

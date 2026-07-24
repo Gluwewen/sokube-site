@@ -66,11 +66,8 @@
             <div class="text-center mb-10">
                 {{ partial "brand-heading.html" (dict
                     "lines" ($heading.lines | default slice)
-                    "size" $heading.size
                     "baseColor" $heading.baseColor
-                    "baseColorDark" $heading.baseColorDark
                     "accentColor" $heading.accentColor
-                    "accentColorDark" $heading.accentColorDark
                 ) }}
 
                 {{ with $intro.description }}

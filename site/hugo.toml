@@ -694,6 +694,18 @@ Our learning methods also help you acquire the skills you need to put them into 
     # Card body text (.Inner)
     cardText = "text-gray-600 dark:text-neurokube-200"
 
+# Brand-heading style (see layouts/partials/brand-heading.html, used by both
+# layouts/shortcodes/sokube-brand-heading.html and layouts/partials/
+# trainings-extra-sections.html). One style for the whole site - every
+# current call uses the default, but each can still override baseColor/
+# accentColor on its own instance if needed.
+[params.brandHeading]
+  [params.brandHeading.style]
+    # Plain (non-highlighted) part of the heading
+    baseColor = "text-gray-900 dark:text-white"
+    # *word*-wrapped part of the heading
+    accentColor = "text-kube-600 dark:text-kube-600"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"
