@@ -17,17 +17,15 @@
     it stands out from the rest of the page. Toggle with
     params.trainings.introSection.enable.
 
-    The light/dark background colors are configured separately, as plain
-    Tailwind classes without any "dark:" prefix - this partial adds the
-    "dark:" prefix itself:
-      params.trainings.introSection.style.backgroundLight (e.g. a solid
-        color or a "bg-gradient-to-b from-... to-..." gradient)
-      params.trainings.introSection.style.backgroundDark (e.g. a solid
-        color; "dark:bg-none" is added automatically alongside it so any
-        light-mode gradient's background-image doesn't show through)
-    Remember to safelist in tailwind.config.js any new color/gradient class
-    used here (and its "dark:"-prefixed form), since these values come from
-    hugo.toml rather than a literal class in an .html file.
+    params.trainings.introSection.style.background is a single combined
+    light+dark Tailwind class string (rule 4), e.g. a solid color or a
+    "bg-gradient-to-b from-... to-..." gradient for light mode plus
+    "dark:bg-none dark:bg-..." for dark mode ("dark:bg-none" clears the
+    light-mode gradient's background-image so the flat dark color shows
+    instead - only needed when dark mode swaps a gradient for a solid
+    color). Remember to safelist in tailwind.config.js any new color/
+    gradient class used here, since these values come from hugo.toml
+    rather than a literal class in an .html file.
 
     Section 2 ("ctaSection"): a sokube-cta instance (see
     layouts/partials/cta-block.html - called directly here since shortcodes
@@ -44,15 +42,8 @@
 {{ if $intro.enable }}
     {{ $heading := $intro.heading | default dict }}
     {{ $style := $intro.style | default dict }}
-    {{ $descriptionColor := $style.description | default "text-gray-600 dark:text-neurokube-200" }}
-
-    {{ $bgLight := $style.backgroundLight | default "bg-gradient-to-b from-neurokube-100 to-neurokube-50" }}
-    {{ $bgDark := $style.backgroundDark | default "bg-neurokube-400" }}
-    {{ $darkClasses := slice "dark:bg-none" }}
-    {{ range (split $bgDark " ") }}
-        {{ if . }}{{ $darkClasses = $darkClasses | append (printf "dark:%s" .) }}{{ end }}
-    {{ end }}
-    {{ $sectionBg := printf "%s %s" $bgLight (delimit $darkClasses " ") }}
+    {{ $descriptionColor := $style.description }}
+    {{ $sectionBg := $style.background }}
 
     <section class="py-16 {{ $sectionBg }}">
         <div class="container mx-auto px-4">
@@ -101,8 +92,7 @@
         "titleColor" $ctaStyle.title
         "descriptionColor" $ctaStyle.description
 
-        "backgroundLight" $ctaStyle.backgroundLight
-        "backgroundDark" $ctaStyle.backgroundDark
+        "background" $ctaStyle.background
 
         "showButtons" false
 
@@ -117,7 +107,6 @@
         "contactButtonText" $contact.buttonText
         "contactButtonLink" $contact.buttonLink
         "contactButtonClass" $contact.buttonClass
-        "contactBackgroundLight" $contact.backgroundLight
-        "contactBackgroundDark" $contact.backgroundDark
+        "contactBackground" $contact.background
     ) }}
 {{ end }}

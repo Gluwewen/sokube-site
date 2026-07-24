@@ -61,6 +61,10 @@ Toute modification de shortcode doit être vérifiée sur les deux arborescences
 
 Avant d'écrire le moindre code pour un **nouveau** shortcode, on se pose systématiquement la question ensemble : ce shortcode est-il **site-wide** (une seule instance, configurable globalement dans `hugo.toml`, règle 5) ou **instanciable par page** (peut avoir un aspect ou un contenu différent selon où il est appelé, règle 5) ? Cette décision conditionne où vivent ses valeurs par défaut (règle 5) et sa structure de paramètres — elle doit donc être prise avant le développement, jamais déduite après coup. Ne jamais commencer à coder un nouveau shortcode sans avoir explicitement posé et tranché cette question au préalable.
 
+## Règle 13 — Shortcode réutilisé hors des pages Markdown : partial partagée + shortcode-adaptateur
+
+Un shortcode ne peut être invoqué que depuis le contenu Markdown d'une page — jamais depuis un template Go (`layouts/partials/*.html`, `layouts/_default/*.html`). Quand un composant doit être à la fois (a) posé à la main dans une page, et (b) injecté automatiquement ailleurs par le thème (ex. section ajoutée en fin de chaque page de formation), sa logique de rendu doit vivre dans une partial partagée (`layouts/partials/<nom>.html`), et le shortcode (`layouts/shortcodes/sokube-<nom>.html`) devient un mince adaptateur qui se contente d'appeler cette partial. La configuration (couleurs, défauts) suit les mêmes règles que d'habitude (règles 4, 5, 7) et peut être lue directement par la partial via `site.Params`, sans que chaque appelant (shortcode ou autre partial) ait besoin de la relayer. Voir `sokube-brand-heading.html` / `brand-heading.html` et `sokube-cta.html` / `cta-block.html` comme référence.
+
 ## Process de refactoring d'un shortcode existant
 
 Le refactoring des shortcodes existants se fait un par un, jamais en lot :

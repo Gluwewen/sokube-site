@@ -14,11 +14,10 @@
     Expected dict keys (all optional unless noted):
       title, showTitle
       description, showDescription
-      backgroundLight (required - plain Tailwind class(es), e.g. "bg-neurokube-600"
-        or a "bg-gradient-to-b from-... to-..." gradient)
-      backgroundDark (plain class(es), WITHOUT "dark:" prefix - this partial
-        adds "dark:" to each one itself, same convention as
-        trainings-extra-sections.html's introSection.style.backgroundDark)
+      background (required - combined light+dark Tailwind class string, e.g.
+        "bg-neurokube-600 dark:bg-neurokube-900"; a plain solid color, not a
+        gradient - the gradient used to blend a background image, below, is
+        derived from it)
       titleColor, descriptionColor
       showButtons, primaryText, primaryLink, primaryClass,
         secondaryText, secondaryLink, secondaryClass
@@ -26,9 +25,8 @@
       showContactBlock, contactTitle, contactDescription,
         contactItems (slice of {icon, text, link}), contactButtonText,
         contactButtonLink, contactButtonClass,
-        contactBackgroundLight, contactBackgroundDark (same convention as
-        backgroundLight/backgroundDark above - plain class, no "dark:"
-        prefix; default "bg-white" / "bg-neurokube-900")
+        contactBackground (combined light+dark string, same convention as
+        "background" above; default "bg-white dark:bg-neurokube-900")
 
     Any new background color/gradient combination used here must be added to
     the safelist in tailwind.config.js, since these classes are built from
@@ -61,48 +59,25 @@
 {{ $contactButtonText := .contactButtonText | default "Contact us" }}
 {{ $contactButtonLink := .contactButtonLink | default "#" }}
 {{ $contactButtonClass := .contactButtonClass | default "bg-kube-600 text-white hover:bg-kube-700" }}
+{{ $contactBgClasses := .contactBackground | default "bg-white dark:bg-neurokube-900" }}
 
-{{/* Contact card background: same "plain class + this partial adds dark:"
-     convention as the section's own backgroundLight/backgroundDark. */}}
-{{ $contactBgLight := .contactBackgroundLight | default "bg-white" }}
-{{ $contactBgDark := .contactBackgroundDark | default "bg-neurokube-900" }}
-{{ $contactDarkBgClasses := slice }}
-{{ range (split $contactBgDark " ") }}
-    {{ if . }}{{ $contactDarkBgClasses = $contactDarkBgClasses | append (printf "dark:%s" .) }}{{ end }}
-{{ end }}
-{{ $contactBgClasses := printf "%s %s" $contactBgLight (delimit $contactDarkBgClasses " ") }}
-
-{{/* Background: backgroundLight as-is + backgroundDark with "dark:" added
-     to each of its classes (so callers can pass a plain color/gradient
-     class in hugo.toml/shortcode params without typing "dark:" themselves). */}}
-{{ $bgLight := .backgroundLight | default "bg-neurokube-600" }}
-{{ $bgDark := .backgroundDark }}
-{{ $darkBgClasses := slice }}
-{{ if $bgDark }}
-    {{ range (split $bgDark " ") }}
-        {{ if . }}{{ $darkBgClasses = $darkBgClasses | append (printf "dark:%s" .) }}{{ end }}
-    {{ end }}
-{{ end }}
-{{ $bgClasses := printf "%s %s" $bgLight (delimit $darkBgClasses " ") }}
+{{/* Background: single combined light+dark string, used as-is for the
+     section's own class attribute. */}}
+{{ $background := .background | default "bg-neurokube-600" }}
+{{ $bgClasses := $background }}
 
 {{/* Image + gradient blend: same technique as blog-single-body.html's hero,
      mirrored when imagePosition is "left" (solid color on the right,
      fading into the photo on the left) instead of the hero's default
-     (solid on the left, fading into the photo on the right). */}}
+     (solid on the left, fading into the photo on the right). Derived from
+     $background by replacing every "bg-" occurrence with "from-"/"via-" -
+     this also correctly turns a "dark:bg-..." token into "dark:from-..."/
+     "dark:via-...", since "bg-" still appears as a substring inside it. */}}
 {{ $gradientDir := "bg-gradient-to-r" }}
 {{ if eq $imagePosition "left" }}{{ $gradientDir = "bg-gradient-to-l" }}{{ end }}
-{{ $fromLight := replace $bgLight "bg-" "from-" }}
-{{ $viaLight := replace $bgLight "bg-" "via-" }}
-{{ $darkGradientClasses := slice }}
-{{ if $bgDark }}
-    {{ range (split $bgDark " ") }}
-        {{ if . }}
-            {{ $darkGradientClasses = $darkGradientClasses | append (printf "dark:%s" (replace . "bg-" "from-")) }}
-            {{ $darkGradientClasses = $darkGradientClasses | append (printf "dark:%s" (replace . "bg-" "via-")) }}
-        {{ end }}
-    {{ end }}
-{{ end }}
-{{ $gradientClasses := printf "%s %s %s %s to-transparent" $gradientDir $fromLight $viaLight (delimit $darkGradientClasses " ") }}
+{{ $fromClasses := replace $background "bg-" "from-" }}
+{{ $viaClasses := replace $background "bg-" "via-" }}
+{{ $gradientClasses := printf "%s %s %s to-transparent" $gradientDir $fromClasses $viaClasses }}
 
 <section class="cta-section">
     <div class="container">

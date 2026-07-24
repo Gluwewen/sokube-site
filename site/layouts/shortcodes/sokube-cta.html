@@ -18,8 +18,7 @@
         title="Parlons de votre projet !"
         description="Vous êtes basés en Suisse, en France ou en Europe, planifiez un entretien avec l'un de nos experts pour en savoir plus sur l'offre de services ou de formation Sokube."
         showButtons="false"
-        backgroundLight="bg-neurokube-900"
-        backgroundDark="bg-neurokube-900"
+        background="bg-neurokube-900 dark:bg-neurokube-900"
         image="/images/contact/contact-banner.jpg"
         showImage="true"
         imagePosition="left"
@@ -38,8 +37,7 @@
         text: "Rue Adrien-Lachenal 20-1207 Genève, Suisse"
     buttonText: "Contactez-nous"
     buttonLink: "/demo"
-    backgroundLight: "bg-white"
-    backgroundDark: "bg-neurokube-900"
+    background: "bg-white dark:bg-neurokube-900"
     {{</* /sokube-cta >}}
 
     The YAML block above (.Inner) is only read when showContactBlock="true";
@@ -66,8 +64,7 @@
     "titleColor" (.Get "titleColor" | default $siteCtaStyle.title)
     "descriptionColor" (.Get "descriptionColor" | default $siteCtaStyle.description)
 
-    "backgroundLight" (.Get "backgroundLight" | default $siteCtaStyle.background)
-    "backgroundDark" (.Get "backgroundDark")
+    "background" (.Get "background" | default $siteCtaStyle.background)
 
     "showButtons" (eq (.Get "showButtons" | default "true") "true")
     "primaryText" (.Get "primaryText" | default $sitePrimary.text)
@@ -88,6 +85,5 @@
     "contactButtonText" $contact.buttonText
     "contactButtonLink" $contact.buttonLink
     "contactButtonClass" (.Get "contactButtonClass")
-    "contactBackgroundLight" $contact.backgroundLight
-    "contactBackgroundDark" $contact.backgroundDark
+    "contactBackground" ($contact.background | default $siteCtaStyle.contactBackground)
 ) }}

@@ -351,15 +351,14 @@ Our learning methods also help you acquire the skills you need to put them into 
           "*best possible learning experience!*",
         ]
 
-      # Section background color, light + dark mode, so it stands out from
-      # the rest of the page (the plain page background above/below it).
+      # Section background color, so it stands out from the rest of the
+      # page (the plain page background above/below it). Combined light +
+      # dark string (rule 4) - dark mode swaps the light-mode gradient for
+      # a flat color, so it must explicitly include "dark:bg-none" to clear
+      # the gradient's background-image, alongside the solid "dark:bg-...".
       [params.trainings.introSection.style]
-        # Plain Tailwind classes, no "dark:" prefix - layouts/partials/
-        # trainings-extra-sections.html adds "dark:" to each class in
-        # backgroundDark itself (and clears the light-mode gradient's
-        # background-image in dark mode automatically).
-        backgroundLight = "bg-gradient-to-b from-neurokube-100 to-neurokube-50"
-        backgroundDark = "bg-neurokube-800"
+        background = "bg-gradient-to-b from-neurokube-100 to-neurokube-50 dark:bg-none dark:bg-neurokube-800"
+        description = "text-gray-600 dark:text-neurokube-200"
 
     # Section 2, appended right after introSection above, on the same
     # individual training pages (never on /trainings/_index.md). Renders a
@@ -380,10 +379,11 @@ Our learning methods also help you acquire the skills you need to put them into 
       imagePosition = "left"
 
       [params.trainings.ctaSection.style]
-        # Same convention as introSection.style above: plain classes, no
-        # "dark:" prefix on backgroundDark.
-        backgroundLight = "bg-neurokube-900"
-        backgroundDark = "bg-neurokube-900"
+        # Combined light + dark string, same convention as everywhere else
+        # in this file (rule 4) - passed as-is to layouts/partials/cta-block.html.
+        background = "bg-neurokube-900 dark:bg-neurokube-900"
+        title = "text-white"
+        description = "text-neurokube-100"
 
       [params.trainings.ctaSection.contact]
         title = "Contact us"
@@ -391,11 +391,8 @@ Our learning methods also help you acquire the skills you need to put them into 
         buttonText = "Contact us"
         buttonLink = "/demo"
 
-        # Card background, light + dark mode. Same convention as
-        # ctaSection.style above: plain classes, no "dark:" prefix on
-        # backgroundDark - layouts/partials/cta-block.html adds it.
-        backgroundLight = "bg-white"
-        backgroundDark = "bg-neurokube-800"
+        # Card background, combined light + dark string.
+        background = "bg-white dark:bg-neurokube-800"
 
         [[params.trainings.ctaSection.contact.items]]
           icon = "phone"
@@ -624,6 +621,9 @@ Our learning methods also help you acquire the skills you need to put them into 
     background = "bg-neurokube-600"
     title = "text-white"
     description = "text-neurokube-100"
+    # Default "Contact us" card background, when a page uses showContactBlock="true"
+    # without specifying its own background in the .Inner YAML.
+    contactBackground = "bg-white dark:bg-neurokube-900"
 
   [params.cta.primary_button]
     class = "bg-white text-neurokube-600 hover:bg-neurokube-200"
