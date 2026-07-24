@@ -822,17 +822,26 @@ Our learning methods also help you acquire the skills you need to put them into 
     descriptionLink = "text-neurokube-600 dark:text-neurokube-300"
     descriptionLinkHover = "hover:text-neurokube-700 dark:hover:text-neurokube-200"
 
+  # "colorVar" references a CSS custom property defined in assets/css/custom.css
+  # (itself read from tailwind.config.js via theme(), single source of truth)
+  # - used by layouts/_default/feature.html for a CSS color-mix() gradient,
+  # where a Tailwind class can't be used directly (règle 14). Never put a raw
+  # hex value here: add a new --color-<palette>-<shade> variable in
+  # custom.css instead, and reference it here.
   [params.feature.default]
     badgeBackground = "bg-neurokube-100 dark:bg-neurokube-800"
     badgeText = "text-neurokube-600 dark:text-neurokube-100"
+    colorVar = "--color-neurokube-600"
 
   [params.feature.kube]
     badgeBackground = "bg-kube-100 dark:bg-kube-800"
     badgeText = "text-kube-600 dark:text-kube-100"
+    colorVar = "--color-kube-600"
 
   [params.feature.hr]
     badgeBackground = "bg-hr-100 dark:bg-hr-800"
     badgeText = "text-hr-600 dark:text-hr-100"
+    colorVar = "--color-hr-600"
 
 # Forms Configuration
 [params.forms]

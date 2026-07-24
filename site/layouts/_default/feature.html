@@ -1,5 +1,26 @@
+{{/*
+    feature (layout)
+
+    Page individuelle "/features/<slug>/" (ex: ai-powered-incident-investigation.md).
+
+    Règle 14 : la couleur du badge (et du dégradé décoratif en haut de page)
+    vient de la même palette nommée que le shortcode sokube-feature -
+    [params.feature.<nom>] (hugo.toml) - au lieu d'être dupliquée en dur
+    dans le front matter de chaque page. Une seule source de vérité pour
+    la couleur "kube"/"hr"/"default" sur tout le site.
+
+    Front matter :
+      palette - nom de la palette : "default", "kube" ou "hr" (défaut "default")
+      badge   - texte du badge (le badge et le dégradé ne s'affichent que si présent)
+*/}}
 {{ define "main" }}
-<article class="feature-page" style="--badge-color: {{ .Params.badgeColor }}">
+{{ $paletteName := .Params.palette | default "default" }}
+{{ $badgeStyle := index site.Params.feature $paletteName }}
+{{ if not $badgeStyle }}
+    {{ errorf "feature layout: palette %q introuvable dans [params.feature] (hugo.toml) — page %s" $paletteName .File.Path }}
+    {{ $badgeStyle = site.Params.feature.default }}
+{{ end }}
+<article class="feature-page" style="--badge-color: var({{ $badgeStyle.colorVar | safeCSS }})">
     <!-- Hero Section -->
     <div class="relative isolate overflow-hidden">
         <style>
@@ -16,7 +37,7 @@
                 <div class="mx-auto max-w-2xl text-center">
                     {{ with .Params.badge }}
                     <div class="mb-6">
-                        <span class="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-bold {{ $.Params.badgeBgColor | default "bg-neurokube-100" }} {{ $.Params.badgeTextColor | default "text-neurokube-600" }}">
+                        <span class="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-bold {{ $badgeStyle.badgeBackground }} {{ $badgeStyle.badgeText }}">
                             {{ . }}
                         </span>
                     </div>

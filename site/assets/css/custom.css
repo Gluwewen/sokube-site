@@ -9,6 +9,19 @@
   des <link> dans baseof.html.
 */
 
+/* Variables CSS globales exposant les couleurs de marque (teinte 600) de
+   tailwind.config.js, pour les rares cas où une vraie valeur de couleur est
+   nécessaire (ex: color-mix() dans layouts/_default/feature.html) et
+   qu'une classe Tailwind ne peut pas suffire. Source unique : si une teinte
+   change dans tailwind.config.js, ces variables suivent automatiquement -
+   ne jamais dupliquer une couleur de marque en hexadécimal ailleurs
+   (hugo.toml, un template...), toujours référencer une de ces variables. */
+:root {
+  --color-neurokube-600: theme('colors.neurokube.600');
+  --color-kube-600: theme('colors.kube.600');
+  --color-hr-600: theme('colors.hr.600');
+}
+
 /* Tous les titres du site : text-gray-900 fixe dans le thème, sans variante sombre. */
 .dark h1,
 .dark h2,

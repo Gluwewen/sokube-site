@@ -1,6 +1,6 @@
 # Instructions projet — SoKube-site (Hugo)
 
-Ce fichier documente les règles à respecter pour tout développement futur sur ce site, en particulier la création ou modification de shortcodes. Objectif : qu'une personne non-développeuse puisse mettre à jour le contenu des pages en toute sécurité, sans jamais toucher à du code.
+Ce fichier documente les règles à respecter pour tout développement futur sur ce site, en particulier la création ou modification de shortcodes — et, depuis la règle 14, des layouts de page (`layouts/_default/*.html`) et de leur front matter. Objectif : qu'une personne non-développeuse puisse mettre à jour le contenu des pages en toute sécurité, sans jamais toucher à du code.
 
 ## Règle 1 — Pas de HTML dans les pages Markdown
 
@@ -64,6 +64,10 @@ Avant d'écrire le moindre code pour un **nouveau** shortcode, on se pose systé
 ## Règle 13 — Shortcode réutilisé hors des pages Markdown : partial partagée + shortcode-adaptateur
 
 Un shortcode ne peut être invoqué que depuis le contenu Markdown d'une page — jamais depuis un template Go (`layouts/partials/*.html`, `layouts/_default/*.html`). Quand un composant doit être à la fois (a) posé à la main dans une page, et (b) injecté automatiquement ailleurs par le thème (ex. section ajoutée en fin de chaque page de formation), sa logique de rendu doit vivre dans une partial partagée (`layouts/partials/<nom>.html`), et le shortcode (`layouts/shortcodes/sokube-<nom>.html`) devient un mince adaptateur qui se contente d'appeler cette partial. La configuration (couleurs, défauts) suit les mêmes règles que d'habitude (règles 4, 5, 7) et peut être lue directement par la partial via `site.Params`, sans que chaque appelant (shortcode ou autre partial) ait besoin de la relayer. Voir `sokube-brand-heading.html` / `brand-heading.html` et `sokube-cta.html` / `cta-block.html` comme référence.
+
+## Règle 14 — Périmètre étendu aux layouts de page
+
+Les règles 3, 4, 5 et 8 (aspect structurel codé en dur, convention de couleur clair/sombre combinée, valeurs par défaut dans `hugo.toml`, validation `errorf` d'une config nommée) ne concernent pas que les shortcodes : elles s'appliquent à tout template du site, y compris les layouts de page (`layouts/_default/*.html`) et leur front matter. Un layout de page ne doit pas dupliquer une couleur de marque en dur ou dans le front matter de chaque page (palette, variante sombre...) : la source unique reste `hugo.toml`, avec le même système de palette nommée que pour un shortcode répété (règle 5) si le layout a besoin de plusieurs variantes de couleur. Voir `layouts/_default/feature.html`, qui réutilise la palette nommée `[params.feature.<nom>]` déjà définie pour le shortcode `sokube-feature` plutôt que de dupliquer les couleurs dans le front matter de chaque page `/features/*`.
 
 ## Process de refactoring d'un shortcode existant
 
