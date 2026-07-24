@@ -384,6 +384,9 @@ module.exports = {
     // still compile since a future page could rely on the default.
     'from-blue-50',
     'via-blue-50',
+
+    // === AJOUTS sokube-cta-image shortcode ([params.ctaImage.style], hugo.toml) ===
+    'dark:bg-kube-600',
   ],
 
   theme: {

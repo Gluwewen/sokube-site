@@ -201,6 +201,9 @@ Read on to find out how the Cloud Native can expand your development horizons.
     # doesn't otherwise appear in the project, add it to the safelist in
     # tailwind.config.js so it isn't purged from the compiled CSS.
     [params.blog.categoryFilter]
+      # Pill border, same for every pill regardless of selected state
+      border = "border-neurokube-900 dark:border-neurokube-100"
+
       # The currently active pill (e.g. "All" by default, or the clicked category)
       [params.blog.categoryFilter.selected]
         background = "bg-neurokube-900 dark:bg-neurokube-100"
@@ -419,6 +422,8 @@ Our learning methods also help you acquire the skills you need to put them into 
 
     # Category filter pills configuration (trainings list page).
     [params.trainings.categoryFilter]
+      border = "border-neurokube-900 dark:border-neurokube-100"
+
       [params.trainings.categoryFilter.selected]
         background = "bg-neurokube-900 dark:bg-neurokube-100"
         text = "text-white dark:text-neurokube-900"
@@ -705,6 +710,22 @@ Our learning methods also help you acquire the skills you need to put them into 
     baseColor = "text-gray-900 dark:text-white"
     # *word*-wrapped part of the heading
     accentColor = "text-kube-600 dark:text-kube-600"
+
+# Cards-section shortcode default style (see layouts/shortcodes/sokube-cards-section.html).
+[params.cardsSection]
+  [params.cardsSection.style]
+    description = "text-gray-600 dark:text-neurokube-200"
+
+# Features-section shortcode default style (see layouts/shortcodes/sokube-features-section.html).
+[params.featuresSection]
+  [params.featuresSection.style]
+    description = "text-gray-600 dark:text-neurokube-200"
+
+# Cta-image shortcode default style (see layouts/shortcodes/sokube-cta-image.html).
+[params.ctaImage]
+  [params.ctaImage.style]
+    buttonBackground = "bg-kube-600 dark:bg-kube-600"
+    buttonTextColor = "text-white dark:text-white"
 
 # Pricing Configuration
 [params.pricing]

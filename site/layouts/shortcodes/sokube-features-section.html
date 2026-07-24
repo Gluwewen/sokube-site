@@ -1,17 +1,38 @@
-{{/* Features Section Wrapper Shortcode */}}
+{{/*
+    Features-section Shortcode
 
-{{ $title := .Get "title" | default "Powerful Features for Modern Teams" }}
-{{ $description := .Get "description" | default "Discover how our platform helps you understand and optimize every aspect of your user experience." }}
+    Wraps a group of sokube-feature blocks with a centered title/description
+    header.
+
+    Site-wide : la couleur de description par défaut vit dans
+    [params.featuresSection.style] (hugo.toml) - surchargeable ponctuellement.
+
+    Paramètres :
+      id          - ancre de la section (optionnel, déduite du titre sinon)
+      title       - titre (optionnel)
+      description - texte sous le titre (optionnel)
+      descriptionColor - couleur du texte (défaut: params.featuresSection.style.description)
+      .Inner      - contenu (typiquement une série de sokube-feature)
+
+    Appel minimal :
+      {{</* sokube-features-section title="..." description="..." >}}
+        ...
+      {{</* /sokube-features-section >}}
+*/}}
+
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
 {{ $id := .Get "id" | default ($title | anchorize) }}
+{{ $descriptionColor := .Get "descriptionColor" | default site.Params.featuresSection.style.description }}
 
-<section 
+<section
     id="{{ $id }}"
     class="section"
 >
     <div class="container">
         <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">{{ $title }}</h2>
-            <p class="text-xl text-gray-600 dark:text-neurokube-200">{{ $description }}</p>
+            {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
+            {{ with $description }}<p class="text-xl {{ $descriptionColor }}">{{ . }}</p>{{ end }}
         </div>
 
         <!-- Feature Grid -->

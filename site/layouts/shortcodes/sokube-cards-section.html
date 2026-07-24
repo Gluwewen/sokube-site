@@ -1,16 +1,41 @@
-{{/* Cards Section Wrapper Shortcode */}} 
+{{/*
+    Cards-section Shortcode
 
-{{ $title := .Get "title" | default "Operational outcomes" }}
-{{ $description := .Get "description" | default "NeuroKube helps platform teams move faster today while building organizational intelligence for tomorrow." }}
+    Wraps a sokube-card-grid + sokube-card group with a centered
+    title/description header.
+
+    Site-wide : la couleur de description par défaut vit dans
+    [params.cardsSection.style] (hugo.toml) - surchargeable ponctuellement.
+
+    Paramètres :
+      id          - ancre de la section (optionnel, déduite du titre sinon)
+      title       - titre (optionnel)
+      description - texte sous le titre (optionnel)
+      descriptionColor - couleur du texte (défaut: params.cardsSection.style.description)
+      .Inner      - contenu (typiquement un sokube-card-grid)
+
+    Appel minimal :
+      {{</* sokube-cards-section title="Born from a recurring operational problem" description="..." >}}
+      {{</* sokube-card-grid cols="2" >}}
+        ...
+      {{</* /sokube-card-grid >}}
+      {{</* /sokube-cards-section >}}
+*/}}
+
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
 {{ $id := .Get "id" | default ($title | anchorize) }}
+{{ $descriptionColor := .Get "descriptionColor" | default site.Params.cardsSection.style.description }}
 
 <section id="{{ $id }}" class="section scroll-mt-24">
   <div class="container">
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <h2 class="text-3xl md:text-4xl font-bold mb-6">{{ $title }}</h2>
-      <p class="text-xl text-gray-600 dark:text-neurokube-200">
-        {{ $description }}
+      {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
+      {{ with $description }}
+      <p class="text-xl {{ $descriptionColor }}">
+        {{ . }}
       </p>
+      {{ end }}
     </div>
 
     <div class="space-y-32">{{ .Inner }}</div>

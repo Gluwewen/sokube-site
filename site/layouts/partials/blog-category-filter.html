@@ -24,10 +24,11 @@
     light and dark mode) are configurable in hugo.toml under
     [params.<section>.categoryFilter.selected] and
     [params.<section>.categoryFilter.unselected] (section = blog or
-    trainings, picked via layouts/partials/blog-section-config.html). Every
-    value below has a fallback (via "default") matching the values shipped
-    in hugo.toml, so this still renders correctly if that config block is
-    removed.
+    trainings, picked via layouts/partials/blog-section-config.html). The
+    pill border (same for every pill, regardless of state) is
+    [params.<section>.categoryFilter.border]. Every value below has a
+    fallback (via "default") matching the values shipped in hugo.toml, so
+    this still renders correctly if that config block is removed.
 
     Note: if you override a color with a Tailwind class that isn't already
     used elsewhere in the project (e.g. a brand-new dark: combination),
@@ -64,7 +65,8 @@
     {{ $selectedClasses := printf "%s %s %s %s" $selectedBackground $selectedText $selectedHoverBackground $selectedHoverText }}
     {{ $unselectedClasses := printf "%s %s %s %s" $unselectedBackground $unselectedText $unselectedHoverBackground $unselectedHoverText }}
 
-    {{ $baseClasses := "category-pill px-5 py-2 rounded-full border-2 border-neurokube-900 dark:border-neurokube-100 font-medium text-sm transition-colors duration-200" }}
+    {{ $border := $categoryFilter.border | default "border-neurokube-900 dark:border-neurokube-100" }}
+    {{ $baseClasses := printf "category-pill px-5 py-2 rounded-full border-2 %s font-medium text-sm transition-colors duration-200" $border }}
 
 <div class="blog-category-filter flex flex-wrap justify-center gap-3 mb-10"
      data-blog-category-filter

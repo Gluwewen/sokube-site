@@ -1,3 +1,20 @@
+{{/*
+    Card-grid Shortcode
+
+    Grille responsive pour un groupe de sokube-card. Purement structurel
+    (aucune couleur) - le seul style configurable, l'espacement entre
+    cartes, vit déjà dans [params.cards.grid_gap] (hugo.toml).
+
+    Paramètres :
+      cols - nombre de colonnes en desktop : "1", "2", "3" ou "4" (défaut "2")
+      .Inner - une série de sokube-card
+
+    Appel minimal :
+      {{</* sokube-card-grid cols="2" >}}
+        {{</* sokube-card title="..." >}}...{{</* /sokube-card >}}
+      {{</* /sokube-card-grid >}}
+*/}}
+
 {{ $cols := .Get "cols" | default "2" }}
 
 {{ $gridClass := "md:grid-cols-2" }}

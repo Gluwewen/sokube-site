@@ -1,3 +1,20 @@
+{{/*
+    Cta-image-grid Shortcode
+
+    Grille pour un groupe de sokube-cta-image. Purement structurel (aucune
+    couleur).
+
+    Paramètres :
+      gap     - espacement entre éléments (défaut "gap-12")
+      columns - classe de colonnes, ex. "sm:grid-cols-2" (défaut)
+      .Inner  - une série de sokube-cta-image
+
+    Appel minimal :
+      {{</* sokube-cta-image-grid >}}
+        {{</* sokube-cta-image image="..." buttonText="..." buttonLink="..." >}}
+      {{</* /sokube-cta-image-grid >}}
+*/}}
+
 {{ $gap := .Get "gap" | default "gap-12" }}
 {{ $columns := .Get "columns" | default "sm:grid-cols-2" }}
 
