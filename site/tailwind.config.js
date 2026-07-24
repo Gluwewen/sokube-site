@@ -378,6 +378,12 @@ module.exports = {
     'hover:dark:text-kube-600',
     'dark:marker:text-kube-600',
     'dark:text-neurokube-600',
+
+    // === AJOUTS sokube-highlight-section shortcode ([params.highlightSection.style], hugo.toml) ===
+    // Default gradient background - every current call overrides it, but it must
+    // still compile since a future page could rely on the default.
+    'from-blue-50',
+    'via-blue-50',
   ],
 
   theme: {

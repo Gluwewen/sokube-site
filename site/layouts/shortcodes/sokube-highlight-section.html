@@ -1,8 +1,53 @@
+{{/*
+    Highlight-section Shortcode
+
+    Bloc titre + sous-titre centré, suivi d'une carte blanche/sombre mettant
+    en avant un message clé (ex: "Our mission" en haut de la page About).
+    À ne pas confondre avec sokube-callout.html (bandeau neutre pour un
+    message secondaire) - nom volontairement différent.
+
+    Site-wide : les couleurs par défaut vivent dans [params.highlightSection.style]
+    (hugo.toml), pas dans ce fichier - une page peut toujours en surcharger
+    une ponctuellement en la passant en paramètre (le "background" est déjà
+    surchargé sur la page About aujourd'hui).
+
+    Paramètres :
+      id             - ancre de la section (optionnel)
+      title          - titre (optionnel)
+      subtitle       - sous-titre sous le titre (optionnel)
+      card_title     - titre à l'intérieur de la carte (optionnel)
+      .Inner         - texte de la carte, en Markdown
+      background     - fond de la section (défaut: params.highlightSection.style.background)
+      subtitleColor  - couleur du sous-titre (défaut: params.highlightSection.style.subtitle)
+      cardBackground - fond de la carte (défaut: params.highlightSection.style.cardBackground)
+      cardBorder     - bordure de la carte, visible seulement en mode sombre
+                       (défaut: params.highlightSection.style.cardBorder)
+      cardTextColor  - couleur du texte de la carte (défaut: params.highlightSection.style.cardText)
+      section_class  - classe complète de la section, remplace entièrement
+                       "background + padding" si fournie (usage avancé, optionnel)
+
+    Appel minimal :
+      {{</* sokube-highlight-section
+          title="Building the future of AI-powered platform assistance"
+          subtitle="Less time chasing context. More room to decide and act."
+          card_title="Our mission"
+      >}}
+      NeuroKube was created to make operational expertise scalable...
+      {{</* /sokube-highlight-section >}}
+*/}}
+
 {{ $id := .Get "id" | default "" }}
 {{ $title := .Get "title" }}
 {{ $subtitle := .Get "subtitle" }}
 {{ $cardTitle := .Get "card_title" }}
-{{ $background := .Get "background" | default "bg-gradient-to-b from-blue-50 via-blue-50 to-white" }}
+
+{{ $style := site.Params.highlightSection.style | default dict }}
+{{ $background := .Get "background" | default $style.background }}
+{{ $subtitleColor := .Get "subtitleColor" | default $style.subtitle }}
+{{ $cardBackground := .Get "cardBackground" | default $style.cardBackground }}
+{{ $cardBorder := .Get "cardBorder" | default $style.cardBorder }}
+{{ $cardTextColor := .Get "cardTextColor" | default $style.cardText }}
+
 {{ $sectionClass := .Get "section_class" | default (printf "%s pt-20 pb-32" $background) }}
 
 {{ if $id }}
@@ -21,12 +66,12 @@
             {{ end }}
 
             {{ with $subtitle }}
-            <p class="text-xl text-gray-600 mb-16 max-w-3xl mx-auto">
+            <p class="text-xl {{ $subtitleColor }} mb-16 max-w-3xl mx-auto">
                 {{ . }}
             </p>
             {{ end }}
 
-            <div class="max-w-3xl mx-auto bg-white dark:bg-neurokube-800 dark:border dark:border-neurokube-700 rounded-xl shadow-sm dark:shadow-none p-8">
+            <div class="max-w-3xl mx-auto {{ $cardBackground }} dark:border {{ $cardBorder }} rounded-xl shadow-sm dark:shadow-none p-8">
 
                 {{ with $cardTitle }}
                 <h2 class="text-3xl font-bold mb-4">
@@ -34,7 +79,7 @@
                 </h2>
                 {{ end }}
 
-                <div class="text-xl text-gray-600 prose prose-lg max-w-none mx-auto">
+                <div class="text-xl {{ $cardTextColor }} prose prose-lg max-w-none mx-auto">
                     {{ .Inner | markdownify }}
                 </div>
 

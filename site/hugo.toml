@@ -677,6 +677,23 @@ Our learning methods also help you acquire the skills you need to put them into 
     # Secondary button: background + text + border + hover
     secondaryButton = "bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400"
 
+# Highlight-section shortcode default style (see layouts/shortcodes/sokube-highlight-section.html).
+# One style for the whole site, same convention as [params.faq.style] above.
+# A page can still override any of these via shortcode parameters for an
+# exceptional case - background already is, on the "about" page.
+[params.highlightSection]
+  [params.highlightSection.style]
+    # Section background (gradient)
+    background = "bg-gradient-to-b from-blue-50 via-blue-50 to-white dark:from-neurokube-900 dark:via-neurokube-900 dark:to-neurokube-900"
+    # Subtitle, right under the title
+    subtitle = "text-gray-600 dark:text-neurokube-200"
+    # Card background (the white/dark box holding card_title + .Inner)
+    cardBackground = "bg-white dark:bg-neurokube-800"
+    # Card border - only shown in dark mode (light mode uses a shadow instead, see the shortcode's template)
+    cardBorder = "dark:border-neurokube-700"
+    # Card body text (.Inner)
+    cardText = "text-gray-600 dark:text-neurokube-200"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"
