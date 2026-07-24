@@ -1,0 +1,67 @@
+{{/*
+    Stats-grid Shortcode
+
+    Rangée de chiffres clés mis en avant (ex: "50% - Faster investigations"),
+    dans des cartes identiques côte à côte.
+
+    Répété plusieurs fois sur une même page : fonctionne par palette nommée,
+    comme sokube-card - la palette (couleurs) vit dans [params.stats.<nom>]
+    (hugo.toml, y compris la palette "default"), le template ne fait que la
+    sélectionner et vérifier qu'elle existe (erreur explicite sinon).
+
+    Paramètres :
+      palette - nom de la palette à utiliser (défaut "default")
+      cols    - nombre de colonnes en desktop : "2", "3" ou "4" (défaut "3")
+      .Inner  - YAML avec une liste "items", chacun {value, label}
+
+    Appel minimal :
+      {{</* sokube-stats-grid >}}
+      items:
+        - value: "50%"
+          label: "Faster investigations"
+        - value: "24/7"
+          label: "Operational assistance"
+        - value: "1"
+          label: "Unified investigation workspace"
+      {{</* /sokube-stats-grid >}}
+
+    Appel avec une palette différente et 2 colonnes :
+      {{</* sokube-stats-grid palette="kube" cols="2" >}}
+      items:
+        - value: "99.9%"
+          label: "Uptime"
+        - value: "10x"
+          label: "Faster remediation"
+      {{</* /sokube-stats-grid >}}
+*/}}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $style := index site.Params.stats $paletteName }}
+{{ if not $style }}
+    {{ errorf "sokube-stats-grid: palette %q introuvable dans [params.stats] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $style = site.Params.stats.default }}
+{{ end }}
+
+{{ $cols := .Get "cols" | default "3" }}
+{{ $gridClass := "md:grid-cols-3" }}
+{{ if eq $cols "2" }}
+    {{ $gridClass = "md:grid-cols-2" }}
+{{ else if eq $cols "4" }}
+    {{ $gridClass = "md:grid-cols-4" }}
+{{ end }}
+
+{{ $data := .Inner | transform.Unmarshal }}
+{{ $items := $data.items | default slice }}
+
+<div class="grid {{ $gridClass }} {{ site.Params.stats.grid_gap | default "gap-8" }} my-16">
+    {{ range $items }}
+    <div class="text-center rounded-xl border p-8 {{ $style.background }} {{ $style.border }}">
+        <div class="text-5xl font-bold mb-4 {{ $style.value }}">
+            {{ .value }}
+        </div>
+        <p class="text-lg font-medium {{ $style.label }}">
+            {{ .label }}
+        </p>
+    </div>
+    {{ end }}
+</div>

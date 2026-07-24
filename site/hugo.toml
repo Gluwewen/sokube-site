@@ -734,6 +734,20 @@ Our learning methods also help you acquire the skills you need to put them into 
     border = "border-gray-100 dark:border-neurokube-800"
     title = "dark:text-white"
 
+# Stats-grid shortcode ([params.stats.<palette>], see layouts/shortcodes/
+# sokube-stats-grid.html). Repeated-per-page component (several stat cards
+# side by side) - works by named palettes, same convention as [params.cards]:
+# the template only selects the requested palette and validates its
+# existence (rule 8), it contains no color of its own.
+[params.stats]
+  grid_gap = "gap-8"
+
+  [params.stats.default]
+    background = "bg-white dark:bg-neurokube-800"
+    border = "border-neurokube-200 dark:border-neurokube-700"
+    value = "text-kube-600 dark:text-kube-300"
+    label = "text-gray-700 dark:text-gray-300"
+
 # Pricing Configuration
 [params.pricing]
   currency = "CHF"
