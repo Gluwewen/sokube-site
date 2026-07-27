@@ -1,0 +1,202 @@
+{{/*
+    sokube-carroussel (shortcode)
+
+    Carrousel horizontal d'images avec titre et flèches de navigation sur la
+    même ligne (précédente à gauche, claire ; suivante à droite, foncée),
+    défilement au clic avec alignement automatique (scroll-snap).
+
+    Shortcode instanciable par page (règle 12) : non déclaré dans hugo.toml,
+    toutes les images sont passées à l'appel via une liste YAML en .Inner.
+    Aujourd'hui utilisé uniquement sur hiring.md avec 6 images, mais le
+    nombre d'images peut varier librement (le carrousel s'adapte).
+
+    Le titre et les flèches restent alignés sur le gabarit standard du site
+    (`.container`, max-w-7xl) et ne bougent jamais. Les images, elles,
+    débordent en plein cadre - mais seulement d'un côté à la fois :
+      - au repos (1ère image), la marge de gauche vaut celle de `.container`
+        (alignée avec le titre), la droite déborde jusqu'au bord de l'écran ;
+      - pendant le défilement, les images utilisent toute la largeur ;
+      - sur la dernière image, la marge de droite revient à celle de
+        `.container`, la gauche est celle qui déborde.
+    Techniquement : le track défilant est en pleine largeur (aucune marge
+    fixe), avec un "espaceur" invisible avant la 1ère et après la dernière
+    image, dont la largeur est calculée en JS pour correspondre exactement à
+    la marge gauche du `.container` du titre (measure au chargement et au
+    redimensionnement) - pas de valeur dupliquée en dur. Seul l'espaceur de
+    tête (et non la 1ère image) porte le point d'alignement scroll-snap
+    représentant "1ère image avec sa marge" - sans quoi le retour en arrière
+    jusqu'à la 1ère image accrocherait celle-ci au bord de l'écran, sans
+    marge, au lieu de revenir à l'état du chargement de la page.
+
+    Ratio des images fixé (aspect-[3/2]), indépendant de la largeur de
+    l'image (qui varie selon l'écran et selon qu'elle est en plein cadre ou
+    non) - ne pas remplacer par une hauteur fixe, qui ferait varier le ratio
+    avec la largeur.
+
+    Paramètres (tous optionnels - rien ne s'affiche pour ceux qui sont
+    omis, ce qui facilite la réutilisation de ce shortcode sur d'autres
+    pages) :
+      title       - titre affiché au-dessus des images, sur la même ligne
+                    que les flèches précédent/suivant
+      description - texte affiché sous les images, aligné sur le gabarit
+                    standard du site comme le titre (max-w-7xl). Markdown
+                    supporté (ex: **gras**), ainsi que du HTML inline (ex:
+                    <span class='text-kube-600 dark:text-kube-300'> pour
+                    une couleur ponctuelle sur une phrase - guillemets
+                    simples à l'intérieur du HTML, jamais \" échappés : Hugo
+                    interprète alors aussi le \n plus bas comme un simple
+                    "n", cassant les sauts de ligne) - même convention que
+                    title/description sur sokube-hero et sokube-cta, jamais
+                    à partir d'une saisie utilisateur non fiable.
+                    Pour un saut de ligne, ne tapez pas de vrai retour à la
+                    ligne dans la valeur (rejeté par Hugo) : utilisez le
+                    texte littéral \n à la place, sur une seule ligne
+                    physique - \n\n démarre un nouveau paragraphe (même
+                    convention que sokube-feature)
+
+    Paramètre .Inner : liste YAML d'images, chaque entrée avec
+      image - chemin de l'image (obligatoire)
+      alt   - texte alternatif (défaut : chaîne vide)
+
+    Exemple minimal (2 images) :
+      {{</* sokube-carroussel title="Travaillez chez SoKube c'est aussi ça :" >}}
+      - image: "/images/hiring/team-1.jpg"
+        alt: "Fresque peinte par l'équipe SoKube"
+      - image: "/images/hiring/team-2.jpg"
+        alt: "Atelier graffiti en équipe"
+      {{</* /sokube-carroussel >}}
+
+    Exemple complet (6 images) :
+      {{</* sokube-carroussel title="Travaillez chez SoKube c'est aussi ça :" >}}
+      - image: "/images/hiring/fresque.jpg"
+        alt: "Fresque SoKube peinte à la main"
+      - image: "/images/hiring/graffiti-atelier.jpg"
+        alt: "Atelier graffiti en équipe"
+      - image: "/images/hiring/neige.jpg"
+        alt: "Logo SoKube tracé dans la neige"
+      - image: "/images/hiring/team-building-1.jpg"
+        alt: "Team building SoKube"
+      - image: "/images/hiring/seminaire.jpg"
+        alt: "Séminaire d'équipe"
+      - image: "/images/hiring/apero.jpg"
+        alt: "Afterwork entre collègues"
+      {{</* /sokube-carroussel >}}
+*/}}
+
+{{ $items := .Inner | transform.Unmarshal }}
+{{ $id := printf "sokube-carroussel-%d" .Ordinal }}
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
+{{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
+{{ $description = $description | replaceRE `\\n` "  \n" }}
+
+<section class="section sokube-carroussel" id="{{ $id }}">
+    <div class="container">
+        <div class="flex justify-between items-center gap-3 mb-6">
+            {{ if $title }}
+            <h2 class="text-2xl md:text-3xl font-bold text-neurokube-900 dark:text-white">{{ $title }}</h2>
+            {{ else }}
+            <div></div>
+            {{ end }}
+            <div class="flex items-center gap-3 shrink-0">
+            <button type="button"
+                class="carroussel-prev inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-neurokube-800 dark:hover:bg-neurokube-700 transition-colors"
+                aria-label="Précédent">
+                <svg class="w-5 h-5 text-gray-900 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button type="button"
+                class="carroussel-next inline-flex items-center justify-center w-11 h-11 rounded-full bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-200 transition-colors"
+                aria-label="Suivant">
+                <svg class="w-5 h-5 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full overflow-hidden">
+        <div class="carroussel-track flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2">
+            <div class="carroussel-spacer flex-none snap-start" aria-hidden="true"></div>
+            {{ range $i, $item := $items }}
+            <div class="carroussel-item flex-none w-[78%] sm:w-[55%] lg:w-[38%]{{ if gt $i 0 }} snap-start{{ end }}">
+                <img src="{{ $item.image | relURL }}" alt="{{ $item.alt | default "" }}"
+                    class="w-full aspect-[3/2] object-cover rounded-2xl shadow-md" loading="lazy">
+            </div>
+            {{ end }}
+            <div class="carroussel-spacer carroussel-spacer-end flex-none snap-end" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    {{ with $description }}
+    <div class="container">
+        <div class="text-lg leading-8 text-gray-600 dark:text-neurokube-200 mt-6 space-y-4">
+            {{ . | markdownify }}
+        </div>
+    </div>
+    {{ end }}
+</section>
+
+<style>
+    #{{ $id }} .carroussel-track {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    #{{ $id }} .carroussel-track::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+
+<script>
+(function () {
+    var root = document.getElementById("{{ $id }}");
+    if (!root) return;
+
+    var track = root.querySelector(".carroussel-track");
+    var prevBtn = root.querySelector(".carroussel-prev");
+    var nextBtn = root.querySelector(".carroussel-next");
+    var containerRef = root.querySelector(".container");
+    var spacers = root.querySelectorAll(".carroussel-spacer");
+
+    function trackGap() {
+        var style = window.getComputedStyle(track);
+        return parseFloat(style.columnGap || style.gap || "0") || 0;
+    }
+
+    // Aligne les espaceurs de début/fin du track (plein cadre) sur la marge
+    // gauche du ".container" du titre - jamais une valeur dupliquée en dur,
+    // toujours mesurée sur l'élément réel, donc jamais désynchronisée si le
+    // gabarit du site (tailwind.config.js, hugo.toml) change un jour. On
+    // retire le "gap" du flex (déjà appliqué entre l'espaceur et la 1ère/
+    // dernière image) pour que la marge visible totale corresponde
+    // exactement à celle du container, sans le compter deux fois.
+    function updateGutter() {
+        if (!containerRef) return;
+        var gutter = containerRef.getBoundingClientRect().left - root.getBoundingClientRect().left;
+        var spacerWidth = Math.max(0, gutter - trackGap());
+        spacers.forEach(function (spacer) {
+            spacer.style.width = spacerWidth + "px";
+        });
+    }
+
+    updateGutter();
+    window.addEventListener("resize", updateGutter);
+
+    function step() {
+        var item = track.querySelector(".carroussel-item");
+        if (!item) return track.clientWidth;
+        return item.getBoundingClientRect().width + trackGap();
+    }
+
+    prevBtn.addEventListener("click", function () {
+        track.scrollBy({ left: -step(), behavior: "smooth" });
+    });
+
+    nextBtn.addEventListener("click", function () {
+        track.scrollBy({ left: step(), behavior: "smooth" });
+    });
+})();
+</script>

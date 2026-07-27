@@ -1,0 +1,56 @@
+{{/*
+    sokube-two-columns (shortcode)
+
+    Bloc de texte Markdown libre sur deux colonnes (desktop), une seule
+    colonne empilée en mobile, suivi d'un bouton centré optionnel.
+
+    Shortcode instanciable par page (règle 12) : pas d'entrée dans
+    hugo.toml, aucune couleur de marque - uniquement du texte et un bouton
+    au style neutre déjà utilisé ailleurs sur le site (.btn-neurokube).
+    Aujourd'hui utilisé uniquement sur hiring.md (sujet 2 : présentation +
+    bouton "Découvrir SoKube" vers about.md).
+
+    Paramètres :
+      buttonText - texte du bouton sous les colonnes (optionnel : pas de
+                   bouton si omis)
+      buttonLink - lien du bouton (obligatoire si buttonText est fourni)
+
+    .Inner : YAML avec deux clés, chacune en Markdown
+      columnLeft  - texte de la colonne de gauche
+      columnRight - texte de la colonne de droite
+
+    Exemple :
+      {{</* sokube-two-columns buttonText="Découvrir SoKube" buttonLink="/about" >}}
+      columnLeft: |
+        Chez SoKube, nous pensons que la technologie n'a de sens que si
+        elle sert des humains.
+      columnRight: |
+        Rejoignez une équipe qui allie expertise technique et valeurs
+        humaines fortes.
+      {{</* /sokube-two-columns >}}
+*/}}
+
+{{ $data := .Inner | transform.Unmarshal }}
+{{ $buttonText := .Get "buttonText" }}
+{{ $buttonLink := .Get "buttonLink" }}
+
+<section class="section">
+    <div class="container">
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="prose prose-lg max-w-none">
+                {{ $data.columnLeft | markdownify }}
+            </div>
+            <div class="prose prose-lg max-w-none">
+                {{ $data.columnRight | markdownify }}
+            </div>
+        </div>
+
+        {{ with $buttonText }}
+        <div class="text-center mt-12">
+            <a href="{{ $buttonLink }}" class="btn-neurokube inline-block">
+                {{ . }}
+            </a>
+        </div>
+        {{ end }}
+    </div>
+</section>

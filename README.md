@@ -389,7 +389,7 @@ Rôle de chaque fichier dans `site/assets/css/` :
 | `themes/hugo-saasify-theme/assets/css/main.css` | CSS du thème — **strictement intouché**, jamais édité directement | 1ère passe, concaténé avec `neurokube-overrides.css` avant traitement |
 | `neurokube-overrides.css` | Composants propres à NeuroKube (`.card-neurokube`, `.btn-neurokube`, `.card`...) | Même passe que le thème → `@layer`/`@apply` pleinement fonctionnels |
 | `custom.css` | Correctifs `.dark` sur des éléments du **thème** dépourvus de variante `dark:` native (titres, `body`, `.prose`) | Passe **isolée** (`resources.Get "css/custom.css" \| css.PostCSS`), sans directive `@tailwind` → pas de `@layer`/`@apply`, uniquement CSS classique + `theme()` |
-| `company.css` | Typographie prévue pour du Markdown brut sur la page About (`layout: "company"`) | **Non chargé actuellement** (orphelin assumé) — contient une duplication de règles non corrigée ; à corriger et raccorder dans `company.html` le jour où du Markdown brut hors shortcode y sera ajouté |
+| `company.css` | Typographie du Markdown brut hors shortcode sur une page `layout: "company"` (titres `##`, paragraphes...) écrit directement entre deux appels de shortcode - ex: le titre du carrousel sur `hiring.md`. Scope `.company-page`, sans effet sur les pages qui n'en contiennent pas (ex. `about.md`, entièrement composé de shortcodes) | Chargé dans la même passe PostCSS que le thème et `neurokube-overrides.css` (voir `baseof.html`), pour que `@layer`/`@apply` fonctionnent |
 
 **Pourquoi `neurokube-overrides.css` et `custom.css` restent séparés** : deux passes PostCSS différentes. Les fusionner ferait perdre le contexte Tailwind complet pour l'un, ou obligerait à injecter des classes `dark:` dans les templates du thème — ce qu'on s'interdit.
 
@@ -563,6 +563,23 @@ Vous devez insérer le code suivant pour ajouter le shortcode **hero** dans une 
     hero_image="Lieu de stockage de votre image"
 >}}
 ```
+
+`sub_headline` et le bouton secondaire sont optionnels : passez `show_description="false"` et/ou `show_secondary_button="false"` pour les masquer sur une instance donnée (ex : le hero de `hiring.md`, sans description ni bouton secondaire).
+
+#### 🧩 Features-section
+
+Le shortcode **sokube-features-section** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Enrobe un groupe de `sokube-feature` avec un titre/description centrés optionnels. Le fond de la section vit dans `[params.featuresSection.style]` (`hugo.toml`), défaut un dégradé gris clair en haut vers blanc en bas :
+
+```
+[params.featuresSection.style]
+  description = "text-gray-600 dark:text-neurokube-200"
+  background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
+```
+
+Surchargeable ponctuellement via le paramètre `background` du shortcode. Toute nouvelle couleur de dégradé doit être ajoutée au safelist de `tailwind.config.js` (voir le commentaire à côté de `'from-gray-50'`).
 
 #### 📣 Call To Action (CTA)
 
@@ -786,6 +803,55 @@ Vous devez insérer le code ci-dessous pour ajouter le shortcode **pricing-table
 }
 {{< /neurokube-pricing-table >}}
 ```
+
+#### 🖼️ Carrousel
+
+Le shortcode **sokube-carroussel** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Carrousel horizontal d'images avec titre et flèches de navigation sur la même ligne (précédente claire à gauche, suivante foncée à droite), défilement au clic. Contrairement aux autres shortcodes de cette liste, il est **instanciable par page** : aucune configuration dans `hugo.toml`, tout se passe à l'appel du shortcode.
+
+Le titre et les flèches restent toujours alignés sur le gabarit standard du site (`.container`, max-w-7xl). Les images débordent en plein cadre, mais seulement d'un côté à la fois : marge de gauche = `.container` sur la 1ère image (déborde à droite), plein cadre des deux côtés pendant le défilement, marge de droite = `.container` sur la dernière image (déborde à gauche). La largeur de la marge est mesurée en JS sur le `.container` du titre (pas de valeur dupliquée en dur, donc jamais désynchronisée si le gabarit du site change).
+
+##### Configurer son contenu
+
+Le titre et la description (tous deux optionnels, pour faciliter la réutilisation du shortcode sur d'autres pages) se passent en paramètres `title` et `description` - ce dernier accepte du Markdown (gras, plusieurs paragraphes via `\n\n`, même convention que `sokube-feature`) et s'affiche sous les images, aligné lui aussi sur `.container`. Les images sont fournies sous forme de liste YAML directement entre les balises d'ouverture et de fermeture du shortcode. Le nombre d'images est libre :
+
+```
+{{< sokube-carroussel
+    title="Travaillez chez SoKube c'est aussi ça :"
+    description="Nous voulons que vous vous sentiez détendu, confiant et à l'aise dans votre environnement de travail."
+>}}
+- image: "/images/hiring/fresque.jpg"
+  alt: "Fresque SoKube peinte à la main"
+- image: "/images/hiring/graffiti-atelier.jpg"
+  alt: "Atelier graffiti en équipe"
+- image: "/images/hiring/neige.jpg"
+  alt: "Logo SoKube tracé dans la neige"
+{{< /sokube-carroussel >}}
+```
+
+#### 📰 Texte sur deux colonnes
+
+Le shortcode **sokube-two-columns** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Bloc de texte Markdown libre sur deux colonnes (empilées en mobile), suivi d'un bouton centré optionnel. **Instanciable par page** (comme sokube-carroussel) : aucune couleur de marque, aucune entrée dans `hugo.toml`. Utilisé aujourd'hui sur `hiring.md` pour la présentation de SoKube avec un bouton vers `/about`.
+
+##### Configurer son contenu
+
+Le texte des deux colonnes est fourni en YAML directement entre les balises d'ouverture et de fermeture du shortcode :
+
+```
+{{< sokube-two-columns buttonText="Découvrir SoKube" buttonLink="/about" >}}
+columnLeft: |
+  Texte Markdown de la colonne de gauche...
+columnRight: |
+  Texte Markdown de la colonne de droite...
+{{< /sokube-two-columns >}}
+```
+
+`buttonText`/`buttonLink` sont optionnels : sans `buttonText`, aucun bouton ne s'affiche.
 
 #### ❓ FAQ
 #### 🧭 Navigation et menus

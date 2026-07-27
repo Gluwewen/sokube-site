@@ -720,6 +720,7 @@ Our learning methods also help you acquire the skills you need to put them into 
 [params.featuresSection]
   [params.featuresSection.style]
     description = "text-gray-600 dark:text-neurokube-200"
+    background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
 
 # Cta-image shortcode default style (see layouts/shortcodes/sokube-cta-image.html).
 [params.ctaImage]

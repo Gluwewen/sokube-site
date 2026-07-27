@@ -82,7 +82,8 @@
     <!-- Main CSS : CSS du thème (intouché) + surcharges NeuroKube, combinés avant PostCSS -->
     {{ $themeCSS := resources.Get "css/main.css" }}
     {{ $overridesCSS := resources.Get "css/neurokube-overrides.css" }}
-    {{ $css := slice $themeCSS $overridesCSS | resources.Concat "css/bundle.css" }}
+    {{ $companyCSS := resources.Get "css/company.css" }}
+    {{ $css := slice $themeCSS $overridesCSS $companyCSS | resources.Concat "css/bundle.css" }}
     {{ $css = $css | css.PostCSS }}
     {{ if hugo.IsProduction }}
         {{ $css = $css | minify | fingerprint | resources.PostProcess }}

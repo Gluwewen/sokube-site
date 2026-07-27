@@ -4,7 +4,7 @@
     Wraps a group of sokube-feature blocks with a centered title/description
     header.
 
-    Site-wide : la couleur de description par défaut vit dans
+    Site-wide : la couleur de description et le fond par défaut vivent dans
     [params.featuresSection.style] (hugo.toml) - surchargeable ponctuellement.
 
     Paramètres :
@@ -12,6 +12,8 @@
       title       - titre (optionnel)
       description - texte sous le titre (optionnel)
       descriptionColor - couleur du texte (défaut: params.featuresSection.style.description)
+      background  - fond de la section (défaut: params.featuresSection.style.background,
+                    ex: dégradé gris clair en haut vers blanc en bas)
       .Inner      - contenu (typiquement une série de sokube-feature)
 
     Appel minimal :
@@ -24,10 +26,11 @@
 {{ $description := .Get "description" }}
 {{ $id := .Get "id" | default ($title | anchorize) }}
 {{ $descriptionColor := .Get "descriptionColor" | default site.Params.featuresSection.style.description }}
+{{ $background := .Get "background" | default site.Params.featuresSection.style.background }}
 
 <section
     id="{{ $id }}"
-    class="section"
+    class="section {{ $background }}"
 >
     <div class="container">
         <div class="text-center max-w-3xl mx-auto mb-16">

@@ -18,6 +18,11 @@
                                    surchargeable par instance ; couleurs non paramétrables par
                                    instance, toujours params.hero.primary_button.*)
       secondary_button_text/url - bouton secondaire (idem, params.hero.secondary_button)
+      show_description          - "true" (défaut) ou "false" pour masquer sub_headline
+                                   (ex: hero sans accroche secondaire)
+      show_secondary_button     - "true" (défaut) ou "false" pour masquer le bouton
+                                   secondaire même si params.hero.secondary_button.* a
+                                   une valeur par défaut pour la langue courante
 
     Appel minimal :
       {{</* sokube-hero
@@ -29,10 +34,22 @@
           secondary_button_url="/about/"
           hero_image="/images/company/example-light.webp"
       >}}
+
+    Appel sans description ni bouton secondaire (ex: hero de hiring.md) :
+      {{</* sokube-hero
+          headline="..."
+          show_description="false"
+          show_secondary_button="false"
+          primary_button_text="Voir nos offres d'emploi"
+          primary_button_url="#jobs"
+          hero_image="/images/jobs/example.jpg"
+      >}}
 */}}
 
 {{ $headline := .Get "headline" }}
 {{ $sub_headline := .Get "sub_headline" }}
+{{ $showDescription := eq (.Get "show_description" | default "true") "true" }}
+{{ $showSecondaryButton := eq (.Get "show_secondary_button" | default "true") "true" }}
 {{ $hero_image := .Get "hero_image" }}
 {{ $hero_image_dark := replace $hero_image "-light" "-dark" }}
 {{ $background_image := .Get "background_image" }}
@@ -72,9 +89,11 @@
                 <h1 class="text-4xl md:text-4xl lg:text-4xl font-bold leading-tight {{ $titleColor }}">
                     {{ $headline | safeHTML }}
                 </h1>
+                {{ if and $showDescription $sub_headline }}
                 <p class="text-xl {{ $descriptionColor }}">
                     {{ $sub_headline | safeHTML }}
                 </p>
+                {{ end }}
                 <div class="flex flex-col sm:flex-row gap-4">
                     {{ with $primaryText }}
                     <a href="{{ $primaryUrl }}"
@@ -83,11 +102,13 @@
                     </a>
                     {{ end }}
 
+                    {{ if $showSecondaryButton }}
                     {{ with $secondaryText }}
                     <a href="{{ $secondaryUrl }}"
                     class="btn text-center border-2 {{ $secondaryBackground }} {{ $secondaryTextColor }} {{ $secondaryHover }} {{ $secondaryBorder }}">
                         {{ . }}
                     </a>
+                    {{ end }}
                     {{ end }}
                 </div>
             </div>
