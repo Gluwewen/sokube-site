@@ -1,0 +1,52 @@
+{{/*
+    Partners-section Shortcode
+
+    Enveloppe unique de la page /partners/ : container + titre/description
+    centrés, puis .Inner (typiquement un sokube-partners-filter suivi d'une
+    série de sokube-partner-category). Même structure que
+    sokube-cards-section.html, réutilisée ici pour éviter tout HTML brut
+    dans content/partners.md (règle 1).
+
+    Site-wide : la couleur de description par défaut vit dans
+    [params.partners.style] (hugo.toml, déjà utilisé par
+    sokube-partner-category pour le même rendu).
+
+    Paramètres :
+      id          - ancre de la section (optionnel, déduite du titre sinon)
+      title       - titre (optionnel)
+      description - texte sous le titre (optionnel). Pour un saut de
+                    paragraphe, utilisez le texte littéral \n\n (voir
+                    sokube-feature pour la même convention).
+      .Inner      - contenu (sokube-partners-filter + sokube-partner-category)
+
+    Appel minimal :
+      {{</* sokube-partners-section title="Découvrez nos partenaires" description="..." >}}
+      {{</* sokube-partners-filter categories="..." >}}
+      {{</* sokube-partner-category id="..." title="..." >}}
+        ...
+      {{</* /sokube-partner-category >}}
+      {{</* /sokube-partners-section >}}
+*/}}
+
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
+{{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
+{{ $id := .Get "id" | default ($title | anchorize) }}
+{{ $descriptionColor := site.Params.partners.style.description | default "text-gray-600 dark:text-neurokube-200" }}
+
+<section id="{{ $id }}" class="section py-16">
+  <div class="container">
+    {{ with $title }}
+    <div class="max-w-3xl mx-auto text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>
+      {{ with $description }}
+      <div class="text-lg {{ $descriptionColor }}">
+        {{ . | markdownify }}
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    {{ .Inner }}
+  </div>
+</section>

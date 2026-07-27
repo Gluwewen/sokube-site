@@ -1,0 +1,74 @@
+{{/*
+    Partner Shortcode
+
+    Une entrée de partenaire, utilisée à l'intérieur d'un
+    sokube-partner-category. Deux rendus possibles, choisis automatiquement :
+
+      - .Inner renseigné (description) -> grande carte (logo + nom + texte),
+        pour les partenaires stratégiques avec plusieurs produits/offres
+        (Red Hat, Rancher, Isovalent, CNCF...).
+      - .Inner vide -> simple logo dans la grille dense, pour les
+        partenaires secondaires (un seul produit, ex. Snyk, Veeam).
+
+    Répété plusieurs fois par catégorie : la carte "featured" fonctionne par
+    palette nommée, même convention que sokube-card - la palette vit dans
+    [params.partners.featured.<nom>] (hugo.toml, y compris la palette
+    "default"), validée avec errorf si absente (règle 8). Le logo simple n'a
+    pas de palette : sa seule variation vient du logoDark éventuel.
+
+    Important : la balise racine générée ici tient sur une seule ligne, sans
+    indentation (via {{- -}}) - une balise ouvrante répartie sur plusieurs
+    lignes, ou précédée d'une ligne indentée de 4 espaces ou plus, n'est plus
+    reconnue comme du HTML valide par le moteur Markdown de Hugo (Goldmark)
+    et s'affiche alors en texte brut au lieu d'être rendue.
+
+    Paramètres :
+      name     - nom du partenaire (utilisé en alt et, si featured, en titre)
+      logo     - chemin du logo, mode clair
+      logoDark - chemin du logo, mode sombre (optionnel : si omis, le même
+                 logo est utilisé dans les deux modes)
+      link     - URL externe du partenaire (optionnel)
+      palette  - palette de la carte featured : "default", "kube" ou "hr"
+                 (ignoré si .Inner est vide)
+      .Inner   - texte optionnel (Markdown) : sa présence bascule la carte
+                 en mode "featured"
+
+    Appel minimal (logo simple) :
+      {{</* sokube-partner name="Snyk" logo="/images/partners/snyk.svg" link="https://snyk.io/" >}}
+
+    Appel complet (carte featured) :
+      {{</* sokube-partner
+          name="Red Hat OpenShift"
+          logo="/images/partners/redhat-openshift.svg"
+          link="https://www.redhat.com/en/technologies/cloud-computing/openshift"
+          palette="kube"
+      >}}
+      Plateforme de conteneurs Kubernetes de référence, avec l'écosystème
+      Advanced Cluster Management, Advanced Cluster Security et Ansible
+      Automation Platform.
+      {{</* /sokube-partner >}}
+*/}}
+{{- $name := .Get "name" -}}
+{{- $logo := .Get "logo" -}}
+{{- $logoDark := .Get "logoDark" | default $logo -}}
+{{- $link := .Get "link" -}}
+{{- $description := strings.TrimSpace .Inner -}}
+{{- $isFeatured := ne $description "" -}}
+{{- if $isFeatured -}}
+    {{- $paletteName := .Get "palette" | default "default" -}}
+    {{- $style := index site.Params.partners.featured $paletteName -}}
+    {{- if not $style -}}
+        {{- errorf "sokube-partner: palette %q introuvable dans [params.partners.featured] (hugo.toml) — page %s" $paletteName .Page.File.Path -}}
+        {{- $style = site.Params.partners.featured.default -}}
+    {{- end -}}
+    {{- $tag := cond (ne $link "") "a" "div" -}}
+    {{- $attrs := printf `class="partner-card block w-full sm:w-[calc(50%%-1rem)] lg:w-[calc(33.333%%-1.5rem)] p-6 rounded-2xl border %s %s %s"` $style.background $style.border $style.hover_border -}}
+    {{- if $link -}}{{- $attrs = printf `href="%s" target="_blank" rel="noopener" %s` $link $attrs -}}{{- end -}}
+    {{- $descriptionHTML := $description | $.Page.RenderString | strings.TrimSpace -}}
+    {{- printf `<%s %s><div class="h-12 mb-4 flex items-center"><img src="%s" alt="%s" width="200" height="48" class="max-h-12 max-w-full object-contain dark:hidden"><img src="%s" alt="%s" width="200" height="48" class="max-h-12 max-w-full object-contain hidden dark:block"></div><h4 class="font-bold mb-2 %s">%s</h4><div class="text-sm %s">%s</div></%s>` $tag ($attrs | safeHTMLAttr) ($logo | relURL) $name ($logoDark | relURL) $name $style.title $name $style.text $descriptionHTML $tag | safeHTML -}}
+{{- else -}}
+    {{- $tag := cond (ne $link "") "a" "div" -}}
+    {{- $attrs := `class="partner-logo flex items-center justify-center w-auto"` -}}
+    {{- if $link -}}{{- $attrs = printf `href="%s" target="_blank" rel="noopener" %s` $link $attrs -}}{{- end -}}
+    {{- printf `<%s %s><img src="%s" alt="%s" width="160" height="64" class="max-h-16 max-w-[10rem] object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-200 dark:hidden"><img src="%s" alt="%s" width="160" height="64" class="max-h-16 max-w-[10rem] object-contain grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-200 hidden dark:block"></%s>` $tag ($attrs | safeHTMLAttr) ($logo | relURL) $name ($logoDark | relURL) $name $tag | safeHTML -}}
+{{- end -}}

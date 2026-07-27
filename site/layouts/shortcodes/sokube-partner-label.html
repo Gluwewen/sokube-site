@@ -1,0 +1,26 @@
+{{/*
+    Partner-label Shortcode
+
+    Étiquette pleine largeur, à placer entre deux groupes de sokube-partner
+    à l'intérieur d'une même sokube-partner-category, pour distinguer
+    visuellement des logos qui n'ont pas de lien entre eux (ex: des
+    solutions autonomes) des logos du fournisseur juste au-dessus (ex: les
+    produits d'un partenaire "featured"). Force un retour à la ligne dans le
+    conteneur flex-wrap parent grâce à sa largeur 100%.
+
+    Ne référence pas .Inner : s'utilise donc toujours nu, sans fermeture
+    (ni self-close, ni balise fermante) - voir sokube-hero pour la même
+    convention.
+
+    Site-wide : la couleur vit dans [params.partners.style.label]
+    (hugo.toml), même style pour toutes les catégories.
+
+    Paramètres :
+      text - texte de l'étiquette
+
+    Appel minimal :
+      {{</* sokube-partner-label text="Autres solutions" >}}
+*/}}
+{{- $text := .Get "text" -}}
+{{- $labelColor := site.Params.partners.style.label | default "text-gray-500 dark:text-neurokube-300" -}}
+{{- printf `<div class="w-full text-sm font-semibold uppercase tracking-wide mt-2 mb-1 %s">%s</div>` $labelColor $text | safeHTML -}}

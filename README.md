@@ -853,6 +853,88 @@ columnRight: |
 
 `buttonText`/`buttonLink` sont optionnels : sans `buttonText`, aucun bouton ne s'affiche.
 
+#### 🤝 Partenaires
+
+Trois shortcodes, utilisés ensemble sur `content/*/partners.md`, remplacent l'ancien mur de logos par des catégories filtrables. Tous se trouvent dans :
+> /site/layouts/shortcodes/
+
+- **sokube-partners-section** : le chapeau de toute la page (container + titre/description centrés optionnels), enrobe le filtre et les catégories.
+- **sokube-partners-filter** : la barre de pills cliquables (une par catégorie + "Tous"), qui affiche/masque les sections `sokube-partner-category` en dessous.
+- **sokube-partner-category** : une catégorie de partenaires (CNCF, Kubernetes & Écosystème, Sécurité...), instanciée une fois par catégorie.
+- **sokube-partner** : une entrée de partenaire, instanciée plusieurs fois par catégorie. Avec une description (`.Inner`), elle se rend en grande carte "featured" (logo + nom + texte, palette nommée comme `sokube-card`) ; sans description, en simple logo dans une grille dense.
+
+##### Configurer son style
+
+```
+[params.partners]
+  [params.partners.style]
+    title = "text-neurokube-900 dark:text-white"
+    description = "text-gray-600 dark:text-neurokube-200"
+    border = "border-gray-200 dark:border-neurokube-700"
+
+  [params.partners.categoryFilter]
+    border = "border-neurokube-900 dark:border-neurokube-100"
+    [params.partners.categoryFilter.selected]
+      background = "bg-neurokube-900 dark:bg-neurokube-100"
+      text = "text-white dark:text-neurokube-900"
+      hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
+      hover_text = "hover:text-white dark:hover:text-neurokube-900"
+    [params.partners.categoryFilter.unselected]
+      background = "bg-transparent dark:bg-transparent"
+      text = "text-neurokube-900 dark:text-neurokube-100"
+      hover_background = "hover:bg-neurokube-100 dark:hover:bg-neurokube-800"
+      hover_text = "hover:text-neurokube-900 dark:hover:text-white"
+
+  # Palettes des cartes "featured" - même convention que [params.cards]
+  [params.partners.featured.default]
+    background = "bg-gradient-to-br from-neurokube-100 to-neurokube-50 dark:from-neurokube-900 dark:to-neurokube-800"
+    border = "border-neurokube-300 dark:border-neurokube-400"
+    hover_border = "hover:border-neurokube-600 dark:hover:border-neurokube-400"
+    title = "text-neurokube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+  [params.partners.featured.kube]
+    background = "bg-gradient-to-br from-kube-100 to-kube-50 dark:from-kube-900 dark:to-kube-800"
+    border = "border-kube-300 dark:border-kube-400"
+    hover_border = "hover:border-kube-600 dark:hover:border-kube-400"
+    title = "text-kube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+  [params.partners.featured.hr]
+    background = "bg-gradient-to-br from-hr-100 to-hr-50 dark:from-hr-900 dark:to-hr-800"
+    border = "border-hr-300 dark:border-hr-400"
+    hover_border = "hover:border-hr-600 dark:hover:border-hr-400"
+    title = "text-hr-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+```
+
+##### Configurer son contenu
+
+```
+{{< sokube-partners-section title="Découvrez nos partenaires" description="..." >}}
+
+{{< sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,security:Sécurité" >}}
+
+{{< sokube-partner-category id="cncf" title="CNCF (Cloud Native Computing Foundation)" >}}
+
+    {{< sokube-partner
+        name="CNCF"
+        logo="/images/partners/cncf.svg"
+        link="https://www.cncf.io/"
+        palette="kube"
+    >}}
+    Description qui bascule cette entrée en grande carte "featured".
+    {{< /sokube-partner >}}
+
+    {{< sokube-partner name="Autre logo" logo="/images/partners/autre-logo.svg" link="https://exemple.com" >}}
+
+{{< /sokube-partner-category >}}
+
+{{< /sokube-partners-section >}}
+```
+
+L'`id` de chaque `sokube-partner-category` doit correspondre à l'un des identifiants passés à `sokube-partners-filter` (partie avant le `:` dans `categories`). Le paramètre `palette` de `sokube-partner` (`default`, `kube` ou `hr`) n'est utilisé que pour les entrées "featured" (avec description) ; il est ignoré pour un simple logo.
+
+Les logos attendus (`/images/partners/*.svg`) ne sont pas fournis avec ces shortcodes : ce sont des assets de marque à ajouter dans `/site/static/images/partners/` avant mise en production.
+
 #### ❓ FAQ
 #### 🧭 Navigation et menus
 

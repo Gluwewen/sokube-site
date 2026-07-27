@@ -1,0 +1,58 @@
+{{/*
+    Partner-category Shortcode
+
+    Une section "catégorie de partenaires" (CNCF, Kubernetes & Écosystème,
+    Sécurité...), instanciée une fois par catégorie dans content/partners.md.
+    Contient une série de sokube-partner en .Inner : certains rendus en
+    grande carte ("featured", ceux qui ont une description), d'autres en
+    simple logo - les deux cohabitent dans le même conteneur flex, chaque
+    sokube-partner portant ses propres classes de taille (voir
+    sokube-partner.html), ce template n'a pas besoin de connaître le type de
+    ses enfants.
+
+    Porte l'attribut data-partner-category, utilisé par
+    sokube-partners-filter.html pour afficher/masquer la section entière.
+
+    Couleurs structurelles (titre, description) dans
+    [params.partners.style] (hugo.toml), même style pour toutes les
+    catégories - seule la palette des sokube-partner "featured" varie
+    d'un partenaire à l'autre (voir sokube-partner.html).
+
+    Paramètres :
+      id          - slug, doit correspondre à un id passé à
+                    sokube-partners-filter (ex: "cncf")
+      title       - titre de la catégorie
+      description - texte optionnel sous le titre (Markdown)
+      .Inner      - une série de sokube-partner
+
+    Appel minimal :
+      {{</* sokube-partner-category id="cncf" title="CNCF (Cloud Native Computing Foundation)" >}}
+        {{</* sokube-partner name="CNCF" logo="/images/partners/cncf.svg" link="https://www.cncf.io/" >}}
+      {{</* /sokube-partner-category >}}
+*/}}
+
+{{ $id := .Get "id" }}
+{{ $title := .Get "title" }}
+{{ $description := .Get "description" }}
+{{ $style := site.Params.partners.style | default dict }}
+
+<section
+    class="partner-category scroll-mt-24 py-10 border-b last:border-b-0 {{ $style.border | default "border-gray-200 dark:border-neurokube-700" }}"
+    {{ with $id }}id="{{ . }}" data-partner-category="{{ . }}"{{ end }}
+>
+    {{ with $title }}
+    <h3 class="text-2xl md:text-3xl font-bold mb-3 {{ $style.title | default "text-neurokube-900 dark:text-white" }}">
+        {{ . }}
+    </h3>
+    {{ end }}
+
+    {{ with $description }}
+    <div class="text-lg mb-8 max-w-3xl {{ $style.description | default "text-gray-600 dark:text-neurokube-200" }}">
+        {{ . | $.Page.RenderString }}
+    </div>
+    {{ end }}
+
+    <div class="partner-category-body flex flex-wrap gap-8 items-stretch">
+        {{ .Inner }}
+    </div>
+</section>

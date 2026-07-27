@@ -810,6 +810,60 @@ Our learning methods also help you acquire the skills you need to put them into 
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-hr-600 dark:marker:text-hr-300"
 
+# Partners page (see layouts/shortcodes/sokube-partner-category.html and
+# sokube-partner.html). One page, several category sections, each with a mix
+# of "featured" cards and simple logos - see the /partners/ content page.
+[params.partners]
+  # Structural style shared by every sokube-partner-category section
+  # (règle 5) : same title/description/border colors regardless of category.
+  [params.partners.style]
+    title = "text-neurokube-900 dark:text-white"
+    description = "text-gray-600 dark:text-neurokube-200"
+    border = "border-gray-200 dark:border-neurokube-700"
+    label = "text-gray-500 dark:text-neurokube-300"
+
+  # sokube-partners-filter pills - same convention and same colors as
+  # [params.blog.categoryFilter] / [params.trainings.categoryFilter], for a
+  # consistent look across the site's filter bars.
+  [params.partners.categoryFilter]
+    border = "border-neurokube-900 dark:border-neurokube-100"
+
+    [params.partners.categoryFilter.selected]
+      background = "bg-neurokube-900 dark:bg-neurokube-100"
+      text = "text-white dark:text-neurokube-900"
+      hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
+      hover_text = "hover:text-white dark:hover:text-neurokube-900"
+
+    [params.partners.categoryFilter.unselected]
+      background = "bg-transparent dark:bg-transparent"
+      text = "text-neurokube-900 dark:text-neurokube-100"
+      hover_background = "hover:bg-neurokube-100 dark:hover:bg-neurokube-800"
+      hover_text = "hover:text-neurokube-900 dark:hover:text-white"
+
+  # sokube-partner "featured" card palettes - repeated several times per
+  # category, same convention as [params.cards] above (including
+  # validation, règle 8).
+  [params.partners.featured.default]
+    background = "bg-gradient-to-br from-neurokube-100 to-neurokube-50 dark:from-neurokube-900 dark:to-neurokube-800"
+    border = "border-neurokube-300 dark:border-neurokube-400"
+    hover_border = "hover:border-neurokube-600 dark:hover:border-neurokube-400"
+    title = "text-neurokube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+
+  [params.partners.featured.kube]
+    background = "bg-gradient-to-br from-kube-100 to-kube-50 dark:from-kube-900 dark:to-kube-800"
+    border = "border-kube-300 dark:border-kube-400"
+    hover_border = "hover:border-kube-600 dark:hover:border-kube-400"
+    title = "text-kube-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+
+  [params.partners.featured.hr]
+    background = "bg-gradient-to-br from-hr-100 to-hr-50 dark:from-hr-900 dark:to-hr-800"
+    border = "border-hr-300 dark:border-hr-400"
+    hover_border = "hover:border-hr-600 dark:hover:border-hr-400"
+    title = "text-hr-900 dark:text-white"
+    text = "text-gray-700 dark:text-gray-300"
+
 # Feature shortcode (see layouts/shortcodes/sokube-feature.html). Repeated
 # several times per page - works by named palette for the badge, same
 # convention as [params.cards] above (including validation, rule 8). Title

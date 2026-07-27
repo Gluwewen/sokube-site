@@ -1,0 +1,135 @@
+{{/*
+    Partners-filter Shortcode
+
+    Barre de pills cliquables filtrant les blocs sokube-partner-category
+    placés plus bas sur la même page (voir sokube-partner-category.html).
+    Appelée une seule fois, en haut du bloc de catégories.
+
+    Contrairement à layouts/partials/blog-category-filter.html (qui déduit
+    ses catégories de .Page.Pages), la liste des catégories ici est passée
+    explicitement en paramètre : la page /partners/ n'a pas de sous-pages,
+    ce sont des sections d'une même page Markdown (règle 7 : le contenu
+    propre à l'instance est toujours passé en paramètre).
+
+    Le filtre bascule des sections entières (data-partner-category), pas des
+    cartes individuelles : chaque sokube-partner-category porte cet
+    attribut sur sa balise <section>.
+
+    Couleurs (fond / texte / hover, état actif et inactif, chacun clair +
+    sombre) dans [params.partners.categoryFilter] (hugo.toml) - même
+    convention que [params.blog.categoryFilter] et
+    [params.trainings.categoryFilter]. Toute nouvelle combinaison de classes
+    doit être ajoutée au safelist de tailwind.config.js.
+
+    Paramètres :
+      categories - liste "id:Label" séparée par des virgules, ex :
+                   "cncf:CNCF,kubernetes:Kubernetes & Écosystème"
+
+    Appel minimal :
+      {{</* sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,middleware:Middleware,security:Sécurité,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
+*/}}
+
+{{ $raw := .Get "categories" }}
+{{ $categories := slice }}
+{{ range split $raw "," }}
+    {{ $pair := split . ":" }}
+    {{ if eq (len $pair) 2 }}
+        {{ $categories = $categories | append (dict "id" (index $pair 0) "label" (index $pair 1)) }}
+    {{ end }}
+{{ end }}
+
+{{ if gt (len $categories) 0 }}
+
+{{ $cfg := site.Params.partners.categoryFilter | default dict }}
+{{ $selected := $cfg.selected | default dict }}
+{{ $unselected := $cfg.unselected | default dict }}
+
+{{ $selectedBackground := $selected.background | default "bg-neurokube-900 dark:bg-neurokube-100" }}
+{{ $selectedText := $selected.text | default "text-white dark:text-neurokube-900" }}
+{{ $selectedHoverBackground := $selected.hover_background | default "hover:bg-neurokube-800 dark:hover:bg-neurokube-200" }}
+{{ $selectedHoverText := $selected.hover_text | default "hover:text-white dark:hover:text-neurokube-900" }}
+
+{{ $unselectedBackground := $unselected.background | default "bg-transparent dark:bg-transparent" }}
+{{ $unselectedText := $unselected.text | default "text-neurokube-900 dark:text-neurokube-100" }}
+{{ $unselectedHoverBackground := $unselected.hover_background | default "hover:bg-neurokube-100 dark:hover:bg-neurokube-800" }}
+{{ $unselectedHoverText := $unselected.hover_text | default "hover:text-neurokube-900 dark:hover:text-white" }}
+
+{{ $selectedClasses := printf "%s %s %s %s" $selectedBackground $selectedText $selectedHoverBackground $selectedHoverText }}
+{{ $unselectedClasses := printf "%s %s %s %s" $unselectedBackground $unselectedText $unselectedHoverBackground $unselectedHoverText }}
+
+{{ $border := $cfg.border | default "border-neurokube-900 dark:border-neurokube-100" }}
+{{ $baseClasses := printf "partner-category-pill px-5 py-2 rounded-full border-2 %s font-medium text-sm transition-colors duration-200" $border }}
+
+<div class="partner-category-filter flex flex-wrap justify-center gap-3 mb-12"
+     data-partner-category-filter
+     data-selected-classes="{{ $selectedClasses }}"
+     data-unselected-classes="{{ $unselectedClasses }}">
+    <button type="button"
+            class="{{ $baseClasses }} {{ $selectedClasses }} is-active"
+            data-partner-category="all">
+        {{ i18n "filterAll" }}
+    </button>
+    {{ range $categories }}
+        <button type="button"
+                class="{{ $baseClasses }} {{ $unselectedClasses }}"
+                data-partner-category="{{ .id }}">
+            {{ .label }}
+        </button>
+    {{ end }}
+</div>
+
+<p class="partner-category-filter-empty hidden text-center text-gray-500 mb-10" data-partner-category-filter-empty>
+    {{ i18n "noResults" }}
+</p>
+
+<script>
+(function () {
+    function init() {
+        document.querySelectorAll("[data-partner-category-filter]").forEach(function (filter) {
+            var buttons = filter.querySelectorAll(".partner-category-pill");
+            var emptyMessage = filter.parentElement.querySelector("[data-partner-category-filter-empty]");
+            var selectedClasses = (filter.getAttribute("data-selected-classes") || "").split(/\s+/).filter(Boolean);
+            var unselectedClasses = (filter.getAttribute("data-unselected-classes") || "").split(/\s+/).filter(Boolean);
+
+            function activate(button) {
+                buttons.forEach(function (b) {
+                    b.classList.remove("is-active");
+                    b.classList.remove.apply(b.classList, selectedClasses);
+                    b.classList.add.apply(b.classList, unselectedClasses);
+                });
+                button.classList.add("is-active");
+                button.classList.remove.apply(button.classList, unselectedClasses);
+                button.classList.add.apply(button.classList, selectedClasses);
+            }
+
+            function applyFilter(category) {
+                var sections = document.querySelectorAll("[data-partner-category]:not(.partner-category-pill)");
+                var visibleCount = 0;
+                sections.forEach(function (section) {
+                    var sectionCategory = section.getAttribute("data-partner-category");
+                    var matches = category === "all" || sectionCategory === category;
+                    section.style.display = matches ? "" : "none";
+                    if (matches) visibleCount++;
+                });
+                if (emptyMessage) {
+                    emptyMessage.classList.toggle("hidden", visibleCount !== 0);
+                }
+            }
+
+            buttons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    activate(button);
+                    applyFilter(button.getAttribute("data-partner-category"));
+                });
+            });
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();
+</script>
+{{ end }}
