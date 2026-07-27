@@ -50,7 +50,12 @@
                 background-image: linear-gradient(180deg, color-mix(in srgb, var(--badge-color) 15%, #000040), #000040);
             }
         </style>
-        <div class="absolute inset-x-0 top-0 h-72 gradient-bg opacity-75"></div>
+        <!-- inset-0 (pas une hauteur fixe) : le dégradé doit couvrir toute la
+             hauteur réelle du bloc hero, qui varie avec la longueur de
+             l'intro/du badge/du lieu - une hauteur fixe plus courte que le
+             contenu laissait apparaître le fond "heroBackground" (gris) nu
+             en dessous du dégradé, avant la section suivante (blanche). -->
+        <div class="absolute inset-0 gradient-bg opacity-75"></div>
         <div class="relative pt-16 pb-12 sm:pt-20">
             <div class="mx-auto max-w-5xl px-6 lg:px-8">
                 <a href="{{ $style.backUrl }}" class="inline-flex items-center text-sm font-semibold {{ $badgeStyle.badgeText }} mb-8 hover:underline">

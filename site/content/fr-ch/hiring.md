@@ -77,5 +77,38 @@ Nous recherchons un·e Architecte DevSecOps pour renforcer notre équipe de cons
 [Pour en savoir plus →](/fr/jobs/architecte-devsecops/)
 {{< /sokube-card >}}
 
+{{< sokube-card
+label="CDI"
+title="Architecte Cloud"
+>}}
+**Genève**
+
+Nous recherchons un·e Architecte Cloud pour renforcer notre équipe de consultants Cloud Native, DevOps et Sécurité, à Genève.
+
+[Pour en savoir plus →](/fr/jobs/architecte-cloud/)
+{{< /sokube-card >}}
+
+{{< sokube-card
+label="CDI"
+title="Architecte Cloud Native Applications"
+>}}
+**Genève**
+
+Nous recherchons un·e Architecte Cloud Native Applications pour renforcer notre équipe de consultants Cloud Native, DevOps et Sécurité, à Genève.
+
+[Pour en savoir plus →](/fr/jobs/architecte-cloud-native-applications/)
+{{< /sokube-card >}}
+
+{{< sokube-card
+label="CDI"
+title="Coach Agile"
+>}}
+**Genève**
+
+Nous recherchons un·e Coach Agile pour renforcer notre équipe de consultants Cloud Native, DevOps et Sécurité, à Genève.
+
+[Pour en savoir plus →](/fr/jobs/coach-agile/)
+{{< /sokube-card >}}
+
 {{< /sokube-card-grid >}}
 {{< /sokube-cards-section >}}

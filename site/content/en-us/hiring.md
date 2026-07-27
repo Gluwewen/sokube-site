@@ -77,5 +77,38 @@ We are looking for a DevSecOps Architect to join our Cloud Native, DevOps and Se
 [Learn more →](/jobs/devsecops-architect/)
 {{< /sokube-card >}}
 
+{{< sokube-card
+label="Permanent"
+title="Cloud Architect"
+>}}
+**Geneva**
+
+We are looking for a Cloud Architect to join our Cloud Native, DevOps and Security consulting team, based in Geneva.
+
+[Learn more →](/jobs/cloud-architect/)
+{{< /sokube-card >}}
+
+{{< sokube-card
+label="Permanent"
+title="Cloud Native Applications Architect"
+>}}
+**Geneva**
+
+We are looking for a Cloud Native Applications Architect to join our Cloud Native, DevOps and Security consulting team, based in Geneva.
+
+[Learn more →](/jobs/cloud-native-applications-architect/)
+{{< /sokube-card >}}
+
+{{< sokube-card
+label="Permanent"
+title="Agile Coach"
+>}}
+**Geneva**
+
+We are looking for an Agile Coach to join our Cloud Native, DevOps and Security consulting team, based in Geneva.
+
+[Learn more →](/jobs/agile-coach/)
+{{< /sokube-card >}}
+
 {{< /sokube-card-grid >}}
 {{< /sokube-cards-section >}}
