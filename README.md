@@ -477,17 +477,21 @@ Il nécessite l'utilisation de plusieurs shortcodes parents :
 
 ##### Configurer son contenu
 
-Vous devez insérer le code suivant pour ajouter le composant **neurokube-cards-section** dans une page :
+Vous devez insérer le code suivant pour ajouter le composant **sokube-cards-section** dans une page :
 
 ```
-{{< neurokube-cards-section
+{{< sokube-cards-section
     id="nom servant de lien"
+    eyebrow="Courte citation/accroche affichée en petites capitales au-dessus du titre (optionnel)"
     title="Titre de la section"
     description="Description de la section"
+    background="Fond de la section (optionnel, transparent par défaut - voir [params.cardsSection.style] dans hugo.toml)"
 >}}
 ...
-{{< /neurokube-cards-section >}}
+{{< /sokube-cards-section >}}
 ```
+
+Le fond transparent est le défaut de la section (pas de paramètre d'activation à part) : un appel peut le remplacer par n'importe quelle autre valeur, ex. `background="bg-gray-100 dark:bg-neurokube-700"` pour un fond gris clair (voir la page Expertises). Si la section précédente a déjà un fond de couleur (ex. `sokube-callout`, gris `bg-gray-50` par défaut), choisir une teinte différente pour garder une frontière visible entre les deux plutôt que de les fusionner en un seul bloc.
 
 Vous devez insérer le code suivant pour ajouter le composant **neurokube-card-grid** dans une page :
 
@@ -936,6 +940,52 @@ L'`id` de chaque `sokube-partner-category` doit correspondre à l'un des identif
 Les logos attendus (`/images/partners/*.svg`) ne sont pas fournis avec ces shortcodes : ce sont des assets de marque à ajouter dans `/site/static/images/partners/` avant mise en production.
 
 #### ❓ FAQ
+
+Le shortcode **faq** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Il affiche un accordéon de questions/réponses, regroupées par catégorie (menu latéral collant) s'il y en a au moins une, sinon en simple liste. Le contenu (`.Inner`) est écrit en YAML entre les balises d'ouverture et de fermeture.
+
+```
+{{< faq showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
+title: "Titre de la FAQ"
+description: "Description optionnelle"
+questions:
+  - category: "Catégorie (optionnelle)"
+    question: "Question ?"
+    answer: |
+      Réponse, en Markdown.
+{{< /faq >}}
+```
+
+Le bouton du bas (`showButton="true"`, désactivé par défaut) pointe vers la page de contact avec un libellé traduit par langue (« Envie d'en savoir plus ? » en français) — voir `[params.faq.button]` dans `hugo.toml`, surchargeable ponctuellement via `buttonText`/`buttonLink`.
+
+`background` (fond blanc par défaut, voir `[params.faq.style]` dans `hugo.toml`) encapsule la FAQ dans une section pleine largeur d'une autre couleur, ex. `bg-gray-50 dark:bg-neurokube-800` pour un fond gris clair — pas de paramètre d'activation séparé, juste un défaut que chaque appel peut remplacer.
+
+#### 💡 Top Tips
+
+Le shortcode **sokube-top-tips** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Utilisé sur les pages d'expertise (Kubernetes, DevSecOps...) pour afficher un bandeau "Tips by SoKube" suivi d'une rangée de conseils (icône + titre + texte), en nombre libre. Le bandeau image, le préfixe "Tips by SoKube :" et toutes les couleurs sont une identité fixe pour tout le site (`[params.topTips]` dans `hugo.toml`) — rien de tout ça ne se passe en paramètre du shortcode, ni au niveau du contenu d'une page. Seul le titre, la description et la liste des tips changent d'une page à l'autre, écrits en YAML entre les balises d'ouverture et de fermeture (même principe que `faq`).
+
+```
+{{< sokube-top-tips
+    title="Quels sont les points de vigilance lors du déploiement de kubernetes ?"
+    description="Le déploiement de Kubernetes peut être un projet complexe..."
+>}}
+tips:
+  - icon: "pencil"
+    title: "Choisir le bon environnement de déploiement"
+    text: "Kubernetes peut être déployé dans différents environnements..."
+  - icon: "network"
+    title: "Mettre en place un réseau robuste"
+    text: "Kubernetes nécessite un réseau performant et fiable..."
+{{< /sokube-top-tips >}}
+```
+
+Icônes disponibles pour le champ `icon` de chaque tip (une erreur explicite s'affiche si le nom ne correspond à aucune d'entre elles) : `pencil`, `network`, `key`, `camera`, `life-ring`, `people`, `robot`, `shield`, `wrench`.
+
 #### 🧭 Navigation et menus
 
 ### ✍️ Ajouter ou modifier du contenu

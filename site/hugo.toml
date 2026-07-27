@@ -510,6 +510,7 @@ Our learning methods also help you acquire the skills you need to put them into 
     [menu.main.params]
       has_submenu = true
       submenu = [
+        { name = "Overview", url = "/expertises/expertises" },
         { name = "Your DevSecOps Experts", url = "/expertises/devsecops" },
         { name = "Your Kubernetes Experts", url = "/expertises/kubernetes" },
         { name = "Your Cloud Native Applications Experts", url = "/expertises/cloud-native-apps" },
@@ -665,6 +666,18 @@ Our learning methods also help you acquire the skills you need to put them into 
     menuText = "text-neurokube-600 dark:text-neurokube-600"
     # Category nav text, active state
     menuActiveText = "text-gray-900 dark:text-white"
+    # Optional bottom button (see [params.faq.button] below), off by default per instance
+    buttonColor = "bg-neurokube-600 text-white hover:bg-neurokube-700"
+    # Full-width section background - white by default, a page can pass its
+    # own "background" parameter to replace it (e.g. a light gray section).
+    background = "bg-white dark:bg-neurokube-900"
+
+  # Default label/link for the faq shortcode's optional bottom button
+  # (shown only on instances calling faq with showButton="true").
+  # Override the label under [languages.xx.params.faq.button].
+  [params.faq.button]
+    label = "Want to know more?"
+    link = "/contact"
 
 # Callout shortcode default style (see layouts/shortcodes/sokube-callout.html).
 # One style for the whole site, same convention as [params.faq.style] above.
@@ -715,6 +728,10 @@ Our learning methods also help you acquire the skills you need to put them into 
 [params.cardsSection]
   [params.cardsSection.style]
     description = "text-gray-600 dark:text-neurokube-200"
+    # Transparent by default (matches the previous, unconfigurable behavior) - a page
+    # can override this per instance, e.g. background="bg-gray-50 dark:bg-neurokube-800".
+    background = "bg-transparent dark:bg-transparent"
+    eyebrow = "text-kube-600 dark:text-kube-600"
 
 # Features-section shortcode default style (see layouts/shortcodes/sokube-features-section.html).
 [params.featuresSection]
@@ -930,6 +947,26 @@ Our learning methods also help you acquire the skills you need to put them into 
     badgeText = "text-neurokube-600 dark:text-neurokube-100"
     colorVar = "--color-neurokube-600"
 
+# Top-tips shortcode (see layouts/shortcodes/sokube-top-tips.html), used on
+# expertise pages. Site-wide : une seule identité visuelle pour tout le site
+# (bandeau, préfixe, couleurs) - rien de tout ça ne se passe en paramètre du
+# shortcode, seul le contenu (titre, description, tips) change d'une page à
+# l'autre. Override possible par langue sous [languages.xx.params.topTips].
+[params.topTips]
+  # Bandeau fixe, partagé par toutes les instances (image statique, ne varie
+  # pas selon le mode clair/sombre).
+  bannerImage = "/images/expertises/tips-by-sokube.png"
+  # Préfixe affiché avant le titre (ex: "Tips by SoKube : <titre>")
+  prefix = "Tips by SoKube :"
+
+  [params.topTips.style]
+    prefixColor = "text-kube-600 dark:text-kube-600"
+    titleColor = "text-neurokube-900 dark:text-white"
+    descriptionColor = "text-gray-600 dark:text-neurokube-200"
+    iconColor = "text-kube-600 dark:text-kube-600"
+    tipTitleColor = "text-neurokube-900 dark:text-white"
+    tipTextColor = "text-gray-600 dark:text-neurokube-200"
+
 # Forms Configuration
 [params.forms]
 
@@ -1041,6 +1078,10 @@ Our learning methods also help you acquire the skills you need to put them into 
     [languages.fr.params.cta]
       title = "Prêt à libérer le plein potentiel de votre équipe DevOps ?"
       description = "Rejoignez les entreprises qui utilisent déjà NeuroKube pour réduire la charge cognitive de leurs équipes DevOps."
+
+    # French language for the faq shortcode's optional bottom button
+    [languages.fr.params.faq.button]
+      label = "Envie d'en savoir plus ?"
 
     # French language for Job Listing
     [languages.fr.params.jobListing.cdi]
@@ -1158,6 +1199,7 @@ Nos méthodes d'apprentissage vous permettront également d'acquérir les compé
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
+            { name = "Aperçu", url = "/fr/expertises/expertises" },
             { name = "Vos Experts DevSecOps", url = "/fr/expertises/devsecops" },
             { name = "Vos Experts Kubernetes", url = "/fr/expertises/kubernetes" },
             { name = "Vos Experts Cloud Native Applications", url = "/fr/expertises/cloud-native-apps" },

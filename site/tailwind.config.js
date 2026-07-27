@@ -293,6 +293,14 @@ module.exports = {
     'to-hr-200',
     'to-hr-300',
 
+    // content/expertises/expertises.md: faq background="bg-gray-50 dark:bg-neurokube-800"
+    'bg-gray-50',
+    // content/expertises/expertises.md: sokube-cards-section background="bg-gray-100 dark:bg-neurokube-700"
+    // (deliberately different from the callout right above it, which already
+    // uses bg-gray-50 dark:bg-neurokube-800 - reusing the exact same value
+    // made the two sections blend into one, with no visible boundary).
+    'bg-gray-100',
+
     // === AJOUTS MODE SOMBRE — lot 1 (header / baseof) ===
     'dark:bg-neurokube-900',
     'dark:bg-neurokube-800',

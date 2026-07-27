@@ -24,6 +24,19 @@
                          (default: params.faq.style.menuText)
       menuActiveTextColor - category nav text, active state
                          (default: params.faq.style.menuActiveText)
+      showButton       - "true"/"false" (default "false") - optional centered
+                         button below the questions, e.g. to point to the
+                         contact page. Off by default: only turn it on for
+                         instances that need it (not every faq call should
+                         show it).
+      buttonText       - button label (default: params.faq.button.label,
+                         overridable per language under
+                         [languages.xx.params.faq.button])
+      buttonLink       - button link (default: params.faq.button.link, same
+                         override rule as buttonText)
+      background       - full-width section background (default: params.faq.style.background,
+                         white ; pass e.g. "bg-gray-50 dark:bg-neurokube-800"
+                         for a light gray section)
 
     Minimal call:
       {{</* faq >}}
@@ -33,8 +46,9 @@
           answer: "..."
       {{</* /faq >}}
 
-    Full call with categories and a one-off color override:
-      {{</* faq accentColor="text-kube-600 dark:text-kube-600" >}}
+    Full call with categories, a one-off color override, the optional bottom
+    button and a light gray section background:
+      {{</* faq accentColor="text-kube-600 dark:text-kube-600" showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
       title: "Most frequently asked questions"
       description: "Find answers to frequently asked questions."
       questions:
@@ -52,6 +66,14 @@
 {{ $markerColor := .Get "markerColor" | default $style.marker }}
 {{ $menuTextColor := .Get "menuTextColor" | default $style.menuText }}
 {{ $menuActiveTextColor := .Get "menuActiveTextColor" | default $style.menuActiveText }}
+
+{{ $showFaqButton := eq (.Get "showButton" | default "false") "true" }}
+{{ $faqButtonDefault := site.Params.faq.button | default dict }}
+{{ $faqButtonText := .Get "buttonText" | default $faqButtonDefault.label }}
+{{ $faqButtonLink := .Get "buttonLink" | default $faqButtonDefault.link }}
+{{ $faqButtonColor := $style.buttonColor }}
+
+{{ $sectionBackground := .Get "background" | default $style.background }}
 
 {{/* Hover variant of accentColor (nav link hover state) - prefixes every
      class in the combined light/dark string with "hover:", so a two-token
@@ -95,7 +117,7 @@
     {{ $sections = $sections | append "" }}
 {{ end }}
 
-<section class="bg-white dark:bg-neurokube-900 py-8 lg:py-16">
+<section class="{{ $sectionBackground }} py-8 lg:py-16">
     <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
 
         <h1 class="mb-10 text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -173,6 +195,14 @@
                 {{ end }}
             </div>
         </div>
+
+        {{ if $showFaqButton }}
+        <div class="text-center mt-16">
+            <a href="{{ $faqButtonLink }}" class="btn {{ $faqButtonColor }}">
+                {{ $faqButtonText }}
+            </a>
+        </div>
+        {{ end }}
     </div>
 </section>
 
