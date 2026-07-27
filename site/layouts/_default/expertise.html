@@ -1,0 +1,247 @@
+{{/*
+    expertise (layout)
+
+    Page individuelle d'expertise ("/expertises/<slug>/", ex: devsecops.md,
+    kubernetes.md). Règle 14 : page entièrement pilotée par le front matter,
+    sans aucun shortcode à écrire dans le corps Markdown - objectif : une
+    personne non-développeuse peut ajouter/modifier une page d'expertise en
+    ne touchant que des champs YAML simples (titre, texte, listes).
+
+    Toutes les sections ci-dessous sont optionnelles et s'affichent dans
+    l'ordre suivant si présentes dans le front matter : hero, callout,
+    cards, features, faq, puis tips en tout dernier (fixe, indépendant de
+    l'ordre des champs dans le front matter). Les couleurs de marque
+    réutilisent les mêmes réglages
+    que les shortcodes déjà existants ([params.hero], [params.callout.style],
+    [params.cardsSection.style]/[params.cards.default], [params.feature.style],
+    [params.topTips], [params.faq.style]) - une seule source de vérité pour
+    ces couleurs, partagée avec le reste du site.
+
+    Front matter :
+
+      hero:
+        headline: "..."          (obligatoire pour afficher le hero)
+        image: "..."              (optionnel)
+        button_text: "..."
+        button_link: "..."
+
+      callout:
+        title: "..."
+        description: "..."
+        button_text: "..."
+        button_link: "..."
+
+      cards:
+        eyebrow: "..."             (optionnel)
+        title: "..."
+        description: "..."
+        items:                     (liste de {title, text})
+          - title: "..."
+            text: "..."
+
+      features:                    (liste de blocs "feature" - composant générique image + liste
+                                    numérotée, ex: étapes d'un processus, liste de questions/points
+                                    à mettre en avant, ou argumentaire de certifications. Autant de
+                                    blocs que nécessaire, chacun s'affiche à la suite du précédent.
+                                    Le côté de l'image alterne automatiquement gauche/droite selon
+                                    la position du bloc dans la liste - aspect structurel fixe,
+                                    non paramétrable depuis le front matter, règle 3)
+        - title: "..."
+          image: "..."
+          button_text: "..."      (optionnel)
+          button_link: "..."      (optionnel)
+          items:                   (liste de {title, text}, numérotée automatiquement -
+                                    text est optionnel : une liste de simples questions/points
+                                    peut n'utiliser que title)
+            - title: "..."
+              text: "..."         (optionnel)
+
+      faq:                         (voir layouts/partials/faq.html)
+        title: "..."
+        description: "..."        (optionnel)
+        show_button: true          (optionnel, false par défaut)
+        button_text: "..."         (optionnel)
+        button_link: "..."         (optionnel)
+        background: "..."         (optionnel, ex: "bg-gray-50 dark:bg-neurokube-800")
+        items:                     (liste de {question, answer, category})
+          - question: "..."
+            answer: "..."
+
+      tips:                        (bandeau "Tips by SoKube", voir layouts/partials/top-tips.html -
+                                    toujours affiché en dernier sur la page, quel que soit l'ordre
+                                    des champs dans le front matter)
+        title: "..."
+        description: "..."
+        items:                     (liste de {icon, title, text})
+          - icon: "pencil"         (voir layouts/partials/top-tips.html pour la liste des icônes)
+            title: "..."
+            text: "..."
+*/}}
+
+{{ define "main" }}
+
+{{/* --- Hero --- */}}
+{{ with .Params.hero }}
+    {{ $headline := .headline }}
+    {{ $image := .image }}
+    {{ $imageDark := replace $image "-light" "-dark" }}
+    {{ $buttonText := .button_text }}
+    {{ $buttonLink := .button_link }}
+    {{ $heroParams := site.Params.hero | default dict }}
+    {{ $background := $heroParams.background }}
+    {{ $style := $heroParams.style | default dict }}
+    {{ $primaryBtn := $heroParams.primary_button | default dict }}
+
+    <section class="relative overflow-hidden {{ $background }}">
+        <div class="container pt-16 pb-20 md:pt-24 md:pb-28">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <h1 class="text-4xl md:text-4xl lg:text-4xl font-bold leading-tight {{ $style.title }}">
+                        {{ $headline }}
+                    </h1>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        {{ with $buttonText }}
+                        <a href="{{ $buttonLink }}" class="btn text-center {{ $primaryBtn.background }} {{ $primaryBtn.text_color }} {{ $primaryBtn.hover }}">
+                            {{ . }}
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+                <div class="relative">
+                    {{ if $image }}
+                    <div class="relative z-10">
+                        <img src="{{ $image | relURL }}" alt="{{ $headline }}" class="rounded-xl shadow-elevation dark:hidden">
+                        <img src="{{ $imageDark | relURL }}" alt="{{ $headline }}" class="rounded-xl shadow-elevation hidden dark:block">
+                    </div>
+                    {{ end }}
+                    <div class="absolute -top-20 -right-20 w-64 h-64 {{ $style.decoration_1 }} rounded-full filter blur-3xl opacity-50"></div>
+                    <div class="absolute -bottom-20 -left-20 w-64 h-64 {{ $style.decoration_2 }} rounded-full filter blur-3xl opacity-50"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+{{ end }}
+
+{{/* --- Callout --- */}}
+{{ with .Params.callout }}
+    {{ $title := .title }}
+    {{ $description := .description }}
+    {{ $buttonText := .button_text }}
+    {{ $buttonLink := .button_link }}
+    {{ $style := site.Params.callout.style | default dict }}
+
+    <section class="{{ $style.background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
+        <div class="container text-center max-w-3xl mx-auto">
+            {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
+            {{ with $description }}<p class="text-xl {{ $style.description }} mb-10">{{ . }}</p>{{ end }}
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                {{ with $buttonText }}
+                <a href="{{ $buttonLink }}" class="btn text-center {{ $style.primaryButton }}">{{ . }}</a>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+{{ end }}
+
+{{/* --- Cards --- */}}
+{{ with .Params.cards }}
+    {{ $eyebrow := .eyebrow }}
+    {{ $title := .title }}
+    {{ $description := .description }}
+    {{ $items := .items | default slice }}
+    {{ $cardsStyle := site.Params.cardsSection.style | default dict }}
+    {{ $palette := site.Params.cards.default | default dict }}
+
+    <section class="section scroll-mt-24 bg-gray-100 dark:bg-neurokube-700">
+        <div class="container">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                {{ with $eyebrow }}<p class="text-sm font-bold uppercase tracking-wide mb-4 {{ $cardsStyle.eyebrow }}">{{ . }}</p>{{ end }}
+                {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
+                {{ with $description }}<p class="text-xl {{ $cardsStyle.description }}">{{ . }}</p>{{ end }}
+            </div>
+
+            <div class="grid md:grid-cols-3 {{ site.Params.cards.grid_gap | default "gap-8" }}">
+                {{ range $items }}
+                <div class="card-neurokube {{ $palette.background }} {{ $palette.border }} {{ $palette.hover_border }}">
+                    <h3 class="{{ $palette.title }}">{{ .title }}</h3>
+                    <div class="{{ $palette.text }} {{ $palette.marker }}">{{ .text | $.RenderString }}</div>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+{{ end }}
+
+{{/* --- Features (liste de blocs image + liste numérotée, alternant l'image gauche/droite) --- */}}
+{{ range $fi, $feature := .Params.features }}
+    {{ $title := $feature.title }}
+    {{ $image := $feature.image }}
+    {{ $buttonText := $feature.button_text }}
+    {{ $buttonLink := $feature.button_link }}
+    {{ $items := $feature.items | default slice }}
+    {{ $featureStyle := site.Params.feature.style | default dict }}
+    {{ $imageOrder := "lg:order-1" }}
+    {{ $textOrder := "lg:order-2" }}
+    {{ if eq (mod $fi 2) 1 }}
+        {{ $imageOrder = "lg:order-2" }}
+        {{ $textOrder = "lg:order-1" }}
+    {{ end }}
+
+    <section class="section">
+        <div class="container">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="{{ $imageOrder }}">
+                    {{ if $image }}
+                    {{ $imageDark := replace $image "-light" "-dark" }}
+                    <img src="{{ $image | relURL }}" alt="{{ $title }}" class="rounded-2xl shadow-elevation dark:hidden">
+                    <img src="{{ $imageDark | relURL }}" alt="{{ $title }}" class="rounded-2xl shadow-elevation hidden dark:block">
+                    {{ end }}
+                </div>
+                <div class="space-y-6 {{ $textOrder }}">
+                    <h3 class="text-2xl md:text-3xl font-bold {{ $featureStyle.title }}">{{ $title }}</h3>
+                    <ol class="space-y-4">
+                        {{ range $i, $item := $items }}
+                        <li class="flex gap-4">
+                            <span class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold bg-kube-100 dark:bg-kube-800 text-kube-600 dark:text-kube-100">
+                                {{ add $i 1 }}
+                            </span>
+                            <div>
+                                <span class="font-bold {{ $featureStyle.title }}">{{ $item.title }}</span>
+                                {{ with $item.text }}<span class="{{ $featureStyle.description }}"> : {{ . }}</span>{{ end }}
+                            </div>
+                        </li>
+                        {{ end }}
+                    </ol>
+                    {{ with $buttonText }}
+                    <a href="{{ $buttonLink }}" class="btn-neurokube inline-block">{{ . }}</a>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+    </section>
+{{ end }}
+
+{{/* --- FAQ --- */}}
+{{ with .Params.faq }}
+    {{ $faqData := dict "title" .title "description" .description "questions" .items }}
+    {{ partial "faq.html" (dict
+        "id" "page"
+        "data" $faqData
+        "showButton" .show_button
+        "buttonText" .button_text
+        "buttonLink" .button_link
+        "background" .background
+    ) }}
+{{ end }}
+
+{{/* --- Tips (toujours en dernier sur la page) --- */}}
+{{ with .Params.tips }}
+    {{ partial "top-tips.html" (dict
+        "title" .title
+        "description" .description
+        "tips" .items
+        "page" $
+    ) }}
+{{ end }}
+
+{{ end }}

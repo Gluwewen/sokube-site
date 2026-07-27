@@ -1,27 +1,102 @@
 ---
 title: "Vos Experts Kubernetes"
-layout: "company"
+layout: "expertise"
 description: "SoKube vous accompagne dans le déploiement et l'exploitation de vos clusters Kubernetes, avec les bonnes pratiques à connaître pour éviter les pièges les plus courants."
----
 
-{{< sokube-top-tips
-    title="Quels sont les points de vigilance lors du déploiement de kubernetes ?"
-    description="Le déploiement de Kubernetes peut être un projet complexe et impliquer de nombreux changements pour une entreprise. Il est important de bien planifier cette migration en suivant certaines meilleures pratiques pour s'assurer que tout se déroule bien. Voici quelques points à prendre en compte lors du déploiement de Kubernetes :"
->}}
+hero:
+  headline: "Vos Experts Kubernetes"
+  image: "/images/expertises/expertise-kubernetes-2jpg.jpg"
+  button_text: "Parlons de votre projet"
+  button_link: "/contact"
+
+callout:
+  title: "Vous recherchez de l'Expertise autour de Kubernetes ?"
+  description: "Chez SoKube nous maîtrisons l'utilisation et la gestion de systèmes d'orchestration de conteneurs basés sur Kubernetes ainsi que son écosystème. Au-delà de la connaissance des concepts et des fonctionnalités de Kubernetes, ainsi que des outils et des pratiques couramment utilisés pour déployer, gérer et surveiller des applications dans un environnement Kubernetes, nos consultants maîtrisent les aspects architecturaux, de sécurité, opérationnels et l'assistance à l'exploitation de cette technologie. Nos experts en Kubernetes sont capables de travailler dans différents contextes, tels que les entreprises utilisant Kubernetes pour gérer leurs applications, les fournisseurs de services Cloud offrant des solutions Kubernetes, ou encore les éditeurs de logiciels proposant des outils pour gérer des clusters Kubernetes."
+  button_text: "Parlons en ensemble"
+  button_link: "/contact"
+
+cards:
+  eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"
+  title: "Votre partenaire Kubernetes"
+  description: "Chez SoKube, nous possédons une solide expertise du système d'orchestration de conteneurs Kubernetes. Nous pouvons vous aider pour tous vos besoins en matière de Kubernetes : de la conception et de la mise en œuvre d'un nouveau cluster Kubernetes à la migration d'un cluster existant, de la formation au support."
+  items:
+    - title: "La connaissance des concepts fondamentaux"
+      text: "de Kubernetes, tels que l'architecture, les conteneurs, les pods, les services, les déploiements, les ingress, les secrets, etc."
+    - title: "La capacité à déployer et à gérer"
+      text: "des applications dans un environnement Kubernetes, en utilisant les outils et les commandes appropriés."
+    - title: "La maîtrise des outils d'observabilité et des pratiques"
+      text: "couramment utilisés pour surveiller et superviser les clusters Kubernetes, tels que Prometheus, Grafana, Kibana, Elastic, etc."
+    - title: "La capacité à résoudre"
+      text: "les problèmes courants rencontrés dans un environnement Kubernetes, tels que les erreurs de déploiement, les performances lentes, les problèmes de sécurité, etc."
+    - title: "La connaissance des bonnes pratiques"
+      text: "en matière de sécurité pour les clusters Kubernetes, tels que la gestion des secrets, la sécurisation des communications, l'isolation, les droits d'accès, etc."
+    - title: "Partenaires des distributions Kubernetes majeures"
+      text: "RedHat Openshift, Rancher RKE2 / K3S, VmWare Tanzu, D2iQ Konvoy, Google GKE, Amazon EKS, Azure AKS, Exoscale SKS, ..."
+
+features:
+  - title: "Expert Kubernetes"
+    image: "/images/expertises/kubernetes-cnf-logo.png"
+    button_text: "En savoir plus sur nos formations"
+    button_link: "/training"
+    items:
+      - title: "Kubernetes Certified Service Provider (KCSP)"
+        text: "nous sommes certifiés partenaire de service certifié Kubernetes, reconnu par la Cloud Native Computing Foundation (CNCF), la fondation qui héberge Kubernetes et son écosystème."
+      - title: "Silver Member de la CNCF"
+        text: "nous sommes « Silver Member » de la Cloud Native Computing Foundation."
+      - title: "Kubernetes Training Partner (KTP)"
+        text: "cette certification nous permet aussi de délivrer des formations officielles sur Kubernetes."
+
+  - title: "Si vous vous posez ces questions autour de Kubernetes :"
+    image: "/images/expertises/serious-man-thinking.jpg"
+    button_text: "Alors contactez-nous !"
+    button_link: "/contact"
+    items:
+      - title: "Quelle distribution choisir ?"
+      - title: "Quelle architecture mettre en place ?"
+      - title: "Quelle approche On-Premise vs Cloud vs Hybrid ?"
+      - title: "Comment provisionner un cluster ?"
+      - title: "Comment gérer de multiples clusters ?"
+      - title: "Comment sécuriser un cluster Kubernetes ?"
+      - title: "Comment faire le day-2 operation et gérer le cycle de vie du cluster ?"
+      - title: "Quels sont les coûts de mise en place de ce type d'infrastructure ?"
+      - title: "Quelles organisations faut-il mettre en place ?"
+      - title: "Comment déployer mes applications dans Kubernetes ?"
+
+faq:
+  title: "Découvrez les avantages de Kubernetes, le leader d'orchestration de conteneurs"
+  show_button: true
+  button_text: "Envie d'en savoir plus ?"
+  button_link: "/contact"
+  background: "bg-gray-50 dark:bg-neurokube-800"
+  items:
+    - question: "Flexibilité et Portabilité"
+      answer: "Kubernetes permet de déployer des applications dans différents environnements, que ce soit en local, sur des serveurs dédiés ou dans le Cloud. Les applications peuvent être facilement migrées d'un environnement à l'autre sans modification."
+    - question: "Scalabilité"
+      answer: "Kubernetes facilite la montée en charge des applications en permettant de gérer dynamiquement le nombre de conteneurs nécessaires pour répondre aux demandes des utilisateurs. Les applications peuvent être facilement redimensionnées en fonction des besoins en temps réel."
+    - question: "Disponibilité"
+      answer: "Kubernetes garantit la disponibilité des applications en permettant de redémarrer automatiquement les conteneurs en cas de panne ou de défaillance. Les applications sont tolérantes aux erreurs et peuvent continuer à fonctionner même en cas de problème."
+    - question: "Automatisation"
+      answer: "Kubernetes permet d'automatiser de nombreux processus, tels que le déploiement, la mise à jour, la montée en charge, la surveillance, etc. Cela réduit les tâches manuelles et les erreurs humaines, et accélère les cycles de développement et de livraison."
+    - question: "Sécurité"
+      answer: "Kubernetes offre des fonctionnalités de sécurité de base, telles que la gestion des rôles, la sécurisation des communications, l'isolation, la restriction des accès, etc. Cela permet d'amener un premier niveau de sécurité pour protéger les applications et les données, avec la possibilité de rajouter facilement des niveaux supplémentaires de sécurité via des solutions tierces pour aller vers une approche « zero trust »."
+
 tips:
-  - icon: "pencil"
-    title: "Choisir le bon environnement de déploiement"
-    text: "Kubernetes peut être déployé dans différents environnements, tels que local, sur des serveurs dédiés ou dans le Cloud. Il est important de choisir l'environnement qui convient le mieux à vos besoins en termes de performances, de scalabilité, de sécurité, etc."
-  - icon: "network"
-    title: "Mettre en place un réseau robuste"
-    text: "Kubernetes nécessite un réseau performant et fiable pour communiquer entre les différents éléments du cluster. Il est important de vérifier les performances du réseau et de mettre en place des solutions de secours en cas de panne."
-  - icon: "key"
-    title: "Gérer les secrets"
-    text: "Kubernetes permet de gérer une notion de secret mais qui est limitée. Il est recommandé d'utiliser des solutions tierces pour crypter vos secrets voir d'utiliser une solution centralisée et sécurisée (type Vault). Il est important de configurer les secrets de manière appropriée et de les protéger contre les accès non autorisés."
-  - icon: "camera"
-    title: "Surveiller les performances"
-    text: "Kubernetes permet de surveiller les performances des applications et des conteneurs en temps réel. Il est important de configurer les outils de surveillance et de superviser les indicateurs de performance pour détecter les éventuels problèmes et être proactif."
-  - icon: "life-ring"
-    title: "Mettre en place des procédures de secours"
-    text: "Kubernetes permet de redémarrer automatiquement les conteneurs en cas de défaillance. Il est important de mettre en place des procédures de secours pour gérer les situations d'urgence et les problèmes critiques."
-{{< /sokube-top-tips >}}
+  title: "Quels sont les points de vigilance lors du déploiement de kubernetes ?"
+  description: "Le déploiement de Kubernetes peut être un projet complexe et impliquer de nombreux changements pour une entreprise. Il est important de bien planifier cette migration en suivant certaines meilleures pratiques pour s'assurer que tout se déroule bien. Voici quelques points à prendre en compte lors du déploiement de Kubernetes :"
+  items:
+    - icon: "pencil"
+      title: "Choisir le bon environnement de déploiement"
+      text: "Kubernetes peut être déployé dans différents environnements, tels que local, sur des serveurs dédiés ou dans le Cloud. Il est important de choisir l'environnement qui convient le mieux à vos besoins en termes de performances, de scalabilité, de sécurité, etc."
+    - icon: "network"
+      title: "Mettre en place un réseau robuste"
+      text: "Kubernetes nécessite un réseau performant et fiable pour communiquer entre les différents éléments du cluster. Il est important de vérifier les performances du réseau et de mettre en place des solutions de secours en cas de panne."
+    - icon: "key"
+      title: "Gérer les secrets"
+      text: "Kubernetes permet de gérer une notion de secret mais qui est limitée. Il est recommandé d'utiliser des solutions tierces pour crypter vos secrets voir d'utiliser une solution centralisée et sécurisée (type Vault). Il est important de configurer les secrets de manière appropriée et de les protéger contre les accès non autorisés."
+    - icon: "camera"
+      title: "Surveiller les performances"
+      text: "Kubernetes permet de surveiller les performances des applications et des conteneurs en temps réel. Il est important de configurer les outils de surveillance et de superviser les indicateurs de performance pour détecter les éventuels problèmes et être proactif."
+    - icon: "life-ring"
+      title: "Mettre en place des procédures de secours"
+      text: "Kubernetes permet de redémarrer automatiquement les conteneurs en cas de défaillance. Il est important de mettre en place des procédures de secours pour gérer les situations d'urgence et les problèmes critiques."
+---

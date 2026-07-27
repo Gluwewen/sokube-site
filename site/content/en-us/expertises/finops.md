@@ -1,0 +1,102 @@
+---
+title: "Your FinOps Experts"
+layout: "expertise"
+description: "SoKube supports you in mastering and optimizing your Cloud costs, with the best practices you need to know to avoid the most common pitfalls."
+
+hero:
+  headline: "Your FinOps Experts"
+  image: "/images/expertises/finops.jpg"
+  button_text: "Let's talk about your project"
+  button_link: "/contact"
+
+callout:
+  title: "Looking for expertise around FinOps?"
+  description: "FinOps is a global approach aimed at improving the way IT investments are managed by optimizing spending on cloud services. At Sokube, our certified experts help you find the right balance between cloud spending on one hand, and the IT performance and innovation your business needs on the other. They also help you modernize your applications so they become cloud native, reducing the costs associated with running them. Through tailored training or support engagements, our consultants build a company culture around the FinOps approach, helping you generate savings and business value without penalizing operational teams in their day-to-day work."
+  button_text: "Let's talk about it"
+  button_link: "/contact"
+
+cards:
+  eyebrow: "Benefit from expert advice to accelerate your digital transformation"
+  title: "Your FinOps partner"
+  description: "At Sokube, we have strong FinOps expertise. We can help at several levels, from building a FinOps company culture, to setting up a team dedicated to this approach, all the way to optimizing the costs of your cloud resources and applications."
+  items:
+    - title: "Identifying and rolling out best practices"
+      text: "for FinOps, to effectively manage the costs and risks associated with cloud services."
+    - title: "Setting up a process"
+      text: "for budgeting and reporting, to plan, measure, optimize and manage spending."
+    - title: "Optimizing costs"
+      text: "related to cloud services by using tools and techniques to identify unnecessary spending and put strategies in place to reduce it."
+    - title: "Implementing controls and audits"
+      text: "to guarantee the security and compliance of data and applications in the cloud."
+    - title: "Building a team"
+      text: "dedicated to FinOps by recruiting, training and coaching the people involved, to effectively manage the costs and risks associated with cloud services."
+    - title: "Developing plans"
+      text: "for migration and deployment to ease the transition to Cloud Native services while guaranteeing application performance and security."
+
+features:
+  - title: "Certified FinOps expert"
+    image: "/images/expertises/certified-service-provider-tm.webp"
+    button_text: "Learn more about our training"
+    button_link: "/training"
+    items:
+      - title: "FinOps Certified Service Provider (FCSP)"
+        text: "SoKube is certified as a \"FinOps Certified Service Provider\" by the FinOps Foundation."
+      - title: "Active member of the FinOps Foundation"
+        text: "we are committed to optimizing cloud service spending and follow its recommendations to plan, measure, optimize and manage that spending."
+      - title: "Experience and support"
+        text: "we have the knowledge and experience needed to help you master your cloud spending and improve your IT performance."
+
+  - title: "If you're asking yourself these questions about FinOps:"
+    image: "/images/expertises/serious-man-thinking.jpg"
+    button_text: "Then get in touch with us!"
+    button_link: "/contact"
+    items:
+      - title: "What is FinOps, and how can it help my company optimize its cloud service spending?"
+      - title: "How do I build a FinOps company culture?"
+      - title: "How do I set up a budgeting and reporting process?"
+      - title: "What are the FinOps best practices for optimizing cloud service costs?"
+      - title: "How do I set up security and compliance controls for my data and applications in the cloud?"
+      - title: "How do I build a FinOps team?"
+      - title: "How do I develop migration plans to ease the transition to cloud services?"
+      - title: "What impact does FinOps have on my application?"
+      - title: "How do I deploy my application to optimize my costs?"
+      - title: "How do I train and support employees to effectively manage the costs and risks associated with cloud services?"
+
+faq:
+  title: "Discover the benefits of a FinOps approach for your organization"
+  show_button: true
+  button_text: "Want to know more?"
+  button_link: "/contact"
+  background: "bg-gray-50 dark:bg-neurokube-800"
+  items:
+    - question: "Cost control"
+      answer: "FinOps helps control cloud service costs by identifying unnecessary spending, putting strategies in place to reduce it, and ensuring that spending is aligned with the company's business objectives."
+    - question: "Improved agility"
+      answer: "FinOps helps a company become more agile by optimizing cloud service spending, allowing it to cut unnecessary costs and dedicate additional resources to innovation and growth."
+    - question: "Spending transparency"
+      answer: "FinOps helps a company become more transparent about cloud service spending, allowing it to better understand the costs and risks associated with cloud services and make informed decisions."
+    - question: "Reduced risk"
+      answer: "FinOps helps reduce the risks associated with cloud services by putting security and compliance controls in place to guarantee the security and compliance of data and applications in the cloud."
+    - question: "Improved IT performance"
+      answer: "FinOps helps improve IT performance by optimizing cloud service spending, allowing the company to dedicate additional resources to the performance and innovation of its cloud applications."
+
+tips:
+  title: "What are the key points of attention in a FinOps approach?"
+  description: "Implementing a FinOps approach can be a complex project that involves many changes for a company. It's important to plan this change carefully by following certain best practices to make sure your project succeeds. Here are a few points to keep in mind when rolling out a FinOps approach:"
+  items:
+    - icon: "pencil"
+      title: "Aligning spending with the company's business objectives"
+      text: "Check that cloud service spending is aligned with the company's business objectives, to make sure spending is justified and useful."
+    - icon: "shield"
+      title: "Data security and compliance"
+      text: "Make sure data and applications in the cloud are secure and compliant with applicable regulations and standards."
+    - icon: "network"
+      title: "Balancing costs and IT performance"
+      text: "Strike a balance between costs, IT performance and long-term investments to avoid penalizing technical teams. This includes modernizing existing applications to make them cloud native."
+    - icon: "people"
+      title: "Involving everyone across the company"
+      text: "Make sure everyone across the company is involved and aware of the challenges of controlling cloud service costs, to help build a company culture around FinOps."
+    - icon: "camera"
+      title: "Continuous monitoring and adaptation"
+      text: "Continuously monitor and adapt the processes and tools put in place to ensure their effectiveness and keep up with evolving needs and contexts."
+---

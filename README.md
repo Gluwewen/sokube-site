@@ -986,6 +986,39 @@ tips:
 
 Icônes disponibles pour le champ `icon` de chaque tip (une erreur explicite s'affiche si le nom ne correspond à aucune d'entre elles) : `pencil`, `network`, `key`, `camera`, `life-ring`, `people`, `robot`, `shield`, `wrench`.
 
+#### 🧩 Layout "expertise"
+
+Toutes les pages du sous-menu Expertises (`/site/content/*/expertises/*.md`, sauf `expertises.md` lui-même qui reste une page vide) utilisent le layout **expertise** (`/site/layouts/_default/expertise.html`, voir règle 14). Une page d'expertise ne contient **aucun shortcode** dans son corps Markdown : tout se pilote depuis le front matter, en sections optionnelles (elles ne s'affichent que si elles sont présentes) :
+
+Ordre d'affichage sur la page (fixe, indépendant de l'ordre des champs dans le front matter) : `hero`, `callout`, `cards`, `features`, `faq`, puis `tips` toujours en tout dernier.
+
+- `hero` : `headline`, `image` (optionnel), `button_text`, `button_link`
+- `callout` : `title`, `description`, `button_text`, `button_link`
+- `cards` : `eyebrow` (optionnel), `title`, `description`, `items` (liste de `{title, text}`)
+- `features` : **liste** de blocs génériques image + liste numérotée (étapes d'un processus, argumentaire de certifications, points de vigilance, questions à se poser...) — autant de blocs que nécessaire, affichés à la suite les uns des autres dans l'ordre du front matter. Chaque bloc : `title`, `image`, `button_text`/`button_link` (optionnels), `items` (liste de `{title, text}`, `text` optionnel, numérotée automatiquement)
+- `faq` : `title`, `description` (optionnel), `show_button` (optionnel), `background` (optionnel), `items` (liste de `{question, answer, category}`)
+- `tips` : bandeau "Tips by SoKube", toujours affiché en dernier — `title`, `description`, `items` (liste de `{icon, title, text}`, mêmes icônes que `sokube-top-tips` ci-dessus)
+
+Exemple minimal (une page qui n'a pour l'instant qu'un bandeau de tips, voir `kubernetes.md`) :
+
+```
+---
+title: "Vos Experts Kubernetes"
+layout: "expertise"
+description: "..."
+
+tips:
+  title: "Quels sont les points de vigilance lors du déploiement de kubernetes ?"
+  description: "..."
+  items:
+    - icon: "pencil"
+      title: "Choisir le bon environnement de déploiement"
+      text: "..."
+---
+```
+
+Les couleurs de chaque section réutilisent les mêmes réglages `hugo.toml` que les shortcodes déjà existants (`[params.hero]`, `[params.callout.style]`, `[params.cardsSection.style]`/`[params.cards.default]`, `[params.feature.style]`, `[params.topTips]`, `[params.faq.style]`) - une seule source de vérité pour ces couleurs, partagée avec le reste du site. Les sections `tips` et `faq` du layout appellent directement les partials partagées `layouts/partials/top-tips.html` et `layouts/partials/faq.html`, les mêmes que celles utilisées en coulisses par les shortcodes `sokube-top-tips` et `faq` (règle 13) : toute évolution de leur rendu profite donc aux deux à la fois.
+
 #### 🧭 Navigation et menus
 
 ### ✍️ Ajouter ou modifier du contenu
