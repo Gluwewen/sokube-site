@@ -6,12 +6,14 @@ description: "SoKube vous accompagne dans le déploiement et l'exploitation de v
 hero:
   headline: "Vos Experts Kubernetes"
   image: "/images/expertises/expertise-kubernetes-2jpg.jpg"
+  palette: "default"
   button_text: "Parlons de votre projet"
   button_link: "/contact"
 
 callout:
   title: "Vous recherchez de l'Expertise autour de Kubernetes ?"
   description: "Chez SoKube nous maîtrisons l'utilisation et la gestion de systèmes d'orchestration de conteneurs basés sur Kubernetes ainsi que son écosystème. Au-delà de la connaissance des concepts et des fonctionnalités de Kubernetes, ainsi que des outils et des pratiques couramment utilisés pour déployer, gérer et surveiller des applications dans un environnement Kubernetes, nos consultants maîtrisent les aspects architecturaux, de sécurité, opérationnels et l'assistance à l'exploitation de cette technologie. Nos experts en Kubernetes sont capables de travailler dans différents contextes, tels que les entreprises utilisant Kubernetes pour gérer leurs applications, les fournisseurs de services Cloud offrant des solutions Kubernetes, ou encore les éditeurs de logiciels proposant des outils pour gérer des clusters Kubernetes."
+  palette: "kube"
   button_text: "Parlons en ensemble"
   button_link: "/contact"
 
@@ -19,22 +21,30 @@ cards:
   eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"
   title: "Votre partenaire Kubernetes"
   description: "Chez SoKube, nous possédons une solide expertise du système d'orchestration de conteneurs Kubernetes. Nous pouvons vous aider pour tous vos besoins en matière de Kubernetes : de la conception et de la mise en œuvre d'un nouveau cluster Kubernetes à la migration d'un cluster existant, de la formation au support."
+  palette: "kube"
   items:
-    - title: "La connaissance des concepts fondamentaux"
+    - icon: "graduation-cap"
+      title: "La connaissance des concepts fondamentaux"
       text: "de Kubernetes, tels que l'architecture, les conteneurs, les pods, les services, les déploiements, les ingress, les secrets, etc."
-    - title: "La capacité à déployer et à gérer"
+    - icon: "rocket"
+      title: "La capacité à déployer et à gérer"
       text: "des applications dans un environnement Kubernetes, en utilisant les outils et les commandes appropriés."
-    - title: "La maîtrise des outils d'observabilité et des pratiques"
+    - icon: "camera"
+      title: "La maîtrise des outils d'observabilité et des pratiques"
       text: "couramment utilisés pour surveiller et superviser les clusters Kubernetes, tels que Prometheus, Grafana, Kibana, Elastic, etc."
-    - title: "La capacité à résoudre"
+    - icon: "life-ring"
+      title: "La capacité à résoudre"
       text: "les problèmes courants rencontrés dans un environnement Kubernetes, tels que les erreurs de déploiement, les performances lentes, les problèmes de sécurité, etc."
-    - title: "La connaissance des bonnes pratiques"
+    - icon: "shield"
+      title: "La connaissance des bonnes pratiques"
       text: "en matière de sécurité pour les clusters Kubernetes, tels que la gestion des secrets, la sécurisation des communications, l'isolation, les droits d'accès, etc."
-    - title: "Partenaires des distributions Kubernetes majeures"
+    - icon: "medal"
+      title: "Partenaires des distributions Kubernetes majeures"
       text: "RedHat Openshift, Rancher RKE2 / K3S, VmWare Tanzu, D2iQ Konvoy, Google GKE, Amazon EKS, Azure AKS, Exoscale SKS, ..."
 
 features:
   - title: "Expert Kubernetes"
+    palette: "kube"
     image: "/images/expertises/kubernetes-cnf-logo.png"
     button_text: "En savoir plus sur nos formations"
     button_link: "/training"
@@ -47,6 +57,7 @@ features:
         text: "cette certification nous permet aussi de délivrer des formations officielles sur Kubernetes."
 
   - title: "Si vous vous posez ces questions autour de Kubernetes :"
+    palette: "kube"
     image: "/images/expertises/serious-man-thinking.jpg"
     button_text: "Alors contactez-nous !"
     button_link: "/contact"
@@ -64,6 +75,7 @@ features:
 
 faq:
   title: "Découvrez les avantages de Kubernetes, le leader d'orchestration de conteneurs"
+  palette: "kube"
   show_button: true
   button_text: "Envie d'en savoir plus ?"
   button_link: "/contact"
@@ -84,7 +96,7 @@ tips:
   title: "Quels sont les points de vigilance lors du déploiement de kubernetes ?"
   description: "Le déploiement de Kubernetes peut être un projet complexe et impliquer de nombreux changements pour une entreprise. Il est important de bien planifier cette migration en suivant certaines meilleures pratiques pour s'assurer que tout se déroule bien. Voici quelques points à prendre en compte lors du déploiement de Kubernetes :"
   items:
-    - icon: "pencil"
+    - icon: "cloud"
       title: "Choisir le bon environnement de déploiement"
       text: "Kubernetes peut être déployé dans différents environnements, tels que local, sur des serveurs dédiés ou dans le Cloud. Il est important de choisir l'environnement qui convient le mieux à vos besoins en termes de performances, de scalabilité, de sécurité, etc."
     - icon: "network"
@@ -93,7 +105,7 @@ tips:
     - icon: "key"
       title: "Gérer les secrets"
       text: "Kubernetes permet de gérer une notion de secret mais qui est limitée. Il est recommandé d'utiliser des solutions tierces pour crypter vos secrets voir d'utiliser une solution centralisée et sécurisée (type Vault). Il est important de configurer les secrets de manière appropriée et de les protéger contre les accès non autorisés."
-    - icon: "camera"
+    - icon: "gauge"
       title: "Surveiller les performances"
       text: "Kubernetes permet de surveiller les performances des applications et des conteneurs en temps réel. Il est important de configurer les outils de surveillance et de superviser les indicateurs de performance pour détecter les éventuels problèmes et être proactif."
     - icon: "life-ring"

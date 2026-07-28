@@ -15,18 +15,24 @@
     cartes individuelles : chaque sokube-partner-category porte cet
     attribut sur sa balise <section>.
 
-    Couleurs (fond / texte / hover, état actif et inactif, chacun clair +
-    sombre) dans [params.partners.categoryFilter] (hugo.toml) - même
-    convention que [params.blog.categoryFilter] et
-    [params.trainings.categoryFilter]. Toute nouvelle combinaison de classes
-    doit être ajoutée au safelist de tailwind.config.js.
+    Instanciable par page (règle 12) : les couleurs (fond / texte / hover,
+    état actif et inactif, chacun clair + sombre) fonctionnent par palette
+    nommée - la palette vit dans [params.partners.categoryFilter.<nom>]
+    (hugo.toml, y compris la palette "default"), même convention que
+    [params.cards] (règle 5). Contrairement à [params.blog.categoryFilter] /
+    [params.trainings.categoryFilter] (fixes, site-wide - ces deux shortcodes
+    ne sont pas concernés par ce changement). Toute nouvelle combinaison de
+    classes doit être ajoutée au safelist de tailwind.config.js.
 
     Paramètres :
       categories - liste "id:Label" séparée par des virgules, ex :
                    "cncf:CNCF,kubernetes:Kubernetes & Écosystème"
+      palette    - nom de la palette : "default", "kube" ou "hr" (défaut
+                   "default") - voir [params.partners.categoryFilter]
+                   (hugo.toml)
 
     Appel minimal :
-      {{</* sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,middleware:Middleware,security:Sécurité,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
+      {{</* sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,middleware:Middleware,security:Sécurité,ci:CI/CD,cloud:Cloud,finops:FinOps" palette="kube" >}}
 */}}
 
 {{ $raw := .Get "categories" }}
@@ -40,7 +46,12 @@
 
 {{ if gt (len $categories) 0 }}
 
-{{ $cfg := site.Params.partners.categoryFilter | default dict }}
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $cfg := index site.Params.partners.categoryFilter $paletteName }}
+{{ if not $cfg }}
+    {{ errorf "sokube-partners-filter: palette %q introuvable dans [params.partners.categoryFilter] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $cfg = site.Params.partners.categoryFilter.default }}
+{{ end }}
 {{ $selected := $cfg.selected | default dict }}
 {{ $unselected := $cfg.unselected | default dict }}
 

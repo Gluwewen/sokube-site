@@ -6,12 +6,14 @@ description: "SoKube vous accompagne dans la maîtrise et l'optimisation de vos 
 hero:
   headline: "Vos Experts FinOps"
   image: "/images/expertises/finops.jpg"
+  palette: "default"
   button_text: "Parlons de votre projet"
   button_link: "/contact"
 
 callout:
   title: "Vous recherchez de l'Expertise autour de FinOps ?"
   description: "Le FinOps est une approche globale visant à améliorer le pilotage des investissements IT en optimisant les dépenses liées aux services cloud. Chez Sokube, nos experts certifiés vous permettront de trouver le bon compromis entre les dépenses liées aux services cloud d'une part, et la performance et l'innovation IT recherchées en termes business, d'autre part. Ils vous aideront également à moderniser vos applications pour qu'elles deviennent cloud natives, diminuant ainsi les coûts liés à leur utilisation. Au travers de formations personnalisées ou de missions d'accompagnement, nos consultants instaureront une culture d'entreprise autour de l'approche FinOps pour vous permettre de réaliser des économies, générer de la valeur business, sans pour autant pénaliser les équipes opérationnelles dans leur travail."
+  palette: "kube"
   button_text: "Parlons en ensemble"
   button_link: "/contact"
 
@@ -19,22 +21,30 @@ cards:
   eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"
   title: "Votre partenaire FinOps"
   description: "Chez Sokube, nous possédons une solide expertise du FinOps. Nous pouvons vous aider à plusieurs niveaux, de la mise en place d'une culture d'entreprise FinOps, à la création d'une équipe dédiée à cette approche jusqu'à l'optimisation des coûts liés à vos ressources cloud et vos applications."
+  palette: "kube"
   items:
-    - title: "Identification et mise en place de bonnes pratiques"
+    - icon: "graduation-cap"
+      title: "Identification et mise en place de bonnes pratiques"
       text: "FinOps pour gérer efficacement les coûts et les risques liés aux services cloud."
-    - title: "Mise en place d'un processus"
+    - icon: "cycle"
+      title: "Mise en place d'un processus"
       text: "de budgétisation et de reporting pour planifier, mesurer, optimiser et gérer les dépenses."
-    - title: "Optimisation des coûts"
+    - icon: "dollar"
+      title: "Optimisation des coûts"
       text: "liés aux services cloud en utilisant des outils et des techniques pour identifier les dépenses inutiles et mettre en place des stratégies pour les réduire."
-    - title: "Mise en place de contrôles et d'audit"
+    - icon: "shield"
+      title: "Mise en place de contrôles et d'audit"
       text: "pour garantir la sécurité et la conformité des données et des applications dans le cloud."
-    - title: "Mise en place d'une équipe"
+    - icon: "people"
+      title: "Mise en place d'une équipe"
       text: "FinOps en recrutant, formant et coachant les intervenants pour gérer efficacement les coûts et les risques liés aux services cloud."
-    - title: "Élaboration de plans"
+    - icon: "rocket"
+      title: "Élaboration de plans"
       text: "de migration et de déploiement pour faciliter la transition vers les services Cloud Native tout en garantissant la performance et la sécurité des applications."
 
 features:
   - title: "Expert FinOps et certifié"
+    palette: "kube"
     image: "/images/expertises/certified-service-provider-tm.webp"
     button_text: "En savoir plus sur nos formations"
     button_link: "/training"
@@ -47,6 +57,7 @@ features:
         text: "nous disposons des connaissances et de l'expérience nécessaires pour vous aider à maîtriser vos dépenses cloud et améliorer votre performance IT."
 
   - title: "Si vous vous posez ces questions autour de FinOps :"
+    palette: "kube"
     image: "/images/expertises/serious-man-thinking.jpg"
     button_text: "Alors contactez-nous !"
     button_link: "/contact"
@@ -64,6 +75,7 @@ features:
 
 faq:
   title: "Découvrez les avantages de l'approche FinOps pour votre organisation"
+  palette: "kube"
   show_button: true
   button_text: "Envie d'en savoir plus ?"
   button_link: "/contact"
@@ -84,19 +96,19 @@ tips:
   title: "Quels sont les points de vigilance dans une approche FinOps ?"
   description: "La mise en œuvre d'une approche FinOps peut être un projet complexe et impliquer de nombreux changements pour une entreprise. Il est important de bien planifier ce changement en suivant certaines bonnes pratiques pour s'assurer que votre projet se réalise avec succès. Voici quelques points à prendre en compte lors du déploiement d'une approche FinOps :"
   items:
-    - icon: "pencil"
+    - icon: "dollar"
       title: "Alignement des dépenses sur les objectifs commerciaux de l'entreprise"
       text: "Vérifier que les dépenses liées aux services cloud sont alignées sur les objectifs commerciaux de l'entreprise pour garantir que les dépenses soient justifiées et utiles."
     - icon: "shield"
       title: "Sécurité et conformité des données"
       text: "S'assurer que les données et les applications dans le cloud sont sécurisées et conformes aux réglementations et aux normes en vigueur."
-    - icon: "network"
+    - icon: "gauge"
       title: "Équilibre entre les coûts et les performances IT"
       text: "Trouver un équilibre entre les coûts, les performances IT et les investissements à long terme pour éviter de pénaliser les équipes techniques. Cela inclut la modernisation des applications existantes pour les rendre cloud natives."
     - icon: "people"
       title: "Implication de tous les acteurs de l'entreprise"
       text: "S'assurer que tous les acteurs de l'entreprise sont impliqués et sensibilisés aux enjeux de maîtrise des coûts liés aux services cloud pour garantir la mise en place d'une culture d'entreprise autour du FinOps."
-    - icon: "camera"
+    - icon: "cycle"
       title: "Suivi et adaptation continue"
       text: "Suivre et adapter en continu les processus et les outils mis en place pour garantir leur efficacité et s'adapter aux évolutions des besoins et des contextes."
 ---

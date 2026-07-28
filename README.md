@@ -513,6 +513,27 @@ Ajoutez le contenu de la carte en HTML ou en MD
 {{< /neurokube-card >}}
 ```
 
+**Palette automatique pour les offres d'emploi** : si `palette` est omis et que `label` correspond à un type de contrat connu (ex. "CDI"/"Permanent"), la palette est déduite automatiquement via `[params.contractTypes]` (`hugo.toml`), sans avoir à répéter `palette="..."` sur chaque carte - et ça fonctionne quelle que soit la langue de la page (voir `layouts/partials/resolve-contract-palette.html`). Utilisé par les cartes d'offres d'emploi de `hiring.md` :
+
+```
+[params.contractTypes]
+  [params.contractTypes.cdi]
+    palette = "kube"
+  [params.contractTypes.cdd]
+    palette = "default"
+  [params.contractTypes.stage]
+    palette = "hr"
+
+# Le texte affiché ("CDI", "Permanent"...) est surchargé par langue,
+# jamais la palette :
+[languages.fr.params.contractTypes.cdi]
+  label = "CDI"
+[languages.en.params.contractTypes.cdi]
+  label = "Permanent"
+```
+
+Cette même table `[params.contractTypes]` est aussi utilisée par le layout `job-listing` (voir plus bas) pour résoudre le champ `contractType` du front matter en palette. Une card dont le `label` ne correspond à aucun type de contrat connu (ex. "PROBLÈME 01" sur `about.md`) n'est pas affectée : elle retombe sur la palette "default", ou sur `palette="..."` si fourni explicitement.
+
 #### 🎯 Hero
 
 Le shortcode **Hero** se trouve dans le répertoire :
@@ -638,15 +659,23 @@ Appel type :
 Le shortcode **sokube-features-section** se trouve dans le répertoire :
 > /site/layouts/shortcodes/
 
-Enrobe un groupe de `sokube-feature` avec un titre/description centrés optionnels. Le fond de la section vit dans `[params.featuresSection.style]` (`hugo.toml`), défaut un dégradé gris clair en haut vers blanc en bas :
+Enrobe un groupe de `sokube-feature` avec un titre/description centrés optionnels. Instanciable par page (règle 12) : la couleur de la description suit une palette nommée ("default"/"kube"/"hr", défaut "default"), même convention que `sokube-callout` - voir `[params.featuresSection]` dans `hugo.toml` :
 
 ```
-[params.featuresSection.style]
+[params.featuresSection.default]
   description = "text-gray-600 dark:text-neurokube-200"
+  background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
+
+[params.featuresSection.kube]
+  description = "text-gray-600 dark:text-kube-200"
+  background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
+
+[params.featuresSection.hr]
+  description = "text-gray-600 dark:text-hr-200"
   background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
 ```
 
-Surchargeable ponctuellement via le paramètre `background` du shortcode. Toute nouvelle couleur de dégradé doit être ajoutée au safelist de `tailwind.config.js` (voir le commentaire à côté de `'from-gray-50'`).
+`background` est volontairement identique sur les 3 palettes (cette section n'est qu'un en-tête de texte, pas une identité visuelle en soi). `palette`, `descriptionColor` et `background` sont surchargeables ponctuellement via les paramètres du shortcode. Toute nouvelle couleur de dégradé doit être ajoutée au safelist de `tailwind.config.js` (voir le commentaire à côté de `'from-gray-50'`).
 
 #### 📣 Call To Action (CTA)
 
@@ -903,14 +932,14 @@ Le titre et la description (tous deux optionnels, pour faciliter la réutilisati
 Le shortcode **sokube-two-columns** se trouve dans le répertoire :
 > /site/layouts/shortcodes/
 
-Bloc de texte Markdown libre sur deux colonnes (empilées en mobile), suivi d'un bouton centré optionnel. **Instanciable par page** (comme sokube-carroussel) : aucune couleur de marque, aucune entrée dans `hugo.toml`. Utilisé aujourd'hui sur `hiring.md` pour la présentation de SoKube avec un bouton vers `/about`.
+Bloc de texte Markdown libre sur deux colonnes (empilées en mobile), suivi d'un bouton centré optionnel. **Instanciable par page** (comme sokube-carroussel) : aucune couleur de marque pour le texte, mais le bouton fonctionne par palette nommée ("default"/"kube"/"hr", défaut "default" - voir `[params.twoColumns]` dans `hugo.toml`), même convention que sokube-feature/sokube-callout. Utilisé aujourd'hui sur `hiring.md` pour la présentation de SoKube avec un bouton vers `/about`.
 
 ##### Configurer son contenu
 
 Le texte des deux colonnes est fourni en YAML directement entre les balises d'ouverture et de fermeture du shortcode :
 
 ```
-{{< sokube-two-columns buttonText="Découvrir SoKube" buttonLink="/about" >}}
+{{< sokube-two-columns palette="kube" buttonText="Découvrir SoKube" buttonLink="/about" >}}
 columnLeft: |
   Texte Markdown de la colonne de gauche...
 columnRight: |
@@ -918,7 +947,7 @@ columnRight: |
 {{< /sokube-two-columns >}}
 ```
 
-`buttonText`/`buttonLink` sont optionnels : sans `buttonText`, aucun bouton ne s'affiche.
+`buttonText`/`buttonLink` sont optionnels : sans `buttonText`, aucun bouton ne s'affiche. `palette` est optionnel, défaut "default" (bouton bleu neurokube).
 
 #### 🤝 Partenaires
 
@@ -926,7 +955,7 @@ Trois shortcodes, utilisés ensemble sur `content/*/partners.md`, remplacent l'a
 > /site/layouts/shortcodes/
 
 - **sokube-partners-section** : le chapeau de toute la page (container + titre/description centrés optionnels), enrobe le filtre et les catégories.
-- **sokube-partners-filter** : la barre de pills cliquables (une par catégorie + "Tous"), qui affiche/masque les sections `sokube-partner-category` en dessous.
+- **sokube-partners-filter** : la barre de pills cliquables (une par catégorie + "Tous"), qui affiche/masque les sections `sokube-partner-category` en dessous. Instanciable par page (contrairement à sokube-blog-category-filter et sokube-trainings-category-filter, fixes) : la couleur des pills fonctionne par palette nommée via le paramètre `palette` (`default`/`kube`/`hr`, défaut "default" - voir `[params.partners.categoryFilter]` dans `hugo.toml`).
 - **sokube-partner-category** : une catégorie de partenaires (CNCF, Kubernetes & Écosystème, Sécurité...), instanciée une fois par catégorie.
 - **sokube-partner** : une entrée de partenaire, instanciée plusieurs fois par catégorie. Avec une description (`.Inner`), elle se rend en grande carte "featured" (logo + nom + texte, palette nommée comme `sokube-card`) ; sans description, en simple logo dans une grille dense.
 
@@ -978,7 +1007,7 @@ Trois shortcodes, utilisés ensemble sur `content/*/partners.md`, remplacent l'a
 ```
 {{< sokube-partners-section title="Découvrez nos partenaires" description="..." >}}
 
-{{< sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,security:Sécurité" >}}
+{{< sokube-partners-filter palette="kube" categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,security:Sécurité" >}}
 
 {{< sokube-partner-category id="cncf" title="CNCF (Cloud Native Computing Foundation)" >}}
 
@@ -1007,10 +1036,10 @@ Les logos attendus (`/images/partners/*.svg`) ne sont pas fournis avec ces short
 Le shortcode **faq** se trouve dans le répertoire :
 > /site/layouts/shortcodes/
 
-Il affiche un accordéon de questions/réponses, regroupées par catégorie (menu latéral collant) s'il y en a au moins une, sinon en simple liste. Le contenu (`.Inner`) est écrit en YAML entre les balises d'ouverture et de fermeture.
+Il affiche un accordéon de questions/réponses, regroupées par catégorie (menu latéral collant) s'il y en a au moins une, sinon en simple liste. Le contenu (`.Inner`) est écrit en YAML entre les balises d'ouverture et de fermeture. Instanciable par page (règle 12) : fonctionne par palette nommée pour l'accent, les markers, le menu de catégories et le bouton, même convention que `sokube-callout`/`sokube-card`/`sokube-feature` — voir `[params.faq]` dans `hugo.toml`.
 
 ```
-{{< faq showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
+{{< faq palette="kube" showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
 title: "Titre de la FAQ"
 description: "Description optionnelle"
 questions:
@@ -1021,9 +1050,11 @@ questions:
 {{< /faq >}}
 ```
 
+`palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.faq]` dans `hugo.toml`) contrôle la couleur de l'accent (icônes +/-), des markers de listes, du menu de catégories et du bouton du bas. Chaque couleur précise peut aussi être surchargée ponctuellement via `accentColor`/`markerColor`/`menuTextColor`/`menuActiveTextColor`/`buttonColor`, pour un cas exceptionnel.
+
 Le bouton du bas (`showButton="true"`, désactivé par défaut) pointe vers la page de contact avec un libellé traduit par langue (« Envie d'en savoir plus ? » en français) — voir `[params.faq.button]` dans `hugo.toml`, surchargeable ponctuellement via `buttonText`/`buttonLink`.
 
-`background` (fond blanc par défaut, voir `[params.faq.style]` dans `hugo.toml`) encapsule la FAQ dans une section pleine largeur d'une autre couleur, ex. `bg-gray-50 dark:bg-neurokube-800` pour un fond gris clair — pas de paramètre d'activation séparé, juste un défaut que chaque appel peut remplacer.
+`background` (fond blanc par défaut, identique sur les 3 palettes - voir `[params.faq]` dans `hugo.toml`) encapsule la FAQ dans une section pleine largeur d'une autre couleur, ex. `bg-gray-50 dark:bg-neurokube-800` pour un fond gris clair — pas de paramètre d'activation séparé, juste un défaut que chaque appel peut remplacer.
 
 #### 💡 Top Tips
 
@@ -1047,7 +1078,7 @@ tips:
 {{< /sokube-top-tips >}}
 ```
 
-Icônes disponibles pour le champ `icon` de chaque tip (une erreur explicite s'affiche si le nom ne correspond à aucune d'entre elles) : `pencil`, `network`, `key`, `camera`, `life-ring`, `people`, `robot`, `shield`, `wrench`.
+Icônes disponibles pour le champ `icon` de chaque tip (une erreur explicite s'affiche si le nom ne correspond à aucune d'entre elles) : `pencil`, `network`, `key`, `camera`, `life-ring`, `people`, `robot`, `shield`, `wrench`, `lightbulb`, `graduation-cap`, `rocket`, `gauge`, `cloud`, `medal`, `palette`, `id-card`, `dollar`, `crown`, `cycle` - liste et tracés SVG définis une seule fois dans `layouts/partials/icon.html`, réutilisée telle quelle par les `cards` du layout expertise (voir plus bas).
 
 #### 🧩 Layout "expertise"
 
@@ -1055,11 +1086,11 @@ Toutes les pages du sous-menu Expertises (`/site/content/*/expertises/*.md`, sau
 
 Ordre d'affichage sur la page (fixe, indépendant de l'ordre des champs dans le front matter) : `hero`, `callout`, `cards`, `features`, `faq`, puis `tips` toujours en tout dernier.
 
-- `hero` : `headline`, `image` (optionnel), `button_text`, `button_link`
-- `callout` : `title`, `description`, `button_text`, `button_link`
-- `cards` : `eyebrow` (optionnel), `title`, `description`, `items` (liste de `{title, text}`)
-- `features` : **liste** de blocs génériques image + liste numérotée (étapes d'un processus, argumentaire de certifications, points de vigilance, questions à se poser...) — autant de blocs que nécessaire, affichés à la suite les uns des autres dans l'ordre du front matter. Chaque bloc : `title`, `image`, `button_text`/`button_link` (optionnels), `items` (liste de `{title, text}`, `text` optionnel, numérotée automatiquement)
-- `faq` : `title`, `description` (optionnel), `show_button` (optionnel), `background` (optionnel), `items` (liste de `{question, answer, category}`)
+- `hero` : `headline`, `sub_headline` (optionnel), `image` (optionnel), `image_position` (optionnel, "left"/"right"), `palette` (optionnel, "default"/"kube"/"hr" - voir `[params.heroFondu]`), `fade_distance` (optionnel), `button_text`, `button_link` — rendu via `sokube-hero-fondu`
+- `callout` : `title`, `description`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.callout]`), `button_text`, `button_link` — rendu via `sokube-callout`
+- `cards` : `eyebrow` (optionnel, couleur pilotée par la palette - champ `eyebrow` de `[params.cards.<nom>]`), `title`, `description`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.cards]`, s'applique à toutes les cards de la section ainsi qu'à l'eyebrow), `items` (liste de `{icon, palette, title, text}` - `icon` optionnel, mêmes icônes que `tips` ci-dessous, voir `layouts/partials/icon.html` ; `palette` optionnel, surcharge la palette de la section pour cette seule card)
+- `features` : **liste** de blocs génériques image + liste numérotée (étapes d'un processus, argumentaire de certifications, points de vigilance, questions à se poser...) — autant de blocs que nécessaire, affichés à la suite les uns des autres dans l'ordre du front matter. Chaque bloc : `title`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.feature]`, couleur du badge numéroté et du bouton, propre à ce bloc), `image`, `button_text`/`button_link` (optionnels), `items` (liste de `{title, text}`, `text` optionnel, numérotée automatiquement)
+- `faq` : `title`, `description` (optionnel), `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.faq]`, couleur de l'accent, des markers, du menu de catégories et du bouton), `show_button` (optionnel), `background` (optionnel), `items` (liste de `{question, answer, category}`)
 - `tips` : bandeau "Tips by SoKube", toujours affiché en dernier — `title`, `description`, `items` (liste de `{icon, title, text}`, mêmes icônes que `sokube-top-tips` ci-dessus)
 
 Exemple minimal (une page qui n'a pour l'instant qu'un bandeau de tips, voir `kubernetes.md`) :
@@ -1080,7 +1111,33 @@ tips:
 ---
 ```
 
-Les couleurs de chaque section réutilisent les mêmes réglages `hugo.toml` que les shortcodes déjà existants (`[params.hero]`, `[params.callout.style]`, `[params.cardsSection.style]`/`[params.cards.default]`, `[params.feature.style]`, `[params.topTips]`, `[params.faq.style]`) - une seule source de vérité pour ces couleurs, partagée avec le reste du site. Les sections `tips` et `faq` du layout appellent directement les partials partagées `layouts/partials/top-tips.html` et `layouts/partials/faq.html`, les mêmes que celles utilisées en coulisses par les shortcodes `sokube-top-tips` et `faq` (règle 13) : toute évolution de leur rendu profite donc aux deux à la fois.
+Les couleurs de chaque section réutilisent les mêmes réglages `hugo.toml` que les shortcodes déjà existants (`[params.heroFondu]`, `[params.callout]`, `[params.cardsSection.style]`, `[params.feature.style]`, `[params.topTips]`, `[params.faq.style]`) - une seule source de vérité pour ces couleurs, partagée avec le reste du site. Les sections `tips`, `faq` et `callout` du layout appellent directement les partials partagées `layouts/partials/top-tips.html`, `layouts/partials/faq.html` et `layouts/partials/callout-block.html`, les mêmes que celles utilisées en coulisses par les shortcodes `sokube-top-tips`, `faq` et `sokube-callout` (règle 13) : toute évolution de leur rendu profite donc à la fois au layout et au shortcode. La couleur de l'icône d'une card reprend celle déjà définie pour cette palette (`[params.cards.<nom>].label`), pas de nouveau réglage à faire dans `hugo.toml`.
+
+`hero`, `callout`, `cards` et `features` sont chacun instanciables par page (règle 12) via une palette nommée (`"default"`/`"kube"`/`"hr"`, voir `[params.heroFondu]`, `[params.callout]`, `[params.cards]` et `[params.feature]` dans `hugo.toml`) : la valeur par défaut vit dans `hugo.toml`, mais chaque page - et même chaque card individuelle via `items[].palette` - peut la remplacer par son propre champ `palette` dans le front matter, sans toucher au code. C'est le même principe que pour les shortcodes `sokube-card`/`sokube-feature`/`sokube-callout` utilisés ailleurs sur le site.
+
+#### 🧩 Layout "job-listing"
+
+Les pages individuelles d'offre d'emploi (`/site/content/*/jobs/*.md`) utilisent le layout **job-listing** (`/site/layouts/_default/job-listing.html`, voir règle 14).
+
+Front matter :
+
+```
+layout: "job-listing"
+contractType: "cdi"          (optionnel, "cdi"/"cdd"/"stage", défaut "cdi" -
+                              voir [params.contractTypes] dans hugo.toml)
+location: "Genève"           (optionnel)
+intro: "..."                 (optionnel, sous le titre)
+missions:                    (optionnel, liste de strings)
+  - "..."
+skills:                      (optionnel, liste de strings courtes, en pastilles)
+  - "..."
+offer_intro: "..."           (optionnel)
+offer_points:                (optionnel, liste de strings)
+  - "..."
+apply_url: "..."             (optionnel, défaut params.jobListing.style.applyUrl par langue)
+```
+
+Le corps Markdown de la page est la description complète du poste. `contractType` (code interne, indépendant de la langue) est résolu en palette nommée (`"default"`/`"kube"`/`"hr"`) via `[params.contractTypes]`, la même table que `sokube-card` utilise pour déduire automatiquement sa palette depuis le label affiché sur les cards d'offres d'emploi de `hiring.md` (voir plus haut, section "🎴 Système de palettes des cartes") - une seule source de vérité, partagée entre le layout et le shortcode. La couleur du badge, du dégradé décoratif en haut de page, du bouton "Postuler" (section "Notre offre") et des pastilles de compétences (section "Vos compétences") vient ensuite de `[params.jobListing.<palette>]` (champs `badgeBackground`/`badgeText`/`colorVar`/`button`/`pillBackground`/`pillText`) ; le texte du badge ("CDI"/"Permanent"...) vient de `[params.contractTypes.<contractType>].label`, surchargé par langue.
 
 #### 🧭 Navigation et menus
 

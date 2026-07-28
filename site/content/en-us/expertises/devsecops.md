@@ -6,12 +6,14 @@ description: "SoKube supports you in implementing a DevOps or DevSecOps practice
 hero:
   headline: "Your DevSecOps Experts"
   image: "/images/expertises/devops.jpg"
+  palette: "default"
   button_text: "Let's talk about your project"
   button_link: "/contact"
 
 callout:
   title: "Looking for expertise in the DevOps or DevSecOps approach?"
   description: "At SoKube, we master the concepts and practices of the DevOps and DevSecOps approach. This includes knowledge of the tools and technologies used to automate software development and delivery processes, as well as the ability to work collaboratively with development, operations and security teams to improve the efficiency and quality of your software and platforms. Whether you're a software vendor or building applications for internal use, our experts are by your side to design, build and optimize your infrastructure."
+  palette: "kube"
   button_text: "Let's talk about it"
   button_link: "/contact"
 
@@ -19,20 +21,27 @@ cards:
   eyebrow: "Benefit from expert advice to accelerate your digital transformation"
   title: "Your DevOps partner"
   description: "At SoKube, we have a strong command of the DevOps approach, and our consultants are able to work closely with your development, operations and security teams to optimize your software development and delivery processes, efficiently and securely."
+  palette: "kube"
   items:
-    - title: "Knowledge of fundamental concepts"
+    - icon: "graduation-cap"
+      title: "Knowledge of fundamental concepts"
       text: "of DevOps, such as agility, collaboration, sharing, automation, measurement, etc."
-    - title: "Command of the tools and technologies"
+    - icon: "wrench"
+      title: "Command of the tools and technologies"
       text: "commonly used in a DevOps environment, such as Git, Gitlab, Docker, Kubernetes, GitOps, Cloud, Prometheus, Grafana, ELK, Vault, etc."
-    - title: "Ability to work"
+    - icon: "people"
+      title: "Ability to work"
       text: "in collaboration with your development, operations and security teams to optimize software development, delivery and platform-building processes."
-    - title: "Command of management practices"
+    - icon: "shield"
+      title: "Command of management practices"
       text: "for quality and security in a DevSecOps environment, such as continuous integration, automated testing, error handling, environment isolation, ..."
-    - title: "Ability to assess"
+    - icon: "gauge"
+      title: "Ability to assess"
       text: "software performance and identify improvement opportunities to accelerate development and delivery cycles."
 
 features:
   - title: "We support you through every phase of your DevOps / DevSecOps project:"
+    palette: "kube"
     image: "/images/expertises/happy-men-colleagues-office-using-computer-looking-aside.jpg"
     button_text: "Learn more"
     button_link: "/services/services"
@@ -72,6 +81,7 @@ tips:
 
 faq:
   title: "Discover the benefits of implementing a DevOps / DevSecOps practice"
+  palette: "kube"
   show_button: true
   background: "bg-gray-50 dark:bg-neurokube-800"
   items:

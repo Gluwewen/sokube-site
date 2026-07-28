@@ -4,20 +4,27 @@
     Wraps a group of sokube-feature blocks with a centered title/description
     header.
 
-    Site-wide : la couleur de description et le fond par défaut vivent dans
-    [params.featuresSection.style] (hugo.toml) - surchargeable ponctuellement.
+    Instanciable par page (règle 12) : fonctionne par palette nommée pour la
+    couleur de la description, même convention que sokube-callout (règle 5) -
+    la palette vit dans [params.featuresSection.<nom>] (hugo.toml, y compris
+    la palette "default"), le template ne fait que la sélectionner et
+    vérifier qu'elle existe (erreur explicite sinon, règle 8).
 
     Paramètres :
       id          - ancre de la section (optionnel, déduite du titre sinon)
+      palette     - nom de la palette : "default", "kube" ou "hr" (défaut
+                    "default") - voir [params.featuresSection] (hugo.toml)
       title       - titre (optionnel)
       description - texte sous le titre (optionnel)
-      descriptionColor - couleur du texte (défaut: params.featuresSection.style.description)
-      background  - fond de la section (défaut: params.featuresSection.style.background,
-                    ex: dégradé gris clair en haut vers blanc en bas)
+      descriptionColor - surcharge ponctuelle de la couleur du texte,
+                    par-dessus la palette choisie (défaut: palette.description)
+      background  - surcharge ponctuelle du fond de la section, par-dessus
+                    la palette choisie (défaut: palette.background, ex:
+                    dégradé gris clair en haut vers blanc en bas)
       .Inner      - contenu (typiquement une série de sokube-feature)
 
     Appel minimal :
-      {{</* sokube-features-section title="..." description="..." >}}
+      {{</* sokube-features-section title="..." description="..." palette="kube" >}}
         ...
       {{</* /sokube-features-section >}}
 */}}
@@ -25,8 +32,16 @@
 {{ $title := .Get "title" }}
 {{ $description := .Get "description" }}
 {{ $id := .Get "id" | default ($title | anchorize) }}
-{{ $descriptionColor := .Get "descriptionColor" | default site.Params.featuresSection.style.description }}
-{{ $background := .Get "background" | default site.Params.featuresSection.style.background }}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $style := index site.Params.featuresSection $paletteName }}
+{{ if not $style }}
+    {{ errorf "sokube-features-section: palette %q introuvable dans [params.featuresSection] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $style = site.Params.featuresSection.default }}
+{{ end }}
+
+{{ $descriptionColor := .Get "descriptionColor" | default $style.description }}
+{{ $background := .Get "background" | default $style.background }}
 
 <section
     id="{{ $id }}"

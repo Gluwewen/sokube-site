@@ -3,7 +3,7 @@ title: "FAQ"
 layout: "simple"
 ---
 
-{{< faq >}}
+{{< faq palette="kube" >}}
 title: "Questions fréquemment posées"
 description: "Retrouvez les réponses aux questions les plus fréquentes sur les activités de SoKube."
 questions:

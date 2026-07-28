@@ -6,12 +6,14 @@ description: "SoKube supports you in deploying and operating your Kubernetes clu
 hero:
   headline: "Your Kubernetes Experts"
   image: "/images/expertises/expertise-kubernetes-2jpg.jpg"
+  palette: "default"
   button_text: "Let's talk about your project"
   button_link: "/contact"
 
 callout:
   title: "Looking for expertise around Kubernetes?"
   description: "At SoKube, we master the use and management of container orchestration systems based on Kubernetes, as well as its ecosystem. Beyond knowledge of Kubernetes concepts and features, and the tools and practices commonly used to deploy, manage and monitor applications in a Kubernetes environment, our consultants master the architectural, security, operational and support aspects of this technology. Our Kubernetes experts are able to work in different contexts, whether it's companies using Kubernetes to manage their applications, Cloud providers offering Kubernetes solutions, or software vendors building tools to manage Kubernetes clusters."
+  palette: "kube"
   button_text: "Let's talk about it"
   button_link: "/contact"
 
@@ -19,22 +21,30 @@ cards:
   eyebrow: "Benefit from expert advice to accelerate your digital transformation"
   title: "Your Kubernetes partner"
   description: "At SoKube, we have strong expertise in the Kubernetes container orchestration system. We can help with all your Kubernetes needs: from designing and setting up a new Kubernetes cluster to migrating an existing one, from training to support."
+  palette: "kube"
   items:
-    - title: "Knowledge of fundamental concepts"
+    - icon: "graduation-cap"
+      title: "Knowledge of fundamental concepts"
       text: "of Kubernetes, such as architecture, containers, pods, services, deployments, ingress, secrets, and so on."
-    - title: "Ability to deploy and manage"
+    - icon: "rocket"
+      title: "Ability to deploy and manage"
       text: "applications in a Kubernetes environment, using the right tools and commands."
-    - title: "Command of the observability tools and practices"
+    - icon: "camera"
+      title: "Command of the observability tools and practices"
       text: "commonly used to monitor and supervise Kubernetes clusters, such as Prometheus, Grafana, Kibana, Elastic, etc."
-    - title: "Ability to troubleshoot"
+    - icon: "life-ring"
+      title: "Ability to troubleshoot"
       text: "common issues encountered in a Kubernetes environment, such as deployment errors, slow performance, security issues, and so on."
-    - title: "Knowledge of best practices"
+    - icon: "shield"
+      title: "Knowledge of best practices"
       text: "for Kubernetes cluster security, such as secrets management, securing communications, isolation, access rights, etc."
-    - title: "Partners of the major Kubernetes distributions"
+    - icon: "medal"
+      title: "Partners of the major Kubernetes distributions"
       text: "RedHat OpenShift, Rancher RKE2 / K3S, VMware Tanzu, D2iQ Konvoy, Google GKE, Amazon EKS, Azure AKS, Exoscale SKS, ..."
 
 features:
   - title: "Kubernetes expert"
+    palette: "kube"
     image: "/images/expertises/kubernetes-cnf-logo.png"
     button_text: "Learn more about our training"
     button_link: "/training"
@@ -47,6 +57,7 @@ features:
         text: "this certification also lets us deliver official Kubernetes training."
 
   - title: "If you're asking yourself these questions about Kubernetes:"
+    palette: "kube"
     image: "/images/expertises/serious-man-thinking.jpg"
     button_text: "Then get in touch with us!"
     button_link: "/contact"
@@ -64,6 +75,7 @@ features:
 
 faq:
   title: "Discover the benefits of Kubernetes, the leading container orchestration platform"
+  palette: "kube"
   show_button: true
   button_text: "Want to know more?"
   button_link: "/contact"
@@ -84,7 +96,7 @@ tips:
   title: "What are the key points of attention when deploying Kubernetes?"
   description: "Deploying Kubernetes can be a complex project that involves many changes for a company. It's important to plan this migration carefully by following certain best practices to make sure everything goes smoothly. Here are a few points to keep in mind when deploying Kubernetes:"
   items:
-    - icon: "pencil"
+    - icon: "cloud"
       title: "Choose the right deployment environment"
       text: "Kubernetes can be deployed in different environments, such as on-premise, on dedicated servers, or in the Cloud. It's important to choose the environment that best fits your needs in terms of performance, scalability, security, and so on."
     - icon: "network"
@@ -93,7 +105,7 @@ tips:
     - icon: "key"
       title: "Manage secrets"
       text: "Kubernetes has a notion of secrets, but it's a limited one. It's recommended to use third-party solutions to encrypt your secrets, or to use a centralized, secure solution (such as Vault). It's important to configure secrets properly and protect them against unauthorized access."
-    - icon: "camera"
+    - icon: "gauge"
       title: "Monitor performance"
       text: "Kubernetes lets you monitor the performance of applications and containers in real time. It's important to configure monitoring tools and keep an eye on performance indicators to catch potential issues early and stay proactive."
     - icon: "life-ring"

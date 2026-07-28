@@ -9,8 +9,17 @@
     compris la palette "default"), le template ne fait que la sélectionner
     et vérifier qu'elle existe (erreur explicite sinon, voir règle 8).
 
+    Si "palette" n'est pas fourni ET que "label" correspond à un type de
+    contrat connu (ex. "CDI"/"Permanent"), la palette est déduite
+    automatiquement via layouts/partials/resolve-contract-palette.html et
+    [params.contractTypes] (hugo.toml) - robuste au changement de langue,
+    utilisé par les cards d'offres d'emploi de hiring.md. Sans
+    correspondance (cas normal pour toute card qui n'est pas une offre
+    d'emploi), comportement inchangé : palette "default".
+
     Paramètres :
-      palette - nom de la palette à utiliser (défaut "default"; voir aussi
+      palette - nom de la palette à utiliser (défaut : déduit du label si
+                c'est un type de contrat connu, sinon "default"; voir aussi
                 "kube" et "hr" dans hugo.toml)
       label   - petit texte au-dessus du titre (optionnel)
       title   - titre de la carte
@@ -21,17 +30,27 @@
       Metrics, logs, Kubernetes state, Git history: with no link between
       them, correlating everything by hand takes time.
       {{</* /sokube-card >}}
+
+    Appel pour une offre d'emploi (palette déduite automatiquement de "CDI") :
+      {{</* sokube-card label="CDI" title="Architecte DevSecOps" >}}
+      ...
+      {{</* /sokube-card >}}
 */}}
 
-{{ $paletteName := .Get "palette" | default "default" }}
+{{ $label := .Get "label" }}
+{{ $title := .Get "title" }}
+
+{{ $paletteName := .Get "palette" }}
+{{ if eq $paletteName "" }}
+    {{ $paletteName = partial "resolve-contract-palette.html" $label }}
+{{ end }}
+{{ $paletteName = $paletteName | default "default" }}
+
 {{ $style := index site.Params.cards $paletteName }}
 {{ if not $style }}
     {{ errorf "neurokube-card: palette %q introuvable dans [params.cards] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
     {{ $style = site.Params.cards.default }}
 {{ end }}
-
-{{ $label := .Get "label" }}
-{{ $title := .Get "title" }}
 
 <div
     class="

@@ -4,7 +4,8 @@ layout: "company"
 description: "Découvrez tous nos partenaires dans l'écosystème des solutions Cloud Native et la mise en place de ces méthodes."
 ---
 
-{{< sokube-hero
+{{< sokube-hero-fondu
+    palette="default"
     headline="Nos partenaires"
     sub_headline="Élaboré pour vous aider à accélérer votre transition vers une organisation Cloud native, notre programme de partenaires est composé d'éditeurs de solutions logicielles, de fournisseurs de services cloud et d'experts en transformation numérique. Il vise, au travers de notre expertise, à vous fournir des outils, des conseils et des ressources pour vous aider à adopter efficacement les technologies cloud et à maximiser les avantages qu'elles offrent. De plus, vous pouvez acquérir, chez SoKube, les licences des produits de nos partenaires afin de vous simplifier la cotation et la gestion associée de ces logiciels."
     show_secondary_button="false"
@@ -18,7 +19,7 @@ description: "Découvrez tous nos partenaires dans l'écosystème des solutions 
     description="Chez SoKube, nous croyons que cette collaboration est essentielle pour délivrer des solutions innovantes, évolutives et sur mesure. Déterminés à maintenir notre position de leader dans l'industrie en utilisant les dernières technologies, nous attachons une grande importance à sélectionner les meilleurs acteurs DevOps, Cloud, Cloud Native et Agile afin de mettre en œuvre les projets les plus efficaces et les plus innovants pour nos clients.\n\nFort de son expérience et de son savoir-faire, SoKube est certifié sur de nombreuses technologies et solutions, afin de vous apporter une expertise de premier plan pour vos projets Cloud, Cloud Native, DevOps, DevSecOps et Agile."
 >}}
 
-{{< sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,middleware:Middleware,security:Sécurité,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
+{{< sokube-partners-filter palette="default" categories="cncf:CNCF,kubernetes:Kubernetes & Écosystème,middleware:Middleware,security:Sécurité,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
 
 {{< sokube-partner-category id="cncf" title="CNCF (Cloud Native Computing Foundation)" >}}
 

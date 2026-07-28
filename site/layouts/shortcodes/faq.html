@@ -11,17 +11,15 @@
       answer: "..."        (Markdown supported)
       category: "..."      (optional - omit to leave the question uncategorized)
 
-    Parameters (all optional, override the hugo.toml default for this one
-    instance - combine a light-mode Tailwind class and a dark: variant in
-    the same string):
-      accentColor      - arrow in the menu + expand/collapse icons
-                         (default: params.faq.style.accent)
-      markerColor      - bullet/number markers inside answers' lists
-                         (default: params.faq.style.marker)
-      menuTextColor    - category nav text, inactive state
-                         (default: params.faq.style.menuText)
-      menuActiveTextColor - category nav text, active state
-                         (default: params.faq.style.menuActiveText)
+    Parameters :
+      palette          - nom de la palette (accent, markers, menu, bouton) :
+                         "default", "kube" ou "hr" (défaut "default") - voir
+                         [params.faq] (hugo.toml)
+      accentColor, markerColor, menuTextColor, menuActiveTextColor,
+      buttonColor, background - surcharges ponctuelles par-dessus la palette
+                         choisie, pour un cas exceptionnel (combiner une
+                         classe Tailwind claire + variante dark: dans la
+                         même chaîne)
       showButton       - "true"/"false" (default "false") - optional centered
                          button below the questions, e.g. to point to the
                          contact page. Off by default: only turn it on for
@@ -32,9 +30,6 @@
                          [languages.xx.params.faq.button])
       buttonLink       - button link (default: params.faq.button.link, same
                          override rule as buttonText)
-      background       - full-width section background (default: params.faq.style.background,
-                         white ; pass e.g. "bg-gray-50 dark:bg-neurokube-800"
-                         for a light gray section)
 
     Minimal call:
       {{</* faq >}}
@@ -44,9 +39,9 @@
           answer: "..."
       {{</* /faq >}}
 
-    Full call with categories, a one-off color override, the optional bottom
-    button and a light gray section background:
-      {{</* faq accentColor="text-kube-600 dark:text-kube-600" showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
+    Full call with a named palette, categories, a one-off color override,
+    the optional bottom button and a light gray section background:
+      {{</* faq palette="kube" showButton="true" background="bg-gray-50 dark:bg-neurokube-800" >}}
       title: "Most frequently asked questions"
       description: "Find answers to frequently asked questions."
       questions:
@@ -61,6 +56,7 @@
 {{ partial "faq.html" (dict
     "id" (printf "shortcode-%d" .Ordinal)
     "data" $data
+    "palette" (.Get "palette")
     "accentColor" (.Get "accentColor")
     "markerColor" (.Get "markerColor")
     "menuTextColor" (.Get "menuTextColor")

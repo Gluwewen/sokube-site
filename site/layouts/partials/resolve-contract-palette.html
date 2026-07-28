@@ -1,0 +1,36 @@
+{{/*
+    resolve-contract-palette (partial)
+
+    Déduit une palette nommée ("default"/"kube"/"hr") à partir d'un texte de
+    label affiché (ex. "CDI", "Permanent"), en le comparant aux labels de
+    type de contrat connus dans [params.contractTypes] (hugo.toml, voir
+    [languages.xx.params.contractTypes.<code>].label pour le texte par
+    langue - le champ "palette", lui, n'est jamais surchargé par langue).
+
+    Sert à ce que layouts/shortcodes/sokube-card.html puisse déduire
+    automatiquement sa palette depuis le label d'une carte d'offre d'emploi,
+    quelle que soit la langue de la page, sans qu'il soit nécessaire de
+    passer palette="..." à la main sur chaque appel.
+
+    Ne renvoie RIEN (chaîne vide) si le label ne correspond à aucun type de
+    contrat connu - c'est le cas normal pour toute card qui n'est pas une
+    offre d'emploi (ex. les cards "PROBLÈME 01" de about.md) : l'appelant
+    doit alors retomber sur son propre comportement par défaut.
+
+    Paramètre : une chaîne (pas un dict) - le label à résoudre.
+
+    Exemple :
+      {{ partial "resolve-contract-palette.html" "CDI" }} -> "kube"
+      {{ partial "resolve-contract-palette.html" "PROBLÈME 01" }} -> ""
+*/}}
+
+{{ $label := . }}
+{{ $result := "" }}
+{{ if ne $label "" }}
+    {{ range $code, $contract := site.Params.contractTypes }}
+        {{ if eq $contract.label $label }}
+            {{ $result = $contract.palette }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ return $result }}

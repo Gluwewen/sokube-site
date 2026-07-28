@@ -1,0 +1,77 @@
+{{/*
+    callout-block
+
+    Shared rendering logic behind the "sokube-callout" shortcode. Extracted
+    into a partial (règle 13 - see brand-heading.html/cta-block.html for the
+    same pattern) so it can ALSO be called directly from a Go template, e.g.
+    layouts/_default/expertise.html, since shortcodes cannot be invoked from
+    layouts.
+
+    Every value must already be fully resolved by the caller (this partial
+    does not read .Site/.Page) - see layouts/shortcodes/sokube-callout.html
+    for how the palette is resolved from params.callout in hugo.toml.
+
+    Expected dict keys (all optional unless noted):
+      id                                - ancre de la section
+      title, description
+      primaryText, primaryLink, primaryExternal ("true"/"false")
+      secondaryText, secondaryLink, secondaryExternal ("true"/"false")
+      background (required)            - fond de la section
+      descriptionColor (required)      - couleur du texte de description
+      primaryClass (required)          - fond + texte + hover du bouton principal
+      secondaryClass (required)        - fond + texte + bordure + hover du bouton secondaire
+*/}}
+{{ $id := .id }}
+{{ $title := .title }}
+{{ $description := .description }}
+
+{{ $primaryText := .primaryText }}
+{{ $primaryLink := .primaryLink | default "#" }}
+{{ $primaryExternal := .primaryExternal | default "false" }}
+
+{{ $secondaryText := .secondaryText }}
+{{ $secondaryLink := .secondaryLink | default "#" }}
+{{ $secondaryExternal := .secondaryExternal | default "false" }}
+
+{{ $background := .background }}
+{{ $descriptionColor := .descriptionColor }}
+{{ $primaryClass := .primaryClass }}
+{{ $secondaryClass := .secondaryClass }}
+
+<section {{ with $id }}id="{{ . }}"{{ end }} class="{{ $background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
+  <div class="container text-center max-w-3xl mx-auto">
+
+    {{ with $title }}
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+      {{ . }}
+    </h2>
+    {{ end }}
+
+    {{ with $description }}
+    <p class="text-xl {{ $descriptionColor }} mb-10">
+      {{ . }}
+    </p>
+    {{ end }}
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
+      {{ with $primaryText }}
+      <a href="{{ $primaryLink }}"
+         {{ if eq $primaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
+         class="btn text-center {{ $primaryClass }}">
+        {{ . }}
+      </a>
+      {{ end }}
+
+      {{ with $secondaryText }}
+      <a href="{{ $secondaryLink }}"
+         {{ if eq $secondaryExternal "true" }}target="_blank" rel="noopener noreferrer"{{ end }}
+         class="btn text-center border-2 {{ $secondaryClass }}">
+        {{ . }}
+      </a>
+      {{ end }}
+
+    </div>
+
+  </div>
+</section>

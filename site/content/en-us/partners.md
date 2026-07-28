@@ -4,7 +4,8 @@ layout: "company"
 description: "Discover all our partners in the Cloud Native solutions ecosystem and the implementation of these methods."
 ---
 
-{{< sokube-hero
+{{< sokube-hero-fondu
+    palette="kube"
     headline="Our partners"
     sub_headline="Designed to help you accelerate your transition to a Cloud Native organization, our partner program brings together software vendors, cloud service providers and digital transformation experts. Through our expertise, it aims to give you the tools, advice and resources you need to adopt cloud technologies effectively and get the most out of them. On top of that, you can purchase your partners' software licenses directly through SoKube, simplifying quoting and license management."
     show_secondary_button="false"
@@ -18,7 +19,7 @@ description: "Discover all our partners in the Cloud Native solutions ecosystem 
     description="At SoKube, we believe this collaboration is essential to deliver innovative, scalable, tailor-made solutions. Committed to staying at the forefront of the industry by using the latest technologies, we put great care into selecting the best DevOps, Cloud, Cloud Native and Agile players to run the most efficient and innovative projects for our clients.\n\nBacked by years of experience and expertise, SoKube holds certifications across a wide range of technologies and solutions, giving you top-tier expertise for your Cloud, Cloud Native, DevOps, DevSecOps and Agile projects."
 >}}
 
-{{< sokube-partners-filter categories="cncf:CNCF,kubernetes:Kubernetes & Ecosystem,middleware:Middleware,security:Security,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
+{{< sokube-partners-filter palette="kube" categories="cncf:CNCF,kubernetes:Kubernetes & Ecosystem,middleware:Middleware,security:Security,ci:CI/CD,cloud:Cloud,finops:FinOps" >}}
 
 {{< sokube-partner-category id="cncf" title="CNCF (Cloud Native Computing Foundation)" >}}
 

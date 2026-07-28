@@ -6,12 +6,14 @@ description: "SoKube vous accompagne dans la conception et le développement de 
 hero:
   headline: "Vos Experts Cloud Native Applications"
   image: "/images/expertises/cloud-native-hero.jpg"
+  palette: "default"
   button_text: "Parlons de votre projet"
   button_link: "/contact"
 
 callout:
   title: "Vous recherchez de l'Expertise autour des applications et environnements Cloud Native ?"
   description: "Chez SoKube, nous maîtrisons les concepts et les pratiques de développement d'applications natives dans un monde de containers, Cloud ou Serverless. Nos experts en Cloud Native Applications disposent d'une connaissance avancée des architectures, des technologies et des outils utilisés pour construire et déployer des applications dans un environnement Kubernetes, Cloud ou Serverless. Ils ont également la capacité à travailler en collaboration étroite avec vos équipes de développement et d'exploitation pour optimiser les performances et la mise à l'échelle de vos applications."
+  palette: "kube"
   button_text: "Parlons en ensemble"
   button_link: "/contact"
 
@@ -19,20 +21,27 @@ cards:
   eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"
   title: "Votre partenaire Cloud Native"
   description: "Chez SoKube, nous disposons d'un savoir-faire pour la mise en œuvre de Cloud Native Applications afin de vous faire bénéficier de nombreux avantages, tels que l'amélioration de la flexibilité et de l'agilité de vos applications, davantage de scalabilité, une disponibilité de services, la réduction de vos coûts d'exploitation."
+  palette: "kube"
   items:
-    - title: "Connaissance des architectures et des concepts fondamentaux"
+    - icon: "graduation-cap"
+      title: "Connaissance des architectures et des concepts fondamentaux"
       text: "des applications Cloud natives, tels que les microservices, les conteneurs, les APIs, etc."
-    - title: "Maîtrise des outils et des technologies"
+    - icon: "wrench"
+      title: "Maîtrise des outils et des technologies"
       text: "couramment utilisés dans un environnement On-premise ou Cloud, tels que Docker, Kubernetes, Serverless, etc."
-    - title: "Savoir-faire à travailler"
+    - icon: "people"
+      title: "Savoir-faire à travailler"
       text: "en collaboration avec vos équipes de développement et d'exploitation pour optimiser les performances et la mise à l'échelle des applications Cloud natives."
-    - title: "Maîtrise des pratiques de gestion"
+    - icon: "shield"
+      title: "Maîtrise des pratiques de gestion"
       text: "de la qualité et de la sécurité dans un environnement Cloud, tels que l'intégration continue, les tests automatisés, la gestion des erreurs, etc."
-    - title: "Capacité à évaluer"
+    - icon: "gauge"
+      title: "Capacité à évaluer"
       text: "les performances, observer les applications et identifier les opportunités d'amélioration pour accélérer les cycles de développement et de livraison."
 
 features:
   - title: "Si vous vous posez ces questions autour du Cloud Native !"
+    palette: "kube"
     image: "/images/expertises/serious-man-thinking.jpg"
     button_text: "Alors contactez-nous !"
     button_link: "/contact"
@@ -52,6 +61,7 @@ features:
 
 faq:
   title: "Découvrez les avantages de la mise en œuvre d'une démarche Cloud Native Applications"
+  palette: "kube"
   show_button: true
   button_text: "Envie d'en savoir plus ?"
   button_link: "/contact"
@@ -82,7 +92,7 @@ tips:
     - icon: "camera"
       title: "L'observabilité"
       text: "Il est important de disposer d'outils pour surveiller et mesurer les performances de l'application et de détecter rapidement les problèmes éventuels. Cela peut être réalisé en utilisant des outils de surveillance tels que des journaux, des métriques et des outils de visualisation."
-    - icon: "wrench"
+    - icon: "cycle"
       title: "La gestion des déploiements"
       text: "Lors de la mise en œuvre d'une application cloud native, il est important de disposer d'un processus de déploiement automatisé et fiable pour assurer une livraison rapide et en toute confiance des nouvelles fonctionnalités et correctifs."
 ---

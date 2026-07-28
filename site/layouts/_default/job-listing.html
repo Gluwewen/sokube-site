@@ -4,15 +4,25 @@
     Page individuelle d'une offre d'emploi ("/jobs/<slug>/", ex:
     architecte-devsecops.md). Pas de fil d'Ariane (volontairement omis).
 
-    Règle 14 : la couleur du badge "type de contrat" (et du dégradé
-    décoratif en haut de page) vient de la palette nommée
-    [params.jobListing.<contractType>] (hugo.toml), sur le même principe
-    que sokube-feature / layouts/_default/feature.html — une seule source
-    de vérité pour les couleurs "cdi"/"cdd"/"stage" sur tout le site.
+    Règle 14 : le contractType du front matter (code interne "cdi"/"cdd"/
+    "stage", langue-indépendant) est résolu en palette nommée
+    ("default"/"kube"/"hr") via [params.contractTypes] (hugo.toml) - la même
+    table que layouts/shortcodes/sokube-card.html utilise pour déduire
+    automatiquement sa palette depuis le label affiché sur les cards
+    d'offres d'emploi de hiring.md (voir
+    layouts/partials/resolve-contract-palette.html). La couleur du badge, du
+    dégradé décoratif en haut de page, du bouton "Postuler" (section "Notre
+    offre") et des pastilles de compétences (section "Vos compétences")
+    vient ensuite de
+    [params.jobListing.<palette>], sur le même principe que sokube-feature /
+    layouts/_default/feature.html — une seule source de vérité pour les
+    couleurs sur tout le site. Le texte du badge, lui, vient de
+    [params.contractTypes.<contractType>].label (par langue).
 
     Front matter :
       layout       - "job-listing" (obligatoire)
-      contractType - nom de la palette : "cdi", "cdd" ou "stage" (défaut "cdi")
+      contractType - code de type de contrat : "cdi", "cdd" ou "stage"
+                      (défaut "cdi") - voir [params.contractTypes] (hugo.toml)
       location     - lieu du poste (ex: "Genève")
       intro        - court paragraphe d'accroche affiché sous le titre
       missions     - liste de strings, affichées en grille de cartes
@@ -32,10 +42,16 @@
 */}}
 {{ define "main" }}
 {{ $contractType := .Params.contractType | default "cdi" }}
-{{ $badgeStyle := index site.Params.jobListing $contractType }}
+{{ $contractStyle := index site.Params.contractTypes $contractType }}
+{{ if not $contractStyle }}
+    {{ errorf "job-listing layout: contractType %q introuvable dans [params.contractTypes] (hugo.toml) — page %s" $contractType .File.Path }}
+    {{ $contractStyle = site.Params.contractTypes.cdi }}
+{{ end }}
+{{ $paletteName := $contractStyle.palette | default "default" }}
+{{ $badgeStyle := index site.Params.jobListing $paletteName }}
 {{ if not $badgeStyle }}
-    {{ errorf "job-listing layout: palette %q introuvable dans [params.jobListing] (hugo.toml) — page %s" $contractType .File.Path }}
-    {{ $badgeStyle = site.Params.jobListing.cdi }}
+    {{ errorf "job-listing layout: palette %q introuvable dans [params.jobListing] (hugo.toml) — page %s" $paletteName .File.Path }}
+    {{ $badgeStyle = site.Params.jobListing.default }}
 {{ end }}
 {{ $style := site.Params.jobListing.style }}
 <article class="job-listing-page" style="--badge-color: var({{ $badgeStyle.colorVar | safeCSS }})">
@@ -66,7 +82,7 @@
                 </a>
                 <div class="flex flex-wrap items-center gap-3 mb-6">
                     <span class="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-bold {{ $badgeStyle.badgeBackground }} {{ $badgeStyle.badgeText }}">
-                        {{ $badgeStyle.label }}
+                        {{ $contractStyle.label }}
                     </span>
                     {{ with .Params.location }}
                     <span class="inline-flex items-center gap-1.5 text-sm font-semibold {{ $style.sectionText }}">
@@ -123,7 +139,7 @@
                 <h2 class="text-2xl font-bold {{ $style.sectionTitle }} mb-10 text-center">{{ i18n "jobSkillsTitle" }}</h2>
                 <div class="flex flex-wrap justify-center gap-3">
                     {{ range .Params.skills }}
-                    <span class="inline-block px-4 py-2 rounded-full text-sm font-medium {{ $style.pillBackground }} {{ $style.pillText }}">
+                    <span class="inline-block px-4 py-2 rounded-full text-sm font-medium {{ $badgeStyle.pillBackground }} {{ $badgeStyle.pillText }}">
                         {{ . }}
                     </span>
                     {{ end }}
@@ -153,7 +169,7 @@
                     {{ end }}
                 </div>
                 <div class="mt-12">
-                    <a href="{{ .Params.apply_url | default $style.applyUrl }}" class="inline-block px-8 py-3 rounded-full font-semibold {{ $style.applyButton }}">
+                    <a href="{{ .Params.apply_url | default $style.applyUrl }}" class="inline-block px-8 py-3 rounded-full font-semibold {{ $badgeStyle.button }}">
                         {{ i18n "apply" }}
                     </a>
                 </div>

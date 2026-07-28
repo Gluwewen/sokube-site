@@ -1,0 +1,32 @@
+{{/*
+    tw-force (partial)
+
+    Préfixe chaque classe d'une chaîne Tailwind combinée (claire + dark:) par
+    le modificateur "!" (important), inséré juste après le dernier préfixe de
+    variante ("dark:", "hover:dark:"...) s'il y en a un, sinon au début.
+
+    Sert uniquement à faire gagner une classe de couleur à une seule classe
+    (ex. "text-kube-600") face à une règle CSS écrite à la main dans le thème
+    qui a une spécificité plus élevée qu'une simple classe (ex. ".prose a" -
+    voir layouts/partials/faq.html, où les liens du menu de catégories et le
+    bouton du bas sont rendus à l'intérieur d'un conteneur .prose par certains
+    layouts, ex. layouts/_default/simple.html pour faq.md/offers.md).
+    N'utiliser que là où c'est nécessaire (liens <a> visés par ".prose a") -
+    pas un outil à appliquer par défaut à toute classe de couleur du site.
+
+    Paramètre : une chaîne (pas un dict) - la valeur combinée de classes à
+    transformer, ex. "text-kube-600 dark:text-kube-600".
+
+    Exemple :
+      {{ partial "tw-force.html" "text-kube-600 dark:text-kube-600" }}
+      -> "!text-kube-600 dark:!text-kube-600"
+*/}}
+
+{{ $classes := . }}
+{{ $out := slice }}
+{{ range (split $classes " ") }}
+    {{ if . }}
+        {{ $out = $out | append (replaceRE `(:|^)([^:]+)$` "${1}!${2}" .) }}
+    {{ end }}
+{{ end }}
+{{ delimit $out " " }}

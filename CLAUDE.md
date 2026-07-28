@@ -28,7 +28,7 @@ Pas de paramètres séparés type `backgroundLight`/`backgroundDark`. Toute nouv
 
 Toute valeur par défaut de style (couleur, palette...) vit dans `hugo.toml`, jamais codée en dur dans le template du shortcode. Objectif : pouvoir reconfigurer entièrement l'aspect du site (ou en extraire un thème réutilisable pour un autre site) sans toucher au code des shortcodes.
 
-- **Shortcodes de type "section", instanciés une fois par page** (hero, cta, callout, highlight-section...) : la valeur par défaut vit dans `hugo.toml`, sous `[params.<nom>.style]`, avec override possible par langue dans `[languages.xx.params.<nom>]` et par instance via les paramètres du shortcode.
+- **Shortcodes de type "section", instanciés une fois par page** (hero, cta, callout, highlight-section...) : la valeur par défaut vit dans `hugo.toml`, sous `[params.<nom>.style]`, avec override possible par langue dans `[languages.xx.params.<nom>]` et par instance via les paramètres du shortcode. **Sauf si la couleur doit pouvoir varier d'une page à l'autre : voir règle 15.**
 - **Shortcodes répétés plusieurs fois sur une même page** (card, feature, testimonial...) : fonctionnent par palettes nommées, toutes définies dans `hugo.toml` (y compris la palette `default`, ex. `[params.cards.default]` pour `sokube-card`) — le template ne fait que sélectionner la palette demandée (`palette="kube"`) et valider son existence (règle 8), il ne contient aucune couleur en dur.
 
 Le template d'un shortcode ne doit donc contenir aucune classe Tailwind de couleur de marque en dur : seules les classes structurelles (règle 3) peuvent l'être.
@@ -68,6 +68,16 @@ Un shortcode ne peut être invoqué que depuis le contenu Markdown d'une page �
 ## Règle 14 — Périmètre étendu aux layouts de page
 
 Les règles 3, 4, 5 et 8 (aspect structurel codé en dur, convention de couleur clair/sombre combinée, valeurs par défaut dans `hugo.toml`, validation `errorf` d'une config nommée) ne concernent pas que les shortcodes : elles s'appliquent à tout template du site, y compris les layouts de page (`layouts/_default/*.html`) et leur front matter. Un layout de page ne doit pas dupliquer une couleur de marque en dur ou dans le front matter de chaque page (palette, variante sombre...) : la source unique reste `hugo.toml`, avec le même système de palette nommée que pour un shortcode répété (règle 5) si le layout a besoin de plusieurs variantes de couleur. Voir `layouts/_default/feature.html`, qui réutilise la palette nommée `[params.feature.<nom>]` déjà définie pour le shortcode `sokube-feature` plutôt que de dupliquer les couleurs dans le front matter de chaque page `/features/*`.
+
+## Règle 15 — Palette nommée dès que la couleur peut varier par page
+
+La distinction "section instanciée une fois" / "shortcode répété plusieurs fois" (règle 5) ne détermine que le nombre d'instances par page, pas la façon de gérer la couleur. Dans les deux cas, dès qu'un shortcode ou un layout (règle 14) a une couleur (fond, texte, bouton...) qui peut raisonnablement devoir varier d'une page à l'autre — pas seulement d'une langue à l'autre —, il doit exposer un paramètre `palette` (défaut `"default"` si absent), adossé à des palettes nommées définies dans `hugo.toml` sous `[params.<nom>.default/kube/hr/...]`, avec validation `errorf` de l'existence de la palette demandée (règle 8). C'est le même mécanisme, qu'il s'agisse d'un composant instancié une fois par page (`sokube-hero-fondu`, `sokube-callout`, `sokube-faq`, `sokube-two-columns`, `sokube-partners-filter`, `sokube-features-section`) ou plusieurs fois (`sokube-card`, `sokube-feature`).
+
+Le modèle `[params.<nom>.style]` sans palette (règle 5, premier point) reste réservé aux composants dont la couleur ne varie structurellement jamais sur le site, quelle que soit la page où ils apparaissent (identité visuelle unique, ex. `[params.topTips.style]`, navigation, footer) — pour ceux-là, la couleur vit toujours dans `hugo.toml`, simplement sans la couche de sélection par palette.
+
+Avant de créer ou de refactorer un shortcode/layout dont la couleur est en jeu, on tranche donc explicitement (même logique que la règle 12) : "cette couleur peut-elle un jour devoir changer selon la page ?" Si oui → palette nommée. Si non → `[params.<nom>.style]` simple.
+
+Cas particulier — déduction automatique d'une palette à partir d'une donnée métier (ex. le type de contrat d'une offre d'emploi, voir `[params.contractTypes]` et `layouts/partials/resolve-contract-palette.html`) : la palette reste sélectionnable explicitement via le paramètre `palette`, qui garde toujours la priorité ; la déduction automatique n'intervient que si `palette` n'est pas fourni.
 
 ## Process de refactoring d'un shortcode existant
 

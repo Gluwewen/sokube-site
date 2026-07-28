@@ -4,7 +4,8 @@ layout: "company"
 description: "Join a dynamic, values-driven community that fully values you. Discover our job openings at SoKube."
 ---
 
-{{< sokube-hero
+{{< sokube-hero-fondu
+    palette="default"
     headline="Join a dynamic, values-driven community that fully values you"
     show_description="false"
     show_secondary_button="false"
@@ -13,15 +14,16 @@ description: "Join a dynamic, values-driven community that fully values you. Dis
     hero_image="/images/jobs/happy-colleagues-standing-office-using-computer.jpg"
 >}}
 
-{{< sokube-two-columns buttonText="Discover SoKube" buttonLink="/about" >}}
+{{< sokube-two-columns palette="kube" buttonText="Discover SoKube" buttonLink="/about" >}}
 columnLeft: |
   At SoKube, we believe technology only matters if it serves people. As Cloud Native, DevOps and Security consultants, we help our clients transform their platforms, combining strong technical expertise with real hands-on experience.
 columnRight: |
   We foster an environment where everyone can be themselves, keep learning, and grow alongside a team of passionate experts. If you share these values, this community is for you.
 {{< /sokube-two-columns >}}
 
-{{< sokube-features-section >}}
+{{< sokube-features-section palette="kube" >}}
 {{< sokube-feature
+    palette="kube"
     title="Our team of enthusiasts"
     description="At Sokube, we've built an environment where our team members - the \"Sokubians\" - are free to be themselves and feel supported by the team around them. We want our employees to be relaxed, more productive, more creative and more engaged, so they can give the best of themselves. And it works!\n\nWe're proud of our team's ability to create innovative solutions for our clients, who rely on our expertise to move their business forward."
     image="/images/jobs/sokube-fun-07.jpg"

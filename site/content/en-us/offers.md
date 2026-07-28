@@ -97,7 +97,7 @@ layout: "pricing"
 
 <div class="mt-16"></div>
 
-{{< faq >}}
+{{< faq palette="kube" >}}
 {
     "title": "Common Questions",
     "description": "Find answers to frequently asked questions about our pricing plans and features.",

@@ -242,7 +242,7 @@ module.exports = {
     'bg-gradient-to-r',
     'bg-gradient-to-l',
     // layouts/shortcodes/sokube-features-section.html: gradient built at
-    // render time from params.featuresSection.style.background (default
+    // render time from params.featuresSection.<palette>.background (default
     // "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900
     // dark:to-neurokube-900"). Add any new bg-x you set there as matching
     // from-x/to-x (and dark: variants) below.
@@ -390,6 +390,21 @@ module.exports = {
     'hover:text-neurokube-900',
     'dark:border-neurokube-100',
 
+    // === AJOUTS sokube-partners-filter - palettes kube/hr ([params.partners.categoryFilter.kube/hr], hugo.toml) ===
+    // (les variantes claires text-kube-900/hover:text-kube-900/bg-kube-900/etc.
+    // sont déjà safelistées ailleurs dans ce fichier - seules les variantes
+    // sombres manquaient)
+    'dark:bg-kube-100',
+    'dark:text-kube-900',
+    'dark:hover:bg-kube-200',
+    'dark:hover:text-kube-900',
+    'dark:border-kube-100',
+    'dark:bg-hr-100',
+    'dark:text-hr-900',
+    'dark:hover:bg-hr-200',
+    'dark:hover:text-hr-900',
+    'dark:border-hr-100',
+
     // === AJOUTS marker (puces des listes dans les neurokube-card) ===
     'marker:text-neurokube-600',
     'dark:marker:text-neurokube-300',
@@ -398,11 +413,45 @@ module.exports = {
     'marker:text-hr-600',
     'dark:marker:text-hr-300',
 
-    // === AJOUTS faq shortcode ([params.faq.style], hugo.toml) ===
+    // === AJOUTS faq shortcode ([params.faq], hugo.toml - palettes default/kube/hr) ===
     'dark:text-kube-600',
     'hover:dark:text-kube-600',
     'dark:marker:text-kube-600',
     'dark:text-neurokube-600',
+    'hover:dark:text-neurokube-600',
+    'dark:marker:text-neurokube-600',
+    'dark:text-hr-600',
+    'hover:dark:text-hr-600',
+    'dark:marker:text-hr-600',
+
+    // === AJOUTS faq shortcode - variantes "!" (important) ===
+    // layouts/partials/tw-force.html force la couleur des liens <a> du menu
+    // et du bouton du bas via le modificateur "!" de Tailwind, pour gagner
+    // face à la règle ".prose a" écrite à la main dans le thème (voir
+    // commentaire dans layouts/partials/faq.html). Ces chaînes "!..." ne sont
+    // jamais présentes littéralement dans un fichier scanné (elles sont
+    // construites au rendu), donc obligatoires ici (règle 4/8).
+    '!text-neurokube-600',
+    'dark:!text-neurokube-600',
+    'hover:!text-neurokube-600',
+    'hover:dark:!text-neurokube-600',
+    '!text-kube-600',
+    'dark:!text-kube-600',
+    'hover:!text-kube-600',
+    'hover:dark:!text-kube-600',
+    '!text-hr-600',
+    'dark:!text-hr-600',
+    'hover:!text-hr-600',
+    'hover:dark:!text-hr-600',
+    '!text-gray-900',
+    'dark:!text-white',
+    '!text-white',
+    '!bg-neurokube-600',
+    'hover:!bg-neurokube-700',
+    '!bg-kube-600',
+    'hover:!bg-kube-700',
+    '!bg-hr-600',
+    'hover:!bg-hr-700',
 
     // === AJOUTS sokube-highlight-section shortcode ([params.highlightSection.style], hugo.toml) ===
     // Default gradient background - every current call overrides it, but it must
@@ -427,8 +476,10 @@ module.exports = {
     'dark:bg-hr-900',
     'dark:hover:text-neurokube-200',
 
-    // === AJOUTS layout job-listing ([params.jobListing.style], hugo.toml) ===
+    // === AJOUTS layout job-listing ([params.jobListing.<palette>.button], hugo.toml) ===
     'dark:hover:bg-neurokube-500',
+    'dark:hover:bg-kube-500',
+    'dark:hover:bg-hr-500',
   ],
 
   theme: {

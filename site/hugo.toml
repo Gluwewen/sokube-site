@@ -703,19 +703,28 @@ Our learning methods also help you acquire the skills you need to put them into 
   clientLogos = false
   faq = true
 
-# FAQ shortcode default style (see layouts/shortcodes/faq.html).
-# One style for the whole site: same colors on every page that uses the
-# faq shortcode (faq.md, offers.md...). Each field accepts one or more
-# Tailwind classes; combine a light-mode class and a dark: variant in the
-# same string, same convention as everywhere else in this file. A page can
-# still override any of these via shortcode parameters for an exceptional
-# case, but that should stay the exception, not the rule.
+# FAQ shortcode default style (see layouts/shortcodes/faq.html /
+# layouts/partials/faq.html). Instanciable par page (règle 12) : fonctionne
+# par palette nommée pour l'accent, les markers, le menu de catégories et le
+# bouton, même convention que [params.callout]/[params.cardsSection]/
+# [params.feature] (règle 5) - le nom de la palette se passe via le
+# paramètre "palette" du shortcode (ou faq.palette dans le front matter du
+# layout expertise), défaut "default". Une instance peut toujours surcharger
+# ponctuellement une classe précise (accentColor, markerColor, menuTextColor,
+# menuActiveTextColor, buttonColor, background) par-dessus la palette
+# choisie, pour un cas exceptionnel.
+#
+# "background" est volontairement IDENTIQUE sur les 3 palettes (blanc /
+# neurokube foncé), même raisonnement que [params.callout] : la FAQ est une
+# section de contenu neutre, seule sa couleur d'accent (icônes, markers,
+# menu, bouton) doit changer d'une palette à l'autre, pas le fond de la
+# section.
 [params.faq]
-  [params.faq.style]
+  [params.faq.default]
     # Arrow in the menu + expand/collapse icons
-    accent = "text-kube-600 dark:text-kube-600"
+    accent = "text-neurokube-600 dark:text-neurokube-600"
     # Bullet / number markers used inside the answers' lists
-    marker = "marker:text-kube-600 dark:marker:text-kube-600"
+    marker = "marker:text-neurokube-600 dark:marker:text-neurokube-600"
     # Category nav text, inactive state
     menuText = "text-neurokube-600 dark:text-neurokube-600"
     # Category nav text, active state
@@ -726,6 +735,22 @@ Our learning methods also help you acquire the skills you need to put them into 
     # own "background" parameter to replace it (e.g. a light gray section).
     background = "bg-white dark:bg-neurokube-900"
 
+  [params.faq.kube]
+    accent = "text-kube-600 dark:text-kube-600"
+    marker = "marker:text-kube-600 dark:marker:text-kube-600"
+    menuText = "text-kube-600 dark:text-kube-600"
+    menuActiveText = "text-gray-900 dark:text-white"
+    buttonColor = "bg-kube-600 text-white hover:bg-kube-700"
+    background = "bg-white dark:bg-neurokube-900"
+
+  [params.faq.hr]
+    accent = "text-hr-600 dark:text-hr-600"
+    marker = "marker:text-hr-600 dark:marker:text-hr-600"
+    menuText = "text-hr-600 dark:text-hr-600"
+    menuActiveText = "text-gray-900 dark:text-white"
+    buttonColor = "bg-hr-600 text-white hover:bg-hr-700"
+    background = "bg-white dark:bg-neurokube-900"
+
   # Default label/link for the faq shortcode's optional bottom button
   # (shown only on instances calling faq with showButton="true").
   # Override the label under [languages.xx.params.faq.button].
@@ -733,24 +758,43 @@ Our learning methods also help you acquire the skills you need to put them into 
     label = "Want to know more?"
     link = "/contact"
 
-# Callout shortcode default style (see layouts/shortcodes/sokube-callout.html).
-# One style for the whole site, same convention as [params.faq.style] above.
-# A page can still override any of these via shortcode parameters for an
-# exceptional case (see the "full call" example in the shortcode's own
-# doc comment).
+# Callout shortcode default style (see layouts/shortcodes/sokube-callout.html
+# / layouts/partials/callout-block.html). Instanciable par page (règle 12) :
+# fonctionne par palette nommée pour la description et les boutons, même
+# convention que [params.cards]/[params.feature] (règle 5) - le nom de la
+# palette se passe via le paramètre "palette" du shortcode (ou
+# callout.palette dans le front matter du layout expertise), défaut
+# "default". Une instance peut toujours surcharger ponctuellement une classe
+# précise (background, descriptionColor, primaryButtonColor,
+# secondaryButtonColor) par-dessus la palette choisie, pour un cas
+# exceptionnel (voir le "full call" dans la doc du shortcode).
+#
+# "background" est volontairement IDENTIQUE sur les 3 palettes (gris neutre
+# clair / neurokube foncé) : contrairement aux cards ou au hero fondu, où la
+# couleur de fond EST l'identité de la palette, le callout est un bandeau
+# secondaire discret - seule sa couleur d'accent (boutons, description) doit
+# changer d'une palette à l'autre, pas le fond de la section.
 [params.callout]
-  [params.callout.style]
-    # Section background
+  [params.callout.default]
     background = "bg-gray-50 dark:bg-neurokube-800"
-    # Description text
     description = "text-gray-600 dark:text-neurokube-200"
-    # Primary button: background + text + hover
     primaryButton = "bg-neurokube-600 text-white hover:bg-neurokube-700"
-    # Secondary button: background + text + border + hover
     secondaryButton = "bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400"
 
+  [params.callout.kube]
+    background = "bg-gray-50 dark:bg-neurokube-800"
+    description = "text-gray-600 dark:text-kube-200"
+    primaryButton = "bg-kube-600 text-white hover:bg-kube-700"
+    secondaryButton = "bg-white dark:bg-neurokube-800 text-kube-600 dark:text-kube-100 hover:bg-kube-100 dark:hover:bg-kube-800 border-kube-600 dark:border-kube-400"
+
+  [params.callout.hr]
+    background = "bg-gray-50 dark:bg-neurokube-800"
+    description = "text-gray-600 dark:text-hr-200"
+    primaryButton = "bg-hr-600 text-white hover:bg-hr-700"
+    secondaryButton = "bg-white dark:bg-neurokube-800 text-hr-600 dark:text-hr-100 hover:bg-hr-100 dark:hover:bg-hr-800 border-hr-600 dark:border-hr-400"
+
 # Highlight-section shortcode default style (see layouts/shortcodes/sokube-highlight-section.html).
-# One style for the whole site, same convention as [params.faq.style] above.
+# One style for the whole site, same convention as [params.faq.default] above.
 # A page can still override any of these via shortcode parameters for an
 # exceptional case - background already is, on the "about" page.
 [params.highlightSection]
@@ -789,8 +833,27 @@ Our learning methods also help you acquire the skills you need to put them into 
 
 # Features-section shortcode default style (see layouts/shortcodes/sokube-features-section.html).
 [params.featuresSection]
-  [params.featuresSection.style]
+  # Instanciable par page (règle 12) : fonctionne par palette nommée pour la
+  # description, même convention que [params.callout] (règle 5) - le nom de
+  # la palette se passe via le paramètre "palette" du shortcode, défaut
+  # "default". Une instance peut toujours surcharger ponctuellement
+  # "descriptionColor"/"background" par-dessus la palette choisie.
+  #
+  # "background" est volontairement IDENTIQUE sur les 3 palettes (même
+  # raisonnement que [params.callout]) : cette section n'est qu'un en-tête
+  # de texte au-dessus d'une série de sokube-feature, pas une identité
+  # visuelle en soi - seule la couleur de la description doit changer d'une
+  # palette à l'autre.
+  [params.featuresSection.default]
     description = "text-gray-600 dark:text-neurokube-200"
+    background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
+
+  [params.featuresSection.kube]
+    description = "text-gray-600 dark:text-kube-200"
+    background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
+
+  [params.featuresSection.hr]
+    description = "text-gray-600 dark:text-hr-200"
     background = "bg-gradient-to-b from-gray-50 to-white dark:from-neurokube-900 dark:to-neurokube-900"
 
 # Cta-image shortcode default style (see layouts/shortcodes/sokube-cta-image.html).
@@ -860,6 +923,11 @@ Our learning methods also help you acquire the skills you need to put them into 
     title = "text-neurokube-900 dark:text-white"
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-neurokube-600 dark:marker:text-neurokube-300"
+    # Eyebrow de la section (layouts/_default/expertise.html) - propre à la
+    # palette de la section de cards, distinct de [params.cardsSection.style]
+    # (celui-là reste l'eyebrow fixe du shortcode sokube-cards-section, un
+    # composant différent qui n'a pas de palette).
+    eyebrow = "text-neurokube-600 dark:text-neurokube-300"
 
   # Nouvelle palette KUBE (ex: cartes "PROBLEME" de la page About)
   [params.cards.kube]
@@ -870,6 +938,7 @@ Our learning methods also help you acquire the skills you need to put them into 
     title = "text-kube-900 dark:text-white"
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-kube-600 dark:marker:text-kube-300"
+    eyebrow = "text-kube-600 dark:text-kube-300"
 
   # Nouvelle palette HR (réutilisable ailleurs si besoin)
   [params.cards.hr]
@@ -880,6 +949,7 @@ Our learning methods also help you acquire the skills you need to put them into 
     title = "text-hr-900 dark:text-white"
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-hr-600 dark:marker:text-hr-300"
+    eyebrow = "text-hr-600 dark:text-hr-300"
 
 # Partners page (see layouts/shortcodes/sokube-partner-category.html and
 # sokube-partner.html). One page, several category sections, each with a mix
@@ -893,23 +963,56 @@ Our learning methods also help you acquire the skills you need to put them into 
     border = "border-gray-200 dark:border-neurokube-700"
     label = "text-gray-500 dark:text-neurokube-300"
 
-  # sokube-partners-filter pills - same convention and same colors as
-  # [params.blog.categoryFilter] / [params.trainings.categoryFilter], for a
-  # consistent look across the site's filter bars.
+  # sokube-partners-filter pills - contrairement à [params.blog.categoryFilter]
+  # / [params.trainings.categoryFilter] (fixes, site-wide), ce filtre est
+  # instanciable par page (règle 12) : fonctionne par palette nommée, même
+  # convention que [params.cards] (règle 5) - le nom de la palette se passe
+  # via le paramètre "palette" du shortcode, défaut "default".
   [params.partners.categoryFilter]
-    border = "border-neurokube-900 dark:border-neurokube-100"
+    [params.partners.categoryFilter.default]
+      border = "border-neurokube-900 dark:border-neurokube-100"
 
-    [params.partners.categoryFilter.selected]
-      background = "bg-neurokube-900 dark:bg-neurokube-100"
-      text = "text-white dark:text-neurokube-900"
-      hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
-      hover_text = "hover:text-white dark:hover:text-neurokube-900"
+      [params.partners.categoryFilter.default.selected]
+        background = "bg-neurokube-900 dark:bg-neurokube-100"
+        text = "text-white dark:text-neurokube-900"
+        hover_background = "hover:bg-neurokube-800 dark:hover:bg-neurokube-200"
+        hover_text = "hover:text-white dark:hover:text-neurokube-900"
 
-    [params.partners.categoryFilter.unselected]
-      background = "bg-transparent dark:bg-transparent"
-      text = "text-neurokube-900 dark:text-neurokube-100"
-      hover_background = "hover:bg-neurokube-100 dark:hover:bg-neurokube-800"
-      hover_text = "hover:text-neurokube-900 dark:hover:text-white"
+      [params.partners.categoryFilter.default.unselected]
+        background = "bg-transparent dark:bg-transparent"
+        text = "text-neurokube-900 dark:text-neurokube-100"
+        hover_background = "hover:bg-neurokube-100 dark:hover:bg-neurokube-800"
+        hover_text = "hover:text-neurokube-900 dark:hover:text-white"
+
+    [params.partners.categoryFilter.kube]
+      border = "border-kube-900 dark:border-kube-100"
+
+      [params.partners.categoryFilter.kube.selected]
+        background = "bg-kube-900 dark:bg-kube-100"
+        text = "text-white dark:text-kube-900"
+        hover_background = "hover:bg-kube-800 dark:hover:bg-kube-200"
+        hover_text = "hover:text-white dark:hover:text-kube-900"
+
+      [params.partners.categoryFilter.kube.unselected]
+        background = "bg-transparent dark:bg-transparent"
+        text = "text-kube-900 dark:text-kube-100"
+        hover_background = "hover:bg-kube-100 dark:hover:bg-kube-800"
+        hover_text = "hover:text-kube-900 dark:hover:text-white"
+
+    [params.partners.categoryFilter.hr]
+      border = "border-hr-900 dark:border-hr-100"
+
+      [params.partners.categoryFilter.hr.selected]
+        background = "bg-hr-900 dark:bg-hr-100"
+        text = "text-white dark:text-hr-900"
+        hover_background = "hover:bg-hr-800 dark:hover:bg-hr-200"
+        hover_text = "hover:text-white dark:hover:text-hr-900"
+
+      [params.partners.categoryFilter.hr.unselected]
+        background = "bg-transparent dark:bg-transparent"
+        text = "text-hr-900 dark:text-hr-100"
+        hover_background = "hover:bg-hr-100 dark:hover:bg-hr-800"
+        hover_text = "hover:text-hr-900 dark:hover:text-white"
 
   # sokube-partner "featured" card palettes - repeated several times per
   # category, same convention as [params.cards] above (including
@@ -936,11 +1039,11 @@ Our learning methods also help you acquire the skills you need to put them into 
     text = "text-gray-700 dark:text-gray-300"
 
 # Feature shortcode (see layouts/shortcodes/sokube-feature.html). Repeated
-# several times per page - works by named palette for the badge, same
-# convention as [params.cards] above (including validation, rule 8). Title
-# and description colors are NOT part of the palette: they stay the same
-# regardless of which badge palette is used (matches the current site
-# design, where only the badge accent changes between features).
+# several times per page - works by named palette for the badge and the
+# button, same convention as [params.cards] above (including validation,
+# rule 8). Title and description colors are NOT part of the palette: they
+# stay the same regardless of which palette is used (matches the current
+# site design, where only the badge/button accent changes between features).
 [params.feature]
   [params.feature.style]
     title = "text-neurokube-900 dark:text-white"
@@ -954,25 +1057,72 @@ Our learning methods also help you acquire the skills you need to put them into 
   # where a Tailwind class can't be used directly (règle 14). Never put a raw
   # hex value here: add a new --color-<palette>-<shade> variable in
   # custom.css instead, and reference it here.
+  # "button" combines background + text + hover for the optional CTA button
+  # (showButton="true" on sokube-feature, or button_text/button_link on a
+  # layout expertise features[] block) - applied on top of the generic ".btn"
+  # structural class rather than the fixed ".btn-neurokube" class, so its
+  # color follows the palette instead of always being neurokube blue.
   [params.feature.default]
     badgeBackground = "bg-neurokube-100 dark:bg-neurokube-800"
     badgeText = "text-neurokube-600 dark:text-neurokube-100"
     colorVar = "--color-neurokube-600"
+    button = "bg-neurokube-600 text-white hover:bg-neurokube-700"
 
   [params.feature.kube]
     badgeBackground = "bg-kube-100 dark:bg-kube-800"
     badgeText = "text-kube-600 dark:text-kube-100"
     colorVar = "--color-kube-600"
+    button = "bg-kube-600 text-white hover:bg-kube-700"
 
   [params.feature.hr]
     badgeBackground = "bg-hr-100 dark:bg-hr-800"
     badgeText = "text-hr-600 dark:text-hr-100"
     colorVar = "--color-hr-600"
+    button = "bg-hr-600 text-white hover:bg-hr-700"
+
+# Two-columns shortcode default style (see layouts/shortcodes/sokube-two-columns.html).
+# Instanciable par page (règle 12) : fonctionne par palette nommée pour le
+# bouton, même convention que [params.feature]/[params.callout] (règle 5) -
+# le nom de la palette se passe via le paramètre "palette" du shortcode,
+# défaut "default".
+[params.twoColumns]
+  [params.twoColumns.default]
+    button = "bg-neurokube-600 text-white hover:bg-neurokube-700"
+
+  [params.twoColumns.kube]
+    button = "bg-kube-600 text-white hover:bg-kube-700"
+
+  [params.twoColumns.hr]
+    button = "bg-hr-600 text-white hover:bg-hr-700"
+
+# Contract types ("cdi"/"cdd"/"stage") - code interne langue-indépendant,
+# unique source de vérité pour deux choses distinctes : la palette à utiliser
+# (champ "palette", ci-dessous - jamais surchargé par langue) et le texte
+# affiché (champ "label", surchargé par langue sous
+# [languages.xx.params.contractTypes.<code>] plus bas dans ce fichier).
+# Utilisé à la fois par layouts/_default/job-listing.html (résolution directe
+# depuis le champ contractType du front matter) et par
+# layouts/shortcodes/sokube-card.html (résolution automatique de la palette
+# depuis le label affiché sur la card, voir
+# layouts/partials/resolve-contract-palette.html) - une seule fois configuré
+# ici, robuste au changement de langue des deux côtés.
+[params.contractTypes]
+  [params.contractTypes.cdi]
+    palette = "kube"
+
+  [params.contractTypes.cdd]
+    palette = "default"
+
+  [params.contractTypes.stage]
+    palette = "hr"
 
 # Job Listing (layouts/_default/job-listing.html) - page individuelle
-# d'une offre d'emploi. Palette nommée par type de contrat, même principe
-# que [params.feature] (règle 14) : colorVar référence une variable CSS
-# définie dans assets/css/custom.css, jamais une valeur hex en dur ici.
+# d'une offre d'emploi. Le badge "type de contrat" est coloré par palette
+# nommée ("default"/"kube"/"hr", même convention que [params.feature],
+# règle 14) - le contractType du front matter (cdi/cdd/stage) est résolu en
+# palette via [params.contractTypes] ci-dessus, jamais directement ici.
+# colorVar référence une variable CSS définie dans assets/css/custom.css,
+# jamais une valeur hex en dur.
 [params.jobListing]
   [params.jobListing.style]
     heroBackground = "bg-gray-50 dark:bg-neurokube-900"
@@ -982,24 +1132,29 @@ Our learning methods also help you acquire the skills you need to put them into 
     sectionBackgroundB = "bg-gray-50 dark:bg-neurokube-800"
     sectionTitle = "text-neurokube-900 dark:text-white"
     sectionText = "text-gray-600 dark:text-neurokube-200"
-    pillBackground = "bg-gray-100 dark:bg-neurokube-800"
-    pillText = "text-neurokube-700 dark:text-neurokube-100"
-    applyButton = "bg-neurokube-600 text-white hover:bg-neurokube-700 dark:hover:bg-neurokube-500"
-
-  [params.jobListing.cdi]
-    badgeBackground = "bg-kube-100 dark:bg-kube-800"
-    badgeText = "text-kube-600 dark:text-kube-100"
-    colorVar = "--color-kube-600"
-
-  [params.jobListing.cdd]
-    badgeBackground = "bg-hr-100 dark:bg-hr-800"
-    badgeText = "text-hr-600 dark:text-hr-100"
-    colorVar = "--color-hr-600"
-
-  [params.jobListing.stage]
+  [params.jobListing.default]
     badgeBackground = "bg-neurokube-100 dark:bg-neurokube-800"
     badgeText = "text-neurokube-600 dark:text-neurokube-100"
     colorVar = "--color-neurokube-600"
+    button = "bg-neurokube-600 text-white hover:bg-neurokube-700 dark:hover:bg-neurokube-500"
+    pillBackground = "bg-neurokube-100 dark:bg-neurokube-800"
+    pillText = "text-neurokube-700 dark:text-neurokube-100"
+
+  [params.jobListing.kube]
+    badgeBackground = "bg-kube-100 dark:bg-kube-800"
+    badgeText = "text-kube-600 dark:text-kube-100"
+    colorVar = "--color-kube-600"
+    button = "bg-kube-600 text-white hover:bg-kube-700 dark:hover:bg-kube-500"
+    pillBackground = "bg-kube-100 dark:bg-kube-800"
+    pillText = "text-kube-700 dark:text-kube-100"
+
+  [params.jobListing.hr]
+    badgeBackground = "bg-hr-100 dark:bg-hr-800"
+    badgeText = "text-hr-600 dark:text-hr-100"
+    colorVar = "--color-hr-600"
+    button = "bg-hr-600 text-white hover:bg-hr-700 dark:hover:bg-hr-500"
+    pillBackground = "bg-hr-100 dark:bg-hr-800"
+    pillText = "text-hr-700 dark:text-hr-100"
 
 # Top-tips shortcode (see layouts/shortcodes/sokube-top-tips.html), used on
 # expertise pages. Site-wide : une seule identité visuelle pour tout le site
@@ -1101,12 +1256,14 @@ Our learning methods also help you acquire the skills you need to put them into 
 #      url = "/demo"
 #      class = "border-white text-white hover:bg-neurokube-800"
 
-    # English language for Job Listing
-    [languages.en.params.jobListing.cdi]
+    # English language for Contract Types (job-listing badge label + sokube-card
+    # auto-detection, see [params.contractTypes] and
+    # layouts/partials/resolve-contract-palette.html)
+    [languages.en.params.contractTypes.cdi]
       label = "Permanent"
-    [languages.en.params.jobListing.cdd]
+    [languages.en.params.contractTypes.cdd]
       label = "Fixed-term"
-    [languages.en.params.jobListing.stage]
+    [languages.en.params.contractTypes.stage]
       label = "Internship"
     [languages.en.params.jobListing.style]
       backUrl = "/hiring#jobs"
@@ -1137,12 +1294,14 @@ Our learning methods also help you acquire the skills you need to put them into 
     [languages.fr.params.faq.button]
       label = "Envie d'en savoir plus ?"
 
-    # French language for Job Listing
-    [languages.fr.params.jobListing.cdi]
+    # French language for Contract Types (job-listing badge label + sokube-card
+    # auto-detection, see [params.contractTypes] and
+    # layouts/partials/resolve-contract-palette.html)
+    [languages.fr.params.contractTypes.cdi]
       label = "CDI"
-    [languages.fr.params.jobListing.cdd]
+    [languages.fr.params.contractTypes.cdd]
       label = "CDD"
-    [languages.fr.params.jobListing.stage]
+    [languages.fr.params.contractTypes.stage]
       label = "Stage"
     [languages.fr.params.jobListing.style]
       backUrl = "/hiring#jobs"

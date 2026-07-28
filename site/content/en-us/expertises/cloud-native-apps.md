@@ -6,12 +6,14 @@ description: "SoKube supports you in designing and developing your Cloud Native 
 hero:
   headline: "Your Cloud Native Applications Experts"
   image: "/images/expertises/cloud-native.jpg"
+  palette: "default"
   button_text: "Let's talk about your project"
   button_link: "/contact"
 
 callout:
   title: "Looking for expertise around Cloud Native applications and environments?"
   description: "At SoKube, we master the concepts and practices of building native applications in a world of containers, Cloud or Serverless. Our Cloud Native Applications experts have advanced knowledge of the architectures, technologies and tools used to build and deploy applications in a Kubernetes, Cloud or Serverless environment. They are also able to work closely with your development and operations teams to optimize the performance and scaling of your applications."
+  palette: "kube"
   button_text: "Let's talk about it"
   button_link: "/contact"
 
@@ -19,20 +21,27 @@ cards:
   eyebrow: "Benefit from expert advice to accelerate your digital transformation"
   title: "Your Cloud Native partner"
   description: "At SoKube, we have the know-how to implement Cloud Native Applications, giving you access to numerous benefits such as improved flexibility and agility of your applications, greater scalability, service availability, and reduced operating costs."
+  palette: "kube"
   items:
-    - title: "Knowledge of the architectures and fundamental concepts"
+    - icon: "graduation-cap"
+      title: "Knowledge of the architectures and fundamental concepts"
       text: "of Cloud native applications, such as microservices, containers, APIs, and so on."
-    - title: "Command of the tools and technologies"
+    - icon: "wrench"
+      title: "Command of the tools and technologies"
       text: "commonly used in an on-premise or Cloud environment, such as Docker, Kubernetes, Serverless, etc."
-    - title: "Ability to work"
+    - icon: "people"
+      title: "Ability to work"
       text: "in collaboration with your development and operations teams to optimize the performance and scaling of Cloud native applications."
-    - title: "Command of management practices"
+    - icon: "shield"
+      title: "Command of management practices"
       text: "for quality and security in a Cloud environment, such as continuous integration, automated testing, error handling, etc."
-    - title: "Ability to assess"
+    - icon: "gauge"
+      title: "Ability to assess"
       text: "performance, observe applications and identify improvement opportunities to accelerate development and delivery cycles."
 
 features:
   - title: "If you're asking yourself these questions about Cloud Native!"
+    palette: "kube"
     image: "/images/expertises/serious-man-thinking.jpg"
     button_text: "Then get in touch with us!"
     button_link: "/contact"
@@ -52,6 +61,7 @@ features:
 
 faq:
   title: "Discover the benefits of a Cloud Native Applications approach"
+  palette: "kube"
   show_button: true
   button_text: "Want to know more?"
   button_link: "/contact"
@@ -82,7 +92,7 @@ tips:
     - icon: "camera"
       title: "Observability"
       text: "It's important to have tools in place to monitor and measure application performance and quickly detect potential issues. This can be achieved using monitoring tools such as logs, metrics and visualization tools."
-    - icon: "wrench"
+    - icon: "cycle"
       title: "Deployment management"
       text: "When implementing a cloud native application, it's important to have an automated, reliable deployment process in place to ensure fast, confident delivery of new features and fixes."
 ---

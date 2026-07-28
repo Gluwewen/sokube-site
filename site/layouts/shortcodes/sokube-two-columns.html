@@ -4,13 +4,17 @@
     Bloc de texte Markdown libre sur deux colonnes (desktop), une seule
     colonne empilée en mobile, suivi d'un bouton centré optionnel.
 
-    Shortcode instanciable par page (règle 12) : pas d'entrée dans
-    hugo.toml, aucune couleur de marque - uniquement du texte et un bouton
-    au style neutre déjà utilisé ailleurs sur le site (.btn-neurokube).
+    Shortcode instanciable par page (règle 12) : pas de couleur de marque
+    pour le texte (juste du Markdown neutre), mais le bouton fonctionne par
+    palette nommée - même convention que sokube-feature/sokube-callout
+    (règle 5) - la palette (couleur du bouton) vit dans
+    [params.twoColumns.<nom>] (hugo.toml, y compris la palette "default").
     Aujourd'hui utilisé uniquement sur hiring.md (sujet 2 : présentation +
     bouton "Découvrir SoKube" vers about.md).
 
     Paramètres :
+      palette    - nom de la palette du bouton : "default", "kube" ou "hr"
+                   (défaut "default") - voir [params.twoColumns] (hugo.toml)
       buttonText - texte du bouton sous les colonnes (optionnel : pas de
                    bouton si omis)
       buttonLink - lien du bouton (obligatoire si buttonText est fourni)
@@ -20,7 +24,7 @@
       columnRight - texte de la colonne de droite
 
     Exemple :
-      {{</* sokube-two-columns buttonText="Découvrir SoKube" buttonLink="/about" >}}
+      {{</* sokube-two-columns palette="kube" buttonText="Découvrir SoKube" buttonLink="/about" >}}
       columnLeft: |
         Chez SoKube, nous pensons que la technologie n'a de sens que si
         elle sert des humains.
@@ -33,6 +37,13 @@
 {{ $data := .Inner | transform.Unmarshal }}
 {{ $buttonText := .Get "buttonText" }}
 {{ $buttonLink := .Get "buttonLink" }}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $style := index site.Params.twoColumns $paletteName }}
+{{ if not $style }}
+    {{ errorf "sokube-two-columns: palette %q introuvable dans [params.twoColumns] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $style = site.Params.twoColumns.default }}
+{{ end }}
 
 <section class="section">
     <div class="container">
@@ -47,7 +58,7 @@
 
         {{ with $buttonText }}
         <div class="text-center mt-12">
-            <a href="{{ $buttonLink }}" class="btn-neurokube inline-block">
+            <a href="{{ $buttonLink }}" class="btn inline-block {{ $style.button }}">
                 {{ . }}
             </a>
         </div>

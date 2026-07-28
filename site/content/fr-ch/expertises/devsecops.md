@@ -6,12 +6,14 @@ description: "SoKube vous accompagne dans la mise en œuvre d'une pratique DevOp
 hero:
   headline: "Vos Experts DevSecOps"
   image: "/images/expertises/devops.jpg"
+  palette: "default"
   button_text: "Parlons de votre projet"
   button_link: "/contact"
 
 callout:
   title: "Vous recherchez de l'Expertise autour de l'approche DevOps ou DevSecOps ?"
   description: "Chez SoKube, nous maîtrisons les concepts et les pratiques de l'approche DevOps et DevSecOps. Cela inclut la connaissance des outils et des technologies utilisés pour automatiser les processus de développement et de livraison de logiciels, ainsi que la capacité à travailler en collaboration avec les équipes de développement, d'exploitation et de sécurité pour améliorer l'efficacité et la qualité des logiciels et plateformes. Que vous soyez éditeurs de logiciel ou que vous développiez des applications pour votre usage interne, nos experts seront présents à vos côtés pour concevoir, élaborer et optimiser votre infrastructure."
+  palette: "kube"
   button_text: "Parlons en ensemble"
   button_link: "/contact"
 
@@ -19,20 +21,27 @@ cards:
   eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"
   title: "Votre partenaire DevOps"
   description: "Chez SoKube, nous possédons une solide connaissance de l'approche DevOps, et nos consultants sont capables de travailler en étroite collaboration avec vos équipes de développement, d'exploitation et de sécurité pour optimiser vos processus de développement et de livraison de logiciels, de manière efficace et sécurisée."
+  palette: "kube"
   items:
-    - title: "Connaissance des concepts fondamentaux"
+    - icon: "graduation-cap"
+      title: "Connaissance des concepts fondamentaux"
       text: "de DevOps, tels que l'agilité, la collaboration, le partage, l'automatisation, la mesure, etc."
-    - title: "Maîtrise des outils et des technologies"
+    - icon: "wrench"
+      title: "Maîtrise des outils et des technologies"
       text: "couramment utilisés dans un environnement DevOps, tels que Git, Gitlab, Docker, Kubernetes, GitOps, Cloud, Prometheus, Grafana, ELK, Vault, etc."
-    - title: "Savoir-faire à travailler"
+    - icon: "people"
+      title: "Savoir-faire à travailler"
       text: "en collaboration avec vos équipes de développement, d'exploitation et de sécurité pour optimiser les processus de développement, de livraison de logiciels et de construction de plateformes."
-    - title: "Maîtrise des pratiques de gestion"
+    - icon: "shield"
+      title: "Maîtrise des pratiques de gestion"
       text: "de la qualité et de la sécurité dans un environnement DevSecOps, tels que l'intégration continue, les tests automatisés, la gestion des erreurs, l'isolation des environnements, ..."
-    - title: "Capacité à évaluer"
+    - icon: "gauge"
+      title: "Capacité à évaluer"
       text: "les performances des logiciels et à identifier les opportunités d'amélioration pour accélérer les cycles de développement et de livraison."
 
 features:
   - title: "Nous vous accompagnons dans toutes les phases de votre projet DevOps / DevSecOps :"
+    palette: "kube"
     image: "/images/expertises/happy-men-colleagues-office-using-computer-looking-aside.jpg"
     button_text: "En savoir plus"
     button_link: "/services/services"
@@ -72,6 +81,7 @@ tips:
 
 faq:
   title: "Découvrez les avantages de la mise en œuvre d'une pratique DevOps / DevSecOps"
+  palette: "kube"
   show_button: true
   background: "bg-gray-50 dark:bg-neurokube-800"
   items:

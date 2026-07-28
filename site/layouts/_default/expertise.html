@@ -11,11 +11,20 @@
     l'ordre suivant si présentes dans le front matter : hero, callout,
     cards, features, faq, puis tips en tout dernier (fixe, indépendant de
     l'ordre des champs dans le front matter). Les couleurs de marque
-    réutilisent les mêmes réglages
-    que les shortcodes déjà existants ([params.heroFondu], [params.callout.style],
-    [params.cardsSection.style]/[params.cards.default], [params.feature.style],
-    [params.topTips], [params.faq.style]) - une seule source de vérité pour
-    ces couleurs, partagée avec le reste du site.
+    réutilisent les mêmes réglages que les shortcodes déjà existants
+    ([params.heroFondu], [params.callout], [params.cardsSection.style],
+    [params.feature.style], [params.topTips], [params.faq]) - une seule
+    source de vérité pour ces couleurs, partagée avec le reste du site.
+
+    Hero, callout, cards, features et faq sont chacun instanciables par page
+    (règle 12) via une palette nommée ("default"/"kube"/"hr", voir
+    [params.heroFondu], [params.callout], [params.cards], [params.feature]
+    et [params.faq] dans hugo.toml) : la valeur par défaut vit dans hugo.toml,
+    mais chaque page (et même chaque card individuelle, voir items[].palette
+    ci-dessous)
+    peut la remplacer par son propre champ "palette" dans le front matter -
+    même principe que sokube-card / sokube-feature / sokube-callout, sans
+    avoir à toucher au code.
 
     Front matter :
 
@@ -36,15 +45,27 @@
       callout:
         title: "..."
         description: "..."
+        palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                  voir [params.callout] dans hugo.toml)
         button_text: "..."
         button_link: "..."
 
       cards:
-        eyebrow: "..."             (optionnel)
+        eyebrow: "..."             (optionnel - couleur pilotée par palette, champ
+                                    "eyebrow" de [params.cards.<nom>] ci-dessous)
         title: "..."
         description: "..."
-        items:                     (liste de {title, text})
-          - title: "..."
+        palette: "..."             (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                    voir [params.cards] dans hugo.toml ; s'applique à
+                                    toutes les cards de la section (dont l'eyebrow),
+                                    sauf surcharge individuelle via items[].palette
+                                    ci-dessous)
+        items:                     (liste de {icon, palette, title, text})
+          - icon: "..."            (optionnel - voir layouts/partials/icon.html
+                                    pour la liste des icônes disponibles)
+            palette: "..."         (optionnel, surcharge la palette de la section
+                                    pour cette seule card - même valeurs possibles)
+            title: "..."
             text: "..."
 
       features:                    (liste de blocs "feature" - composant générique image + liste
@@ -55,6 +76,9 @@
                                     la position du bloc dans la liste - aspect structurel fixe,
                                     non paramétrable depuis le front matter, règle 3)
         - title: "..."
+          palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                    voir [params.feature] dans hugo.toml ; couleur du
+                                    badge numéroté ET du bouton, propre à ce bloc)
           image: "..."
           button_text: "..."      (optionnel)
           button_link: "..."      (optionnel)
@@ -67,6 +91,9 @@
       faq:                         (voir layouts/partials/faq.html)
         title: "..."
         description: "..."        (optionnel)
+        palette: "..."             (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                    voir [params.faq] dans hugo.toml ; couleur de l'accent,
+                                    des markers, du menu de catégories et du bouton)
         show_button: true          (optionnel, false par défaut)
         button_text: "..."         (optionnel)
         button_link: "..."         (optionnel)
@@ -128,24 +155,26 @@
 {{ end }}
 
 {{/* --- Callout --- */}}
+{{/* Règle 14/13 : rendu partagé avec le shortcode sokube-callout via
+     layouts/partials/callout-block.html. Palette instanciable par page
+     (règle 12), voir [params.callout.<nom>] dans hugo.toml (règle 5). */}}
 {{ with .Params.callout }}
-    {{ $title := .title }}
-    {{ $description := .description }}
-    {{ $buttonText := .button_text }}
-    {{ $buttonLink := .button_link }}
-    {{ $style := site.Params.callout.style | default dict }}
+    {{ $paletteName := .palette | default "default" }}
+    {{ $palette := index site.Params.callout $paletteName }}
+    {{ if not $palette }}
+        {{ errorf "expertise layout (callout): palette %q introuvable dans [params.callout] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $palette = site.Params.callout.default }}
+    {{ end }}
 
-    <section class="{{ $style.background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
-        <div class="container text-center max-w-3xl mx-auto">
-            {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
-            {{ with $description }}<p class="text-xl {{ $style.description }} mb-10">{{ . }}</p>{{ end }}
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                {{ with $buttonText }}
-                <a href="{{ $buttonLink }}" class="btn text-center {{ $style.primaryButton }}">{{ . }}</a>
-                {{ end }}
-            </div>
-        </div>
-    </section>
+    {{ partial "callout-block.html" (dict
+        "title" .title
+        "description" .description
+        "primaryText" .button_text
+        "primaryLink" .button_link
+        "background" $palette.background
+        "descriptionColor" $palette.description
+        "primaryClass" $palette.primaryButton
+    ) }}
 {{ end }}
 
 {{/* --- Cards --- */}}
@@ -155,19 +184,43 @@
     {{ $description := .description }}
     {{ $items := .items | default slice }}
     {{ $cardsStyle := site.Params.cardsSection.style | default dict }}
-    {{ $palette := site.Params.cards.default | default dict }}
+
+    {{/* Palette de la section (défaut "default", voir [params.cards] hugo.toml,
+         règle 5) - chaque item peut la surcharger individuellement via son
+         propre champ "palette" (règle 12 : instanciable, on donne le choix au
+         niveau le plus fin). L'eyebrow suit aussi cette palette (champ
+         "eyebrow" de [params.cards.<nom>]) plutôt que le style fixe du
+         shortcode sokube-cards-section. */}}
+    {{ $sectionPaletteName := .palette | default "default" }}
+    {{ $sectionPalette := index site.Params.cards $sectionPaletteName }}
+    {{ if not $sectionPalette }}
+        {{ errorf "expertise layout (cards): palette %q introuvable dans [params.cards] (hugo.toml) — page %s" $sectionPaletteName $.File.Path }}
+        {{ $sectionPaletteName = "default" }}
+        {{ $sectionPalette = site.Params.cards.default }}
+    {{ end }}
 
     <section class="section scroll-mt-24 bg-gray-100 dark:bg-neurokube-700">
         <div class="container">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                {{ with $eyebrow }}<p class="text-sm font-bold uppercase tracking-wide mb-4 {{ $cardsStyle.eyebrow }}">{{ . }}</p>{{ end }}
+                {{ with $eyebrow }}<p class="text-sm font-bold uppercase tracking-wide mb-4 {{ $sectionPalette.eyebrow }}">{{ . }}</p>{{ end }}
                 {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}
                 {{ with $description }}<p class="text-xl {{ $cardsStyle.description }}">{{ . }}</p>{{ end }}
             </div>
 
             <div class="grid md:grid-cols-3 {{ site.Params.cards.grid_gap | default "gap-8" }}">
                 {{ range $items }}
+                {{ $paletteName := .palette | default $sectionPaletteName }}
+                {{ $palette := index site.Params.cards $paletteName }}
+                {{ if not $palette }}
+                    {{ errorf "expertise layout (cards): palette %q introuvable dans [params.cards] (hugo.toml) — page %s" $paletteName $.File.Path }}
+                    {{ $palette = site.Params.cards.default }}
+                {{ end }}
                 <div class="card-neurokube {{ $palette.background }} {{ $palette.border }} {{ $palette.hover_border }}">
+                    {{ with .icon }}
+                    <div class="{{ $palette.label }} mb-3">
+                        {{ partial "icon.html" (dict "name" . "class" "w-8 h-8" "page" $) }}
+                    </div>
+                    {{ end }}
                     <h3 class="{{ $palette.title }}">{{ .title }}</h3>
                     <div class="{{ $palette.text }} {{ $palette.marker }}">{{ .text | $.RenderString }}</div>
                 </div>
@@ -185,6 +238,19 @@
     {{ $buttonLink := $feature.button_link }}
     {{ $items := $feature.items | default slice }}
     {{ $featureStyle := site.Params.feature.style | default dict }}
+
+    {{/* Palette du badge numéroté ET du bouton (défaut "default", voir
+         [params.feature] hugo.toml, règle 5) - un bloc "feature" par
+         instance, sa propre palette (règle 12). Titre/description restent
+         fixes (feature.style), seuls le badge et le bouton varient selon
+         la palette. */}}
+    {{ $paletteName := $feature.palette | default "default" }}
+    {{ $badgeStyle := index site.Params.feature $paletteName }}
+    {{ if not $badgeStyle }}
+        {{ errorf "expertise layout (features): palette %q introuvable dans [params.feature] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $badgeStyle = site.Params.feature.default }}
+    {{ end }}
+
     {{ $imageOrder := "lg:order-1" }}
     {{ $textOrder := "lg:order-2" }}
     {{ if eq (mod $fi 2) 1 }}
@@ -207,7 +273,7 @@
                     <ol class="space-y-4">
                         {{ range $i, $item := $items }}
                         <li class="flex gap-4">
-                            <span class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold bg-kube-100 dark:bg-kube-800 text-kube-600 dark:text-kube-100">
+                            <span class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold {{ $badgeStyle.badgeBackground }} {{ $badgeStyle.badgeText }}">
                                 {{ add $i 1 }}
                             </span>
                             <div>
@@ -218,7 +284,7 @@
                         {{ end }}
                     </ol>
                     {{ with $buttonText }}
-                    <a href="{{ $buttonLink }}" class="btn-neurokube inline-block">{{ . }}</a>
+                    <a href="{{ $buttonLink }}" class="btn inline-block {{ $badgeStyle.button }}">{{ . }}</a>
                     {{ end }}
                 </div>
             </div>
@@ -232,6 +298,7 @@
     {{ partial "faq.html" (dict
         "id" "page"
         "data" $faqData
+        "palette" .palette
         "showButton" .show_button
         "buttonText" .button_text
         "buttonLink" .button_link

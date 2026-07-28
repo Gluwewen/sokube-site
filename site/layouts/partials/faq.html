@@ -14,15 +14,28 @@
                     obligatoire s'il peut y avoir plusieurs FAQ sur une page
       data        - dict avec "title", "description" (optionnel) et
                     "questions" (liste de {question, answer, category})
+      palette     - nom de la palette (accent, markers, menu, bouton) :
+                    "default", "kube" ou "hr" - voir [params.faq] (hugo.toml).
+                    Défaut "default".
       accentColor, markerColor, menuTextColor, menuActiveTextColor,
-      buttonColor, background - surcharges ponctuelles (défaut :
-                    site.Params.faq.style.*)
+      buttonColor, background - surcharges ponctuelles par-dessus la
+                    palette choisie, pour un cas exceptionnel
       showButton, buttonText, buttonLink - voir layouts/shortcodes/faq.html
 */}}
 
 {{ $id := .id }}
 {{ $data := .data }}
-{{ $style := site.Params.faq.style | default dict }}
+
+{{ $paletteName := .palette | default "default" }}
+{{ $validFaqPalettes := slice "default" "kube" "hr" }}
+{{ $style := "" }}
+{{ if in $validFaqPalettes $paletteName }}
+    {{ $style = index site.Params.faq $paletteName }}
+{{ else }}
+    {{ errorf "faq: palette %q inconnue (attendu default/kube/hr) — id %s" $paletteName $id }}
+    {{ $style = site.Params.faq.default }}
+{{ end }}
+
 {{ $accentColor := .accentColor | default $style.accent }}
 {{ $markerColor := .markerColor | default $style.marker }}
 {{ $menuTextColor := .menuTextColor | default $style.menuText }}
@@ -46,6 +59,26 @@
     {{ $accentHoverParts = $accentHoverParts | append (printf "hover:%s" .) }}
 {{ end }}
 {{ $accentHover := delimit $accentHoverParts " " }}
+
+{{/* Le thème définit à la main une règle ".prose a { color: primary-600 }"
+     (themes/hugo-saasify-theme/assets/css/main.css), avec une spécificité
+     classe+élément qui l'emporte sur nos classes à une seule classe
+     (.text-kube-600, .text-gray-900...) - contrairement aux règles générées
+     par le plugin Typography lui-même, cette règle écrite à la main n'a pas
+     l'échappatoire "not-prose". Comme cette partial est parfois rendue à
+     l'intérieur d'un conteneur .prose (layouts/_default/simple.html, pour
+     faq.md/offers.md), les liens <a> du menu et le bouton du bas doivent
+     forcer leur couleur via le modificateur "!" de Tailwind (voir
+     layouts/partials/tw-force.html) pour gagner face à cette règle. */}}
+{{ $menuTextColorForced := partial "tw-force.html" $menuTextColor }}
+{{ $menuActiveTextColorForced := partial "tw-force.html" $menuActiveTextColor }}
+{{ $accentHoverForced := partial "tw-force.html" $accentHover }}
+{{ $faqButtonColorForced := partial "tw-force.html" $faqButtonColor }}
+{{/* Même souci pour le nom de chaque catégorie (h2) : le thème définit aussi
+     à la main ".prose h1, .prose h2, .prose h3, .prose h4 { text-gray-900 }"
+     (même fichier, même absence d'échappatoire "not-prose"), donc même
+     traitement "!" pour que la couleur de la palette gagne. */}}
+{{ $accentColorForced := partial "tw-force.html" $accentColor }}
 
 {{/* Shared body text size: description, questions, answers and menu all match */}}
 {{ $bodyTextSize := "text-base sm:text-xl" }}
@@ -73,7 +106,18 @@
     {{ $sections = $sections | append "" }}
 {{ end }}
 
-<section class="{{ $sectionBackground }} py-8 lg:py-16">
+{{/* not-prose : cette partial est parfois rendue à l'intérieur d'un
+     conteneur .prose (ex. layouts/_default/simple.html, pour faq.md /
+     offers.md, qui enveloppe .Content dans .prose). Ça désactive le style
+     du plugin Typography pour tout ce sous-arbre (titres, listes...) ;
+     .faq-content plus bas redéclare volontairement sa propre classe "prose"
+     pour les réponses en Markdown, qui reste donc bien stylée. Ça ne suffit
+     PAS pour les liens <a> du menu et le bouton du bas : le thème définit en
+     plus, à la main, une règle ".prose a { color: primary-600 }"
+     (themes/hugo-saasify-theme/assets/css/main.css) sans l'échappatoire
+     "not-prose" du plugin - d'où le $...Forced plus haut, qui force la
+     couleur de ces liens via "!" pour gagner face à cette règle. */}}
+<section class="not-prose {{ $sectionBackground }} py-8 lg:py-16">
     <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
 
         <h1 class="mb-10 text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -89,8 +133,8 @@
             <aside class="lg:w-56 shrink-0 mb-10 lg:mb-0">
                 <nav class="lg:sticky lg:top-24 space-y-4" id="faq-nav-{{ $id }}"
                      data-faq-nav
-                     data-active-classes="{{ $menuActiveTextColor }} font-semibold"
-                     data-inactive-classes="{{ $menuTextColor }} font-medium">
+                     data-active-classes="{{ $menuActiveTextColorForced }} font-semibold"
+                     data-inactive-classes="{{ $menuTextColorForced }} font-medium">
                     {{ range $sections }}
                     {{ $label := . }}
                     {{ if eq $label "" }}{{ $label = "Other" }}{{ end }}
@@ -98,7 +142,7 @@
                     <a href="#{{ $slug }}"
                        data-faq-nav-link
                        data-target="{{ $slug }}"
-                       class="faq-nav-link flex items-center gap-2 {{ $bodyTextSize }} {{ $menuTextColor }} font-medium {{ $accentHover }} transition-colors duration-150">
+                       class="faq-nav-link flex items-center gap-2 {{ $bodyTextSize }} {{ $menuTextColorForced }} font-medium {{ $accentHoverForced }} transition-colors duration-150">
                         <span class="faq-nav-arrow {{ $accentColor }} opacity-0 transition-opacity duration-150">&rarr;</span>
                         <span>{{ $label }}</span>
                     </a>
@@ -116,7 +160,7 @@
 
                 <div id="{{ $slug }}" class="faq-category-section scroll-mt-28" data-faq-section>
                     {{ if $hasCategories }}
-                    <h2 class="mb-6 text-2xl font-bold text-gray-900 dark:text-white">{{ $label }}</h2>
+                    <h2 class="mb-6 text-2xl font-bold {{ $accentColorForced }}">{{ $label }}</h2>
                     {{ end }}
 
                     <div class="divide-y divide-gray-200 dark:divide-neurokube-700">
@@ -154,7 +198,7 @@
 
         {{ if $showFaqButton }}
         <div class="text-center mt-16">
-            <a href="{{ $faqButtonLink }}" class="btn {{ $faqButtonColor }}">
+            <a href="{{ $faqButtonLink }}" class="btn {{ $faqButtonColorForced }}">
                 {{ $faqButtonText }}
             </a>
         </div>
