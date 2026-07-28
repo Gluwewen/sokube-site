@@ -270,6 +270,16 @@ module.exports = {
     'via-neurokube-600',
     'dark:from-neurokube-800',
     'dark:via-neurokube-800',
+
+    // layouts/shortcodes/sokube-hero-fondu.html / layouts/_default/expertise.html:
+    // the fondu gradient itself is a plain inline CSS linear-gradient (see
+    // layouts/partials/hero-fondu.html), not a Tailwind from-x/via-x class,
+    // so its color (params.heroFondu.<palette>.colorVar) and distance
+    // (params.heroFondu.style.fadeDistance) need no safelist entry here even
+    // though both are set from hugo.toml. Only the section's own solid
+    // background (bg-neurokube-900 / bg-kube-900 / bg-hr-900, already
+    // safelisted above) and the secondary button hover background need one:
+    'hover:bg-white',
     'to-neurokube-50',
     'to-neurokube-100',
     'to-neurokube-200',

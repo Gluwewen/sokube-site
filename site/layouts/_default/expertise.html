@@ -12,16 +12,24 @@
     cards, features, faq, puis tips en tout dernier (fixe, indépendant de
     l'ordre des champs dans le front matter). Les couleurs de marque
     réutilisent les mêmes réglages
-    que les shortcodes déjà existants ([params.hero], [params.callout.style],
+    que les shortcodes déjà existants ([params.heroFondu], [params.callout.style],
     [params.cardsSection.style]/[params.cards.default], [params.feature.style],
     [params.topTips], [params.faq.style]) - une seule source de vérité pour
     ces couleurs, partagée avec le reste du site.
 
     Front matter :
 
-      hero:
+      hero:                      (rendu via sokube-hero-fondu, voir
+                                  layouts/shortcodes/sokube-hero-fondu.html)
         headline: "..."          (obligatoire pour afficher le hero)
+        sub_headline: "..."      (optionnel, description sous le titre)
         image: "..."              (optionnel)
+        image_position: "..."    (optionnel, "left" ou "right", défaut "right")
+        palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                  voir [params.heroFondu] dans hugo.toml)
+        fade_distance: "..."     (optionnel, ex. "55%" - distance à laquelle le
+                                  fondu devient transparent, défaut
+                                  params.heroFondu.style.fadeDistance)
         button_text: "..."
         button_link: "..."
 
@@ -81,45 +89,42 @@
 {{ define "main" }}
 
 {{/* --- Hero --- */}}
+{{/* Règle 14/13 : rendu partagé avec le shortcode sokube-hero-fondu via
+     layouts/partials/hero-fondu.html (les shortcodes ne peuvent pas être
+     invoqués depuis un layout). La palette de couleur vient de
+     [params.heroFondu.<nom>] (hugo.toml, règle 5), sélectionnée via
+     hero.palette dans le front matter (défaut "default"). */}}
 {{ with .Params.hero }}
-    {{ $headline := .headline }}
-    {{ $image := .image }}
-    {{ $imageDark := replace $image "-light" "-dark" }}
-    {{ $buttonText := .button_text }}
-    {{ $buttonLink := .button_link }}
-    {{ $heroParams := site.Params.hero | default dict }}
-    {{ $background := $heroParams.background }}
-    {{ $style := $heroParams.style | default dict }}
-    {{ $primaryBtn := $heroParams.primary_button | default dict }}
+    {{ $paletteName := .palette | default "default" }}
+    {{ $paletteStyle := index site.Params.heroFondu $paletteName }}
+    {{ if not $paletteStyle }}
+        {{ errorf "expertise layout: palette %q introuvable dans [params.heroFondu] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $paletteStyle = site.Params.heroFondu.default }}
+    {{ end }}
+    {{ $style := site.Params.heroFondu.style | default dict }}
+    {{ $primaryBtn := $style.primary_button | default dict }}
+    {{ $secondaryBtn := $style.secondary_button | default dict }}
 
-    <section class="relative overflow-hidden {{ $background }}">
-        <div class="container pt-16 pb-20 md:pt-24 md:pb-28">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8">
-                    <h1 class="text-4xl md:text-4xl lg:text-4xl font-bold leading-tight {{ $style.title }}">
-                        {{ $headline }}
-                    </h1>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        {{ with $buttonText }}
-                        <a href="{{ $buttonLink }}" class="btn text-center {{ $primaryBtn.background }} {{ $primaryBtn.text_color }} {{ $primaryBtn.hover }}">
-                            {{ . }}
-                        </a>
-                        {{ end }}
-                    </div>
-                </div>
-                <div class="relative">
-                    {{ if $image }}
-                    <div class="relative z-10">
-                        <img src="{{ $image | relURL }}" alt="{{ $headline }}" class="rounded-xl shadow-elevation dark:hidden">
-                        <img src="{{ $imageDark | relURL }}" alt="{{ $headline }}" class="rounded-xl shadow-elevation hidden dark:block">
-                    </div>
-                    {{ end }}
-                    <div class="absolute -top-20 -right-20 w-64 h-64 {{ $style.decoration_1 }} rounded-full filter blur-3xl opacity-50"></div>
-                    <div class="absolute -bottom-20 -left-20 w-64 h-64 {{ $style.decoration_2 }} rounded-full filter blur-3xl opacity-50"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{ partial "hero-fondu.html" (dict
+        "headline" .headline
+        "subHeadline" .sub_headline
+        "showDescription" true
+
+        "primaryText" .button_text
+        "primaryLink" .button_link
+        "primaryClass" (printf "%s %s %s" $primaryBtn.background $primaryBtn.text_color $primaryBtn.hover)
+
+        "showSecondaryButton" false
+
+        "image" .image
+        "imagePosition" (.image_position | default "right")
+
+        "background" $paletteStyle.background
+        "titleColor" $style.title
+        "descriptionColor" $paletteStyle.description
+        "colorVar" $paletteStyle.colorVar
+        "fadeDistance" (.fade_distance | default $style.fadeDistance)
+    ) }}
 {{ end }}
 
 {{/* --- Callout --- */}}

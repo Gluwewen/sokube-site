@@ -1,0 +1,128 @@
+{{/*
+    hero-fondu
+
+    Shared rendering logic behind the "sokube-hero-fondu" shortcode.
+    Extracted into a partial (règle 13 - see brand-heading.html/cta-block.html
+    for the same pattern) so it can ALSO be called directly from a Go
+    template, e.g. layouts/_default/expertise.html, since shortcodes cannot
+    be invoked from layouts.
+
+    Every value must already be fully resolved by the caller (this partial
+    does not read .Site/.Page) - see layouts/shortcodes/sokube-hero-fondu.html
+    for how defaults/palettes are resolved from params.heroFondu in hugo.toml.
+
+    Layout: plain "grid lg:grid-cols-2" full-bleed section (same technique as
+    sokube-feature) - the photo fills its column edge-to-edge, and the
+    text/button column uses the ".hero-fondu-text" utility (assets/css/
+    custom.css) so its outer edge (the one away from the photo) lines up
+    with the site's usual ".container" margin instead of the section's own
+    full-bleed edge. Below "lg" the two columns stack (single column, image
+    on top) - imagePosition only matters once they sit side by side.
+
+    Expected dict keys (all optional unless noted):
+      headline (required)      - titre (HTML autorisé, non passé dans markdownify)
+      subHeadline, showDescription
+      primaryText, primaryLink, primaryClass
+      secondaryText, secondaryLink, secondaryClass, showSecondaryButton
+      image                     - image; la variante sombre est déduite en
+                                  remplaçant "-light" par "-dark"
+      imagePosition             - "left" ou "right" (défaut "right")
+      background (required)    - classe de fond combinée du panneau
+      titleColor, descriptionColor
+      colorVar (required if image set) - nom d'une variable CSS (ex.
+                                  "--color-neurokube-900", voir custom.css)
+                                  utilisée comme couleur de départ du dégradé
+                                  de fondu ; doit correspondre à "background"
+      fadeDistance              - distance (%) à laquelle le dégradé devient
+                                  entièrement transparent (défaut "55%")
+
+    "colorVar" est nécessaire car un dégradé dont la couleur de départ suit
+    "background" ne peut pas être construit avec une simple classe Tailwind
+    from-x/via-x tout en gardant fadeDistance librement configurable (%
+    arbitraire) sans avoir à mettre à jour le safelist de tailwind.config.js
+    à chaque changement de valeur - voir le commentaire à côté de
+    [params.heroFondu.default] dans hugo.toml pour la convention colorVar.
+
+    Le dégradé est construit en une seule fois via printf puis marqué safeCSS
+    d'un seul bloc (plutôt que plusieurs {{ }} mêlés à du texte littéral dans
+    l'attribut style) : l'échappement CSS contextuel de Hugo/Go peut sinon
+    rejeter l'attribut entier dès qu'il contient plusieurs interpolations
+    imbriquées dans une même fonction CSS (linear-gradient(...)), et le
+    dégradé disparaît silencieusement au rendu.
+*/}}
+{{ $headline := .headline }}
+{{ $subHeadline := .subHeadline }}
+{{ $showDescription := .showDescription }}
+
+{{ $primaryText := .primaryText }}
+{{ $primaryLink := .primaryLink | default "#" }}
+{{ $primaryClass := .primaryClass }}
+
+{{ $showSecondaryButton := .showSecondaryButton }}
+{{ $secondaryText := .secondaryText }}
+{{ $secondaryLink := .secondaryLink | default "#" }}
+{{ $secondaryClass := .secondaryClass }}
+
+{{ $image := .image }}
+{{ $imageDark := replace $image "-light" "-dark" }}
+{{ $imagePosition := .imagePosition | default "right" }}
+{{ $isLeft := eq $imagePosition "left" }}
+
+{{ $background := .background }}
+{{ $titleColor := .titleColor | default "text-white" }}
+{{ $descriptionColor := .descriptionColor | default "text-neurokube-100" }}
+
+{{ $colorVar := .colorVar }}
+{{ $fadeDistance := .fadeDistance | default "55%" }}
+{{ $gradientDirection := "to right" }}
+{{ if $isLeft }}{{ $gradientDirection = "to left" }}{{ end }}
+{{ $gradientCSS := printf "background-image: linear-gradient(%s, var(%s) 0%%, transparent %s);" $gradientDirection $colorVar $fadeDistance }}
+
+{{ $imageOrder := "lg:order-2" }}
+{{ $textOrder := "lg:order-1" }}
+{{ $textEdge := "hero-fondu-text--edge-left" }}
+{{ if $isLeft }}
+    {{ $imageOrder = "lg:order-1" }}
+    {{ $textOrder = "lg:order-2" }}
+    {{ $textEdge = "hero-fondu-text--edge-right" }}
+{{ end }}
+
+<section class="relative w-full overflow-hidden {{ $background }}">
+    <div class="grid lg:grid-cols-2">
+
+        <div class="relative h-64 lg:h-auto {{ $imageOrder }}">
+            {{ with $image }}
+            <img src="{{ . | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full object-cover dark:hidden">
+            <img src="{{ $imageDark | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full object-cover hidden dark:block">
+            <div class="absolute inset-0" style="{{ $gradientCSS | safeCSS }}"></div>
+            {{ end }}
+        </div>
+
+        <div class="hero-fondu-text {{ $textEdge }} relative z-10 {{ $textOrder }} flex flex-col justify-center gap-6 py-16 lg:py-24">
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight {{ $titleColor }}">
+                {{ $headline | safeHTML }}
+            </h1>
+            {{ if and $showDescription $subHeadline }}
+            <p class="text-lg {{ $descriptionColor }}">
+                {{ $subHeadline | safeHTML }}
+            </p>
+            {{ end }}
+            <div class="flex flex-col sm:flex-row gap-4">
+                {{ with $primaryText }}
+                <a href="{{ $primaryLink }}" class="btn text-center {{ $primaryClass }}">
+                    {{ . }}
+                </a>
+                {{ end }}
+
+                {{ if $showSecondaryButton }}
+                {{ with $secondaryText }}
+                <a href="{{ $secondaryLink }}" class="btn text-center border-2 {{ $secondaryClass }}">
+                    {{ . }}
+                </a>
+                {{ end }}
+                {{ end }}
+            </div>
+        </div>
+
+    </div>
+</section>

@@ -619,6 +619,60 @@ Our learning methods also help you acquire the skills you need to put them into 
     hover = "hover:bg-neurokube-100 dark:hover:bg-neurokube-700"
     border = "border-neurokube-600 dark:border-neurokube-400"
 
+# Hero Fondu shortcode (see layouts/shortcodes/sokube-hero-fondu.html).
+# Instancié différemment selon la page (règle 12) : fonctionne par palette
+# nommée pour la couleur du panneau + de la description, comme
+# [params.cards]/[params.feature] (règle 5). Titre, boutons et la
+# progressivité du fondu (fadeDistance) ne varient pas selon la palette :
+# défaut unique dans [params.heroFondu.style], sur le même principe que
+# [params.feature.style].
+[params.heroFondu]
+  [params.heroFondu.style]
+    title = "text-white"
+
+    # Distance (en % de la largeur du panneau image) à laquelle le dégradé
+    # de fondu devient entièrement transparent - au-delà, la photo est
+    # visible sans aucune teinte. Plus la valeur est petite, plus on voit
+    # tôt la photo nette (fondu court et progressif dès le bord) ; plus elle
+    # est grande, plus la couleur du panneau s'étend sur la photo. Surchargeable
+    # par instance via le paramètre fade_distance du shortcode / hero.fade_distance
+    # du front matter.
+    fadeDistance = "80%"
+
+    [params.heroFondu.style.primary_button]
+      background = "bg-kube-600"
+      text_color = "text-white"
+      hover = "hover:bg-kube-700"
+
+    [params.heroFondu.style.secondary_button]
+      background = "bg-transparent"
+      text_color = "text-white"
+      border = "border-white"
+      hover_background = "hover:bg-white"
+      hover_text_color = "hover:text-neurokube-900"
+
+  # "colorVar" référence une variable CSS définie dans assets/css/custom.css
+  # (elle-même lue depuis tailwind.config.js via theme(), source unique) -
+  # utilisée par layouts/partials/hero-fondu.html pour le dégradé CSS
+  # linear-gradient() du fondu, un cas où une classe Tailwind ne peut pas
+  # suffire (même technique que [params.feature.<nom>].colorVar, règle 5).
+  # Ne jamais mettre une valeur hexadécimale en dur ici : ajouter une
+  # nouvelle variable --color-<palette>-<teinte> dans custom.css à la place.
+  [params.heroFondu.default]
+    background = "bg-neurokube-900"
+    description = "text-neurokube-100"
+    colorVar = "--color-neurokube-900"
+
+  [params.heroFondu.kube]
+    background = "bg-kube-900"
+    description = "text-kube-100"
+    colorVar = "--color-kube-900"
+
+  [params.heroFondu.hr]
+    background = "bg-hr-900"
+    description = "text-hr-100"
+    colorVar = "--color-hr-900"
+
 # Global CTA Configuration
 [params.cta]
   enable = true

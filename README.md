@@ -570,6 +570,69 @@ Vous devez insérer le code suivant pour ajouter le shortcode **hero** dans une 
 
 `sub_headline` et le bouton secondaire sont optionnels : passez `show_description="false"` et/ou `show_secondary_button="false"` pour les masquer sur une instance donnée (ex : le hero de `hiring.md`, sans description ni bouton secondaire).
 
+#### 🌆 Hero Fondu
+
+Le shortcode **sokube-hero-fondu** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Variante en deux colonnes pleine largeur du Hero : un panneau de couleur pleine (titre, description, boutons) d'un côté, une photo de l'autre, qui se "fond" dans la couleur du panneau via un dégradé. Le texte se trouve toujours du côté opposé à la photo (`imagePosition="left"` ou `"right"`, défaut `"right"`), et reste aligné sur les mêmes marges que le reste du site (`.container`, `max-w-7xl`) au lieu de coller au bord plein cadre de la section - seule la photo va jusqu'au bord.
+
+Contrairement au Hero classique (une seule identité visuelle pour tout le site), ce shortcode est **instanciable par page** : chaque appel choisit une palette de couleur (`palette="default"`, `"kube"` ou `"hr"`), définie dans `hugo.toml`. Le titre, les boutons et la progressivité du fondu, eux, ne changent pas d'une palette à l'autre.
+
+```
+[params.heroFondu]
+  [params.heroFondu.style]
+    title = "text-white"
+    # Distance (% de la largeur du panneau photo) à laquelle le fondu devient
+    # entièrement transparent - plus petit = photo nette plus tôt (fondu
+    # court), plus grand = la couleur s'étend plus loin sur la photo.
+    fadeDistance = "55%"
+    [params.heroFondu.style.primary_button]
+      background = "bg-kube-600"
+      text_color = "text-white"
+      hover = "hover:bg-kube-700"
+    [params.heroFondu.style.secondary_button]
+      background = "bg-transparent"
+      text_color = "text-white"
+      border = "border-white"
+      hover_background = "hover:bg-white"
+      hover_text_color = "hover:text-neurokube-900"
+
+  # colorVar référence une variable CSS (assets/css/custom.css), utilisée
+  # pour le dégradé du fondu - voir le commentaire dans hugo.toml.
+  [params.heroFondu.default]
+    background = "bg-neurokube-900"
+    description = "text-neurokube-100"
+    colorVar = "--color-neurokube-900"
+
+  [params.heroFondu.kube]
+    background = "bg-kube-900"
+    description = "text-kube-100"
+    colorVar = "--color-kube-900"
+
+  [params.heroFondu.hr]
+    background = "bg-hr-900"
+    description = "text-hr-100"
+    colorVar = "--color-hr-900"
+```
+
+Toute nouvelle palette doit ajouter sa propre variable CSS `--color-<palette>-900` dans `assets/css/custom.css` (jamais une valeur hexadécimale en dur) et la référencer via `colorVar` ci-dessus - contrairement à la couleur de fond (`background`), le dégradé de fondu n'a donc besoin d'aucune entrée dans le safelist de `tailwind.config.js`.
+
+Appel type :
+
+```
+{{< sokube-hero-fondu
+    palette="default"
+    headline="Vos Experts FinOps"
+    sub_headline="On maîtrise vos coûts cloud, vous gardez la maîtrise du produit."
+    primary_button_text="Parlons de votre projet"
+    primary_button_url="/contact/"
+    hero_image="/images/hero/finops-light.jpg"
+    imagePosition="right"
+    fade_distance="40%"
+>}}
+```
+
 #### 🧩 Features-section
 
 Le shortcode **sokube-features-section** se trouve dans le répertoire :

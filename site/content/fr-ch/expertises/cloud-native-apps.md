@@ -5,7 +5,7 @@ description: "SoKube vous accompagne dans la conception et le développement de 
 
 hero:
   headline: "Vos Experts Cloud Native Applications"
-  image: "/images/expertises/cloud-native.jpg"
+  image: "/images/expertises/cloud-native-hero.jpg"
   button_text: "Parlons de votre projet"
   button_link: "/contact"
 

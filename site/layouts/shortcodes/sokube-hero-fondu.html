@@ -1,0 +1,106 @@
+{{/*
+    Hero Fondu Shortcode
+
+    Thin wrapper around layouts/partials/hero-fondu.html (the shared
+    rendering logic, also called directly by layouts/_default/expertise.html
+    since shortcodes cannot be invoked from layouts - règle 13).
+
+    Variante de sokube-hero en deux colonnes pleine largeur : un panneau de
+    couleur pleine (titre, description, boutons) d'un côté, une photo de
+    l'autre, la photo se "fondant" dans la couleur du panneau via un dégradé
+    superposé sur son bord intérieur (bord extérieur = photo nette). Le
+    titre/description/boutons sont alignés sur le même ".container" que le
+    reste du site (mx-auto, max-w-7xl, mêmes marges px), plutôt que sur le
+    bord plein cadre de la section.
+
+    Instanciable par page (règle 12) : chaque appel peut avoir un aspect
+    différent, via une palette nommée - même convention que sokube-card /
+    sokube-feature (règle 5, cas "répété" / "instancié différemment selon la
+    page"). La palette ne porte que la couleur de fond + description
+    (variable selon la page) ; titre, boutons et progressivité du fondu
+    restent communs à toutes les palettes, définis une fois dans
+    [params.heroFondu.style] (hugo.toml).
+
+    Paramètres :
+      palette              - nom de la palette de couleur : "default", "kube"
+                              ou "hr" (défaut "default"; voir [params.heroFondu]
+                              dans hugo.toml)
+      headline              - titre (HTML autorisé, non passé dans markdownify)
+      sub_headline          - description, sous le titre, texte plus petit
+      show_description      - "true" (défaut) ou "false" pour masquer sub_headline
+      primary_button_text/url    - bouton principal
+      secondary_button_text/url  - bouton secondaire (couleurs communes à
+                              toutes les palettes, voir [params.heroFondu.style])
+      show_secondary_button - "true" (défaut) ou "false" pour masquer le bouton
+                              secondaire
+      hero_image             - image; la variante sombre est déduite en
+                              remplaçant "-light" par "-dark" dans le nom de
+                              fichier (même convention que sokube-hero)
+      imagePosition          - "left" ou "right" (défaut "right") : côté de la
+                              photo. Le texte se trouve toujours du côté opposé.
+      fade_distance          - distance (%) à laquelle le dégradé de fondu
+                              devient entièrement transparent (défaut
+                              params.heroFondu.style.fadeDistance, "55%").
+                              Plus petit = photo nette plus tôt, plus grand =
+                              la couleur du panneau s'étend plus loin sur la photo.
+
+    Appel minimal (photo à droite, palette par défaut) :
+      {{</* sokube-hero-fondu
+          headline="Vos Experts FinOps"
+          sub_headline="On maîtrise vos coûts cloud, vous gardez la maîtrise du produit."
+          primary_button_text="Parlons de votre projet"
+          primary_button_url="/contact/"
+          hero_image="/images/hero/finops-light.jpg"
+      >}}
+
+    Appel complet (photo à gauche, palette "kube", sans bouton secondaire, fondu plus long) :
+      {{</* sokube-hero-fondu
+          palette="kube"
+          headline="Vos Experts FinOps"
+          sub_headline="On maîtrise vos coûts cloud, vous gardez la maîtrise du produit."
+          primary_button_text="Parlons de votre projet"
+          primary_button_url="/contact/"
+          show_secondary_button="false"
+          hero_image="/images/hero/finops-light.jpg"
+          imagePosition="left"
+          fade_distance="40%"
+      >}}
+*/}}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $paletteStyle := index site.Params.heroFondu $paletteName }}
+{{ if not $paletteStyle }}
+    {{ errorf "sokube-hero-fondu: palette %q introuvable dans [params.heroFondu] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $paletteStyle = site.Params.heroFondu.default }}
+{{ end }}
+
+{{ $style := site.Params.heroFondu.style | default dict }}
+{{ $primaryBtn := $style.primary_button | default dict }}
+{{ $secondaryBtn := $style.secondary_button | default dict }}
+
+{{ $primaryClass := printf "%s %s %s" $primaryBtn.background $primaryBtn.text_color $primaryBtn.hover }}
+{{ $secondaryClass := printf "%s %s %s %s %s" $secondaryBtn.background $secondaryBtn.text_color $secondaryBtn.border $secondaryBtn.hover_background $secondaryBtn.hover_text_color }}
+
+{{ partial "hero-fondu.html" (dict
+    "headline" (.Get "headline")
+    "subHeadline" (.Get "sub_headline")
+    "showDescription" (eq (.Get "show_description" | default "true") "true")
+
+    "primaryText" (.Get "primary_button_text")
+    "primaryLink" (.Get "primary_button_url")
+    "primaryClass" $primaryClass
+
+    "showSecondaryButton" (eq (.Get "show_secondary_button" | default "true") "true")
+    "secondaryText" (.Get "secondary_button_text")
+    "secondaryLink" (.Get "secondary_button_url")
+    "secondaryClass" $secondaryClass
+
+    "image" (.Get "hero_image")
+    "imagePosition" (.Get "imagePosition" | default "right")
+
+    "background" $paletteStyle.background
+    "titleColor" $style.title
+    "descriptionColor" $paletteStyle.description
+    "colorVar" $paletteStyle.colorVar
+    "fadeDistance" (.Get "fade_distance" | default $style.fadeDistance)
+) }}

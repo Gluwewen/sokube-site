@@ -20,6 +20,13 @@
   --color-neurokube-600: theme('colors.neurokube.600');
   --color-kube-600: theme('colors.kube.600');
   --color-hr-600: theme('colors.hr.600');
+
+  /* Teinte 900, pour le dégradé de fondu de sokube-hero-fondu
+     (layouts/partials/hero-fondu.html) - référencées via
+     params.heroFondu.<palette>.colorVar (hugo.toml). */
+  --color-neurokube-900: theme('colors.neurokube.900');
+  --color-kube-900: theme('colors.kube.900');
+  --color-hr-900: theme('colors.hr.900');
 }
 
 /* Tous les titres du site : text-gray-900 fixe dans le thème, sans variante sombre. */
@@ -116,6 +123,48 @@
   color: theme('colors.neurokube.100');
 }
 
+
+/* sokube-hero-fondu (layouts/partials/hero-fondu.html) / layout expertise :
+   le bloc titre/description/boutons vit dans une des deux colonnes d'une
+   grille 2 colonnes plein cadre, mais doit rester aligné sur la même marge
+   que ".container" (mx-auto, max-w-7xl, px-4 sm:px-6 lg:px-8) partout
+   ailleurs sur le site. En dessous du breakpoint "lg" (1024px), les deux
+   colonnes s'empilent (une seule colonne pleine largeur) : les mêmes paliers
+   px-4/sm:px-6 que .container suffisent donc. À partir de "lg", la colonne
+   ne fait plus que la moitié de la largeur de la fenêtre : l'écart est donc
+   recalculé directement à partir de 100vw (calc()), en pur CSS plutôt qu'une
+   classe Tailwind, pour reproduire au pixel près le comportement de
+   .container une fois que la largeur de la fenêtre dépasse 1280px (max-w-7xl)
+   et qu'il se recentre avec des marges égales de part et d'autre. */
+.hero-fondu-text {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .hero-fondu-text {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-fondu-text {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  /* Le bord OPPOSÉ à la photo est celui qui doit matcher la marge du site -
+     le bord côté photo garde le padding fixe ci-dessus (juste un peu d'air
+     avant le dégradé). */
+  .hero-fondu-text--edge-left {
+    padding-left: max(2rem, calc((100vw - 1280px) / 2 + 2rem));
+  }
+
+  .hero-fondu-text--edge-right {
+    padding-right: max(2rem, calc((100vw - 1280px) / 2 + 2rem));
+  }
+}
 
 /* text-gray-600 : couleur de texte secondaire générique utilisée sur tout le site
    (descriptions de section, sous-titres...) sans variante sombre dédiée à chaque
