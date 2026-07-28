@@ -20,6 +20,13 @@
       descriptionColor (required)      - couleur du texte de description
       primaryClass (required)          - fond + texte + hover du bouton principal
       secondaryClass (required)        - fond + texte + bordure + hover du bouton secondaire
+      showDiamonds                     - bool, affiche la décoration "losanges
+                                          de marque" (défaut false) - voir
+                                          layouts/partials/brand-diamonds.html
+      diamondsPosition                 - "top" ou "bottom" (défaut "bottom")
+      diamondsPalette                  - nom de la palette déjà résolue par
+                                          l'appelant, pour la couleur des
+                                          losanges (règle 15 ; défaut "default")
 */}}
 {{ $id := .id }}
 {{ $title := .title }}
@@ -38,7 +45,12 @@
 {{ $primaryClass := .primaryClass }}
 {{ $secondaryClass := .secondaryClass }}
 
-<section {{ with $id }}id="{{ . }}"{{ end }} class="{{ $background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24">
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsPalette := .diamondsPalette | default "default" }}
+
+<section {{ with $id }}id="{{ . }}"{{ end }} class="{{ $background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24 relative">
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $diamondsPalette "position" $diamondsPosition) }}
   <div class="container text-center max-w-3xl mx-auto">
 
     {{ with $title }}

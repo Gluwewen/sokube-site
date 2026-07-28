@@ -21,6 +21,11 @@
       background  - surcharge ponctuelle du fond de la section, par-dessus
                     la palette choisie (défaut: palette.background, ex:
                     dégradé gris clair en haut vers blanc en bas)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                    marque" (défaut "false") - voir
+                    layouts/partials/brand-diamonds.html ; couleur liée à la
+                    palette ci-dessus (règle 15)
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
       .Inner      - contenu (typiquement une série de sokube-feature)
 
     Appel minimal :
@@ -43,10 +48,14 @@
 {{ $descriptionColor := .Get "descriptionColor" | default $style.description }}
 {{ $background := .Get "background" | default $style.background }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+
 <section
     id="{{ $id }}"
-    class="section {{ $background }}"
+    class="section {{ $background }} relative"
 >
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition) }}
     <div class="container">
         <div class="text-center max-w-3xl mx-auto mb-16">
             {{ with $title }}<h2 class="text-3xl md:text-4xl font-bold mb-6">{{ . }}</h2>{{ end }}

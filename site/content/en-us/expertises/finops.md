@@ -16,6 +16,7 @@ callout:
   palette: "kube"
   button_text: "Let's talk about it"
   button_link: "/contact"
+  show_diamonds: true
 
 cards:
   eyebrow: "Benefit from expert advice to accelerate your digital transformation"

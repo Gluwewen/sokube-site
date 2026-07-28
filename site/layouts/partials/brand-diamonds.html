@@ -1,0 +1,85 @@
+{{/*
+    brand-diamonds (partial)
+
+    Décoration visuelle : deux losanges accolés (coin à coin, sans se
+    chevaucher) - un petit losange sombre et un grand losange coloré - à
+    cheval sur la bordure haute ou basse d'un shortcode ou layout "section"
+    (50% de leur hauteur dans la section, 50% dans la section précédente ou
+    suivante). Règle 13 : partial partagée, réutilisable par n'importe quel
+    appelant sans dupliquer le code (aujourd'hui : sokube-two-columns,
+    sokube-callout via callout-block.html, sokube-features-section).
+
+    Aspect structurel (règle 3) : un losange tourné à 45° "dépasse" de sa
+    boîte de base par sa demi-diagonale (côté × √2 / 2), pas par sa
+    demi-largeur. Pour que le coin droit du petit losange (w-6, soit 24px)
+    touche exactement le coin gauche du grand (w-10, soit 40px) sans les
+    superposer, l'écart entre les deux boîtes doit compenser la différence
+    entre demi-diagonales et demi-largeurs : gap-x-[13.25px] (calculé une
+    fois pour ces tailles précises - à recalculer si w-6/w-10 changent).
+
+    Positionnement : ce partial se place en absolute par rapport à la
+    <section> appelante, qui DOIT donc avoir la classe "relative" (aspect
+    structurel, règle 3 - à ajouter une fois dans le template de la section,
+    ne se paramètre pas). Alignement horizontal calé sur le même conteneur
+    ".container" (mx-auto + padding + max-w-7xl) que le reste du contenu de
+    la section, pour rester aligné à droite au même endroit visuellement.
+
+    Couleur (règle 15) : liée à la palette du composant appelant, qui garde
+    toujours priorité.
+      - le petit losange utilise TOUJOURS la teinte sombre de la palette
+        "default" ([params.diamonds.default].small dans hugo.toml), quelle
+        que soit la palette du composant appelant.
+      - le grand losange utilise la teinte de la palette du composant
+        appelant ([params.diamonds.<palette>].large). Si le composant est
+        lui-même en palette "default", les deux losanges sont donc dans deux
+        teintes de bleu différentes (sombre / claire) ; sinon le grand
+        losange prend la couleur de la palette de l'appelant (ex. rose en
+        "kube", vert en "hr").
+
+    Toutes les valeurs doivent déjà être résolues par l'appelant (ce partial
+    ne lit pas .Page, seulement site.Params.diamonds pour la table de
+    couleurs elle-même).
+
+    Paramètres (dict) :
+      show     - bool, affiche ou non les losanges (défaut false : ne rien
+                 afficher si omis, pas de régression sur les instances
+                 existantes)
+      palette  - nom de la palette déjà résolue par l'appelant : "default",
+                 "kube" ou "hr" (défaut "default")
+      position - "top" ou "bottom" : bordure de la section sur laquelle les
+                 losanges sont à cheval (défaut "bottom")
+
+    Exemple d'appel (depuis un shortcode ayant déjà résolu $paletteName) :
+      {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition) }}
+*/}}
+
+{{ if .show }}
+    {{ $paletteName := .palette | default "default" }}
+
+    {{ $defaultStyle := site.Params.diamonds.default }}
+    {{ $style := index site.Params.diamonds $paletteName }}
+    {{ if not $style }}
+        {{ errorf "brand-diamonds: palette %q introuvable dans [params.diamonds] (hugo.toml)" $paletteName }}
+        {{ $style = $defaultStyle }}
+    {{ end }}
+
+    {{ $smallColor := $defaultStyle.small }}
+    {{ $largeColor := $style.large | default $defaultStyle.large }}
+
+    {{ $position := .position | default "bottom" }}
+    {{ if not (in (slice "top" "bottom") $position) }}
+        {{ errorf "brand-diamonds: position %q invalide (attendu \"top\" ou \"bottom\")" $position }}
+        {{ $position = "bottom" }}
+    {{ end }}
+    {{ $edgeClasses := "bottom-0 translate-y-1/2" }}
+    {{ if eq $position "top" }}
+        {{ $edgeClasses = "top-0 -translate-y-1/2" }}
+    {{ end }}
+
+    <div class="container absolute inset-x-0 z-10 {{ $edgeClasses }} pointer-events-none" aria-hidden="true">
+        <div class="flex justify-end items-center gap-x-[13.25px]">
+            <div class="w-6 h-6 rounded-md rotate-45 {{ $smallColor }}"></div>
+            <div class="w-10 h-10 rounded-md rotate-45 {{ $largeColor }}"></div>
+        </div>
+    </div>
+{{ end }}

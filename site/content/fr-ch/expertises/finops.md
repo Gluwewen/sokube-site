@@ -16,6 +16,7 @@ callout:
   palette: "kube"
   button_text: "Parlons en ensemble"
   button_link: "/contact"
+  show_diamonds: true
 
 cards:
   eyebrow: "Bénéficiez de conseils d'experts pour accélérer votre transformation numérique"

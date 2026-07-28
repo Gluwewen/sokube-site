@@ -13,11 +13,17 @@
     bouton "Découvrir SoKube" vers about.md).
 
     Paramètres :
-      palette    - nom de la palette du bouton : "default", "kube" ou "hr"
-                   (défaut "default") - voir [params.twoColumns] (hugo.toml)
-      buttonText - texte du bouton sous les colonnes (optionnel : pas de
-                   bouton si omis)
-      buttonLink - lien du bouton (obligatoire si buttonText est fourni)
+      palette          - nom de la palette du bouton : "default", "kube" ou
+                         "hr" (défaut "default") - voir [params.twoColumns]
+                         (hugo.toml)
+      buttonText       - texte du bouton sous les colonnes (optionnel : pas
+                         de bouton si omis)
+      buttonLink       - lien du bouton (obligatoire si buttonText est fourni)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                         marque" (défaut "false") - voir
+                         layouts/partials/brand-diamonds.html ; couleur liée
+                         à la palette ci-dessus (règle 15)
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
 
     .Inner : YAML avec deux clés, chacune en Markdown
       columnLeft  - texte de la colonne de gauche
@@ -45,7 +51,11 @@
     {{ $style = site.Params.twoColumns.default }}
 {{ end }}
 
-<section class="section">
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+
+<section class="section relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition) }}
     <div class="container">
         <div class="grid md:grid-cols-2 gap-12">
             <div class="prose prose-lg max-w-none">

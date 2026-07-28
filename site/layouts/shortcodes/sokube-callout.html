@@ -32,6 +32,11 @@
       descriptionColor       - surcharge ponctuelle du texte de description (défaut: palette.description)
       primaryButtonColor     - surcharge ponctuelle fond+texte+hover du bouton principal (défaut: palette.primaryButton)
       secondaryButtonColor   - surcharge ponctuelle fond+texte+bordure+hover du bouton secondaire (défaut: palette.secondaryButton)
+      showDiamonds           - "true"/"false", affiche la décoration "losanges
+                                de marque" (défaut "false") - voir
+                                layouts/partials/brand-diamonds.html ;
+                                couleur liée à la palette ci-dessus (règle 15)
+      diamondsPosition       - "top" ou "bottom" (défaut "bottom")
 
     Appel minimal :
       {{</* sokube-callout
@@ -80,4 +85,8 @@
     "descriptionColor" (.Get "descriptionColor" | default $palette.description)
     "primaryClass" (.Get "primaryButtonColor" | default $palette.primaryButton)
     "secondaryClass" (.Get "secondaryButtonColor" | default $palette.secondaryButton)
+
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsPalette" $paletteName
 ) }}

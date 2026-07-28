@@ -1156,6 +1156,24 @@ Our learning methods also help you acquire the skills you need to put them into 
     pillBackground = "bg-hr-100 dark:bg-hr-800"
     pillText = "text-hr-700 dark:text-hr-100"
 
+# Décoration "losanges de marque" (voir layouts/partials/brand-diamonds.html,
+# règle 13 : partial partagée réutilisable par sokube-two-columns,
+# sokube-callout et sokube-features-section). Règle 15 : couleur liée à la
+# palette du composant appelant, priorité au shortcode/layout. Le petit
+# losange utilise TOUJOURS [params.diamonds.default].small (peu importe la
+# palette de l'appelant) ; le grand losange utilise [params.diamonds.<palette
+# de l'appelant>].large.
+[params.diamonds]
+  [params.diamonds.default]
+    small = "bg-neurokube-900 dark:bg-neurokube-100"
+    large = "bg-neurokube-600 dark:bg-neurokube-800"
+
+  [params.diamonds.kube]
+    large = "bg-kube-600 dark:bg-kube-800"
+
+  [params.diamonds.hr]
+    large = "bg-hr-600 dark:bg-hr-800"
+
 # Top-tips shortcode (see layouts/shortcodes/sokube-top-tips.html), used on
 # expertise pages. Site-wide : une seule identité visuelle pour tout le site
 # (bandeau, préfixe, couleurs) - rien de tout ça ne se passe en paramètre du

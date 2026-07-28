@@ -49,6 +49,10 @@
                                   voir [params.callout] dans hugo.toml)
         button_text: "..."
         button_link: "..."
+        show_diamonds: true      (optionnel, false par défaut - décoration "losanges
+                                  de marque", voir layouts/partials/brand-diamonds.html ;
+                                  couleur liée à "palette" ci-dessus, règle 15)
+        diamonds_position: "..." (optionnel, "top" ou "bottom", défaut "bottom")
 
       cards:
         eyebrow: "..."             (optionnel - couleur pilotée par palette, champ
@@ -174,6 +178,10 @@
         "background" $palette.background
         "descriptionColor" $palette.description
         "primaryClass" $palette.primaryButton
+
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsPalette" $paletteName
     ) }}
 {{ end }}
 

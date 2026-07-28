@@ -677,6 +677,34 @@ Enrobe un groupe de `sokube-feature` avec un titre/description centrés optionne
 
 `background` est volontairement identique sur les 3 palettes (cette section n'est qu'un en-tête de texte, pas une identité visuelle en soi). `palette`, `descriptionColor` et `background` sont surchargeables ponctuellement via les paramètres du shortcode. Toute nouvelle couleur de dégradé doit être ajoutée au safelist de `tailwind.config.js` (voir le commentaire à côté de `'from-gray-50'`).
 
+`sokube-features-section` supporte aussi la décoration "losanges de marque" (voir section dédiée ci-dessous) : `showDiamonds="true"` et `diamondsPosition="top"/"bottom"` (défaut "bottom").
+
+#### 🔶 Losanges de marque (brand-diamonds)
+
+Décoration partagée (règle 13) : `layouts/partials/brand-diamonds.html`, deux losanges accolés coin à coin (sans se chevaucher) - un petit losange sombre, un grand losange coloré - à cheval sur la bordure haute ou basse d'un shortcode/layout "section" (50% de leur hauteur affichée dans la section, 50% dans la section précédente ou suivante). Réutilisable par n'importe quel composant sans dupliquer de code - aujourd'hui activé sur `sokube-two-columns`, `sokube-callout` (et l'équivalent direct dans `layouts/_default/expertise.html`) et `sokube-features-section`.
+
+Aspect structurel (règle 3) : la `<section>` appelante doit porter la classe `relative` pour que le positionnement fonctionne (déjà fait sur les 3 composants ci-dessus).
+
+Couleur liée à la palette du composant appelant (règle 15), qui garde toujours priorité :
+- le petit losange utilise TOUJOURS la teinte sombre de la palette "default" (`[params.diamonds.default].small`), quelle que soit la palette du composant appelant.
+- le grand losange utilise la teinte de la palette du composant appelant (`[params.diamonds.<palette>].large`). En palette "default", les deux losanges sont donc dans deux teintes de bleu différentes (sombre / claire) ; sinon le grand losange prend la couleur de la palette (rose en "kube", vert en "hr").
+
+```
+[params.diamonds.default]
+  small = "bg-neurokube-900 dark:bg-neurokube-100"
+  large = "bg-neurokube-600 dark:bg-neurokube-800"
+
+[params.diamonds.kube]
+  large = "bg-kube-600 dark:bg-kube-800"
+
+[params.diamonds.hr]
+  large = "bg-hr-600 dark:bg-hr-800"
+```
+
+Chaque composant qui l'utilise expose deux paramètres :
+- `showDiamonds` : `"true"`/`"false"` (défaut `"false"` - pas de losanges par défaut, pas de régression sur les instances existantes)
+- `diamondsPosition` : `"top"` ou `"bottom"` (défaut `"bottom"`)
+
 #### 📣 Call To Action (CTA)
 
 Le shortcode **CTA** se trouve dans le répertoire :
@@ -934,6 +962,8 @@ Le shortcode **sokube-two-columns** se trouve dans le répertoire :
 
 Bloc de texte Markdown libre sur deux colonnes (empilées en mobile), suivi d'un bouton centré optionnel. **Instanciable par page** (comme sokube-carroussel) : aucune couleur de marque pour le texte, mais le bouton fonctionne par palette nommée ("default"/"kube"/"hr", défaut "default" - voir `[params.twoColumns]` dans `hugo.toml`), même convention que sokube-feature/sokube-callout. Utilisé aujourd'hui sur `hiring.md` pour la présentation de SoKube avec un bouton vers `/about`.
 
+Supporte aussi la décoration "losanges de marque" (voir section dédiée plus haut) : `showDiamonds="true"` et `diamondsPosition="top"/"bottom"` (défaut "bottom") ; couleur liée à la palette du bouton ci-dessus.
+
 ##### Configurer son contenu
 
 Le texte des deux colonnes est fourni en YAML directement entre les balises d'ouverture et de fermeture du shortcode :
@@ -1087,7 +1117,7 @@ Toutes les pages du sous-menu Expertises (`/site/content/*/expertises/*.md`, sau
 Ordre d'affichage sur la page (fixe, indépendant de l'ordre des champs dans le front matter) : `hero`, `callout`, `cards`, `features`, `faq`, puis `tips` toujours en tout dernier.
 
 - `hero` : `headline`, `sub_headline` (optionnel), `image` (optionnel), `image_position` (optionnel, "left"/"right"), `palette` (optionnel, "default"/"kube"/"hr" - voir `[params.heroFondu]`), `fade_distance` (optionnel), `button_text`, `button_link` — rendu via `sokube-hero-fondu`
-- `callout` : `title`, `description`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.callout]`), `button_text`, `button_link` — rendu via `sokube-callout`
+- `callout` : `title`, `description`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.callout]`), `button_text`, `button_link`, `show_diamonds` (optionnel, false par défaut - décoration "losanges de marque", voir section dédiée plus haut), `diamonds_position` (optionnel, "top"/"bottom", défaut "bottom") — rendu via `sokube-callout`
 - `cards` : `eyebrow` (optionnel, couleur pilotée par la palette - champ `eyebrow` de `[params.cards.<nom>]`), `title`, `description`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.cards]`, s'applique à toutes les cards de la section ainsi qu'à l'eyebrow), `items` (liste de `{icon, palette, title, text}` - `icon` optionnel, mêmes icônes que `tips` ci-dessous, voir `layouts/partials/icon.html` ; `palette` optionnel, surcharge la palette de la section pour cette seule card)
 - `features` : **liste** de blocs génériques image + liste numérotée (étapes d'un processus, argumentaire de certifications, points de vigilance, questions à se poser...) — autant de blocs que nécessaire, affichés à la suite les uns des autres dans l'ordre du front matter. Chaque bloc : `title`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.feature]`, couleur du badge numéroté et du bouton, propre à ce bloc), `image`, `button_text`/`button_link` (optionnels), `items` (liste de `{title, text}`, `text` optionnel, numérotée automatiquement)
 - `faq` : `title`, `description` (optionnel), `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - voir `[params.faq]`, couleur de l'accent, des markers, du menu de catégories et du bouton), `show_button` (optionnel), `background` (optionnel), `items` (liste de `{question, answer, category}`)
