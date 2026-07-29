@@ -21,6 +21,11 @@
       buttonColor, background - surcharges ponctuelles par-dessus la
                     palette choisie, pour un cas exceptionnel
       showButton, buttonText, buttonLink - voir layouts/shortcodes/faq.html
+      showDiamonds, diamondsPosition, diamondsSide - "true"/"false" (défaut
+                    false), "top"/"bottom" (défaut "bottom") et "left"/"right"
+                    (défaut "right") - décoration "losanges de marque", voir
+                    layouts/partials/brand-diamonds.html ; couleur liée à la
+                    palette ci-dessus (règle 15)
 */}}
 
 {{ $id := .id }}
@@ -48,6 +53,10 @@
 {{ $faqButtonColor := .buttonColor | default $style.buttonColor }}
 
 {{ $sectionBackground := .background | default $style.background }}
+
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
 
 {{/* Hover variant of accentColor (nav link hover state) - prefixes every
      class in the combined light/dark string with "hover:", so a two-token
@@ -117,7 +126,8 @@
      (themes/hugo-saasify-theme/assets/css/main.css) sans l'échappatoire
      "not-prose" du plugin - d'où le $...Forced plus haut, qui force la
      couleur de ces liens via "!" pour gagner face à cette règle. */}}
-<section class="not-prose {{ $sectionBackground }} py-8 lg:py-16">
+<section class="not-prose {{ $sectionBackground }} py-8 lg:py-16 relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="px-4 mx-auto max-w-screen-xl lg:px-6">
 
         <h1 class="mb-10 text-3xl font-extrabold text-gray-900 dark:text-white">

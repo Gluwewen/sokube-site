@@ -23,6 +23,12 @@
                       icon: "..."   - un des noms ci-dessous
                       title: "..."  - titre du tip
                       text: "..."   - texte du tip
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; site-wide (pas
+                        de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Icônes disponibles (rule 8 : erreur explicite si le nom ne correspond à
     aucune des valeurs ci-dessous, voir layouts/partials/icon.html) :
@@ -51,4 +57,7 @@
     "description" (.Get "description")
     "tips" $data.tips
     "page" .Page
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
 ) }}

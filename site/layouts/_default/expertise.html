@@ -44,7 +44,10 @@
 
       callout:
         title: "..."
-        description: "..."
+        description: "..."       (Markdown supporté (gras, liens...) ; pour un saut de
+                                  ligne sans nouveau paragraphe, texte littéral \n - \n\n
+                                  pour un vrai nouveau paragraphe, même convention que
+                                  sokube-feature/sokube-carroussel/sokube-two-columns)
         palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
                                   voir [params.callout] dans hugo.toml)
         button_text: "..."
@@ -53,6 +56,7 @@
                                   de marque", voir layouts/partials/brand-diamonds.html ;
                                   couleur liée à "palette" ci-dessus, règle 15)
         diamonds_position: "..." (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."     (optionnel, "left" ou "right", défaut "right")
 
       cards:
         eyebrow: "..."             (optionnel - couleur pilotée par palette, champ
@@ -102,6 +106,11 @@
         button_text: "..."         (optionnel)
         button_link: "..."         (optionnel)
         background: "..."         (optionnel, ex: "bg-gray-50 dark:bg-neurokube-800")
+        show_diamonds: true        (optionnel, false par défaut - décoration "losanges
+                                    de marque", voir layouts/partials/brand-diamonds.html ;
+                                    couleur liée à "palette" ci-dessus, règle 15)
+        diamonds_position: "..."  (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."      (optionnel, "left" ou "right", défaut "right")
         items:                     (liste de {question, answer, category})
           - question: "..."
             answer: "..."
@@ -111,6 +120,11 @@
                                     des champs dans le front matter)
         title: "..."
         description: "..."
+        show_diamonds: true        (optionnel, false par défaut - décoration "losanges
+                                    de marque", voir layouts/partials/brand-diamonds.html ;
+                                    toujours palette "default", pas de palette nommée ici)
+        diamonds_position: "..."  (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."      (optionnel, "left" ou "right", défaut "right")
         items:                     (liste de {icon, title, text})
           - icon: "pencil"         (voir layouts/partials/top-tips.html pour la liste des icônes)
             title: "..."
@@ -177,10 +191,13 @@
         "primaryLink" .button_link
         "background" $palette.background
         "descriptionColor" $palette.description
+        "descriptionLinkColor" $palette.descriptionLink
+        "descriptionLinkHoverColor" $palette.descriptionLinkHover
         "primaryClass" $palette.primaryButton
 
         "showDiamonds" (.show_diamonds | default false)
         "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
         "diamondsPalette" $paletteName
     ) }}
 {{ end }}
@@ -311,6 +328,9 @@
         "buttonText" .button_text
         "buttonLink" .button_link
         "background" .background
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
     ) }}
 {{ end }}
 
@@ -321,6 +341,9 @@
         "description" .description
         "tips" .items
         "page" $
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
     ) }}
 {{ end }}
 

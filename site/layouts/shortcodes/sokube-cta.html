@@ -62,6 +62,12 @@
 
     The YAML block above (.Inner) is only read when showContactBlock="true";
     every one of its keys is optional. Booleans are the strings "true"/"false".
+
+    showDiamonds/diamondsPosition/diamondsSide : "true"/"false" (default
+    "false"), "top"/"bottom" (default "bottom") and "left"/"right" (default
+    "right") - décoration "losanges de marque", voir
+    layouts/partials/brand-diamonds.html ; toujours palette "default" (pas
+    de palette nommée sur ce shortcode).
 */}}
 
 {{ $siteCta := .Site.Params.cta | default dict }}
@@ -106,4 +112,8 @@
     "contactButtonLink" $contact.buttonLink
     "contactButtonClass" (.Get "contactButtonClass")
     "contactBackground" ($contact.background | default $siteCtaStyle.contactBackground)
+
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
 ) }}

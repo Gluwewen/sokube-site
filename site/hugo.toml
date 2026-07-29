@@ -778,18 +778,24 @@ Our learning methods also help you acquire the skills you need to put them into 
   [params.callout.default]
     background = "bg-gray-50 dark:bg-neurokube-800"
     description = "text-gray-600 dark:text-neurokube-200"
+    descriptionLink = "text-neurokube-600 dark:text-neurokube-300"
+    descriptionLinkHover = "hover:text-neurokube-700 dark:hover:text-neurokube-200"
     primaryButton = "bg-neurokube-600 text-white hover:bg-neurokube-700"
     secondaryButton = "bg-white dark:bg-neurokube-800 text-neurokube-600 dark:text-neurokube-100 hover:bg-neurokube-100 dark:hover:bg-neurokube-700 border-neurokube-600 dark:border-neurokube-400"
 
   [params.callout.kube]
     background = "bg-gray-50 dark:bg-neurokube-800"
     description = "text-gray-600 dark:text-kube-200"
+    descriptionLink = "text-kube-600 dark:text-kube-300"
+    descriptionLinkHover = "hover:text-kube-700 dark:hover:text-kube-200"
     primaryButton = "bg-kube-600 text-white hover:bg-kube-700"
     secondaryButton = "bg-white dark:bg-neurokube-800 text-kube-600 dark:text-kube-100 hover:bg-kube-100 dark:hover:bg-kube-800 border-kube-600 dark:border-kube-400"
 
   [params.callout.hr]
     background = "bg-gray-50 dark:bg-neurokube-800"
     description = "text-gray-600 dark:text-hr-200"
+    descriptionLink = "text-hr-600 dark:text-hr-300"
+    descriptionLinkHover = "hover:text-hr-700 dark:hover:text-hr-200"
     primaryButton = "bg-hr-600 text-white hover:bg-hr-700"
     secondaryButton = "bg-white dark:bg-neurokube-800 text-hr-600 dark:text-hr-100 hover:bg-hr-100 dark:hover:bg-hr-800 border-hr-600 dark:border-hr-400"
 

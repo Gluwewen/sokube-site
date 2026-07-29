@@ -28,6 +28,12 @@
                     frontière reste visible entre les deux plutôt que de
                     fusionner en un seul bloc)
       .Inner      - contenu (typiquement un sokube-card-grid)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                    marque" (défaut "false") - voir
+                    layouts/partials/brand-diamonds.html ; site-wide (pas de
+                    palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal (fond transparent par défaut) :
       {{</* sokube-cards-section title="Born from a recurring operational problem" description="..." >}}
@@ -55,7 +61,12 @@
 {{ $eyebrow := .Get "eyebrow" }}
 {{ $eyebrowColor := .Get "eyebrowColor" | default site.Params.cardsSection.style.eyebrow }}
 
-<section id="{{ $id }}" class="section scroll-mt-24 {{ $background }}">
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
+<section id="{{ $id }}" class="section scroll-mt-24 {{ $background }} relative">
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
   <div class="container">
     <div class="text-center max-w-3xl mx-auto mb-16">
       {{ with $eyebrow }}

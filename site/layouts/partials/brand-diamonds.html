@@ -22,7 +22,11 @@
     structurel, règle 3 - à ajouter une fois dans le template de la section,
     ne se paramètre pas). Alignement horizontal calé sur le même conteneur
     ".container" (mx-auto + padding + max-w-7xl) que le reste du contenu de
-    la section, pour rester aligné à droite au même endroit visuellement.
+    la section, pour rester aligné au même endroit visuellement, à gauche ou
+    à droite selon "side" (voir plus bas). Le losange qui touche le bord
+    extérieur (gauche ou droite) est toujours le grand (coloré) ; le petit
+    (sombre) reste toujours du côté du contenu - l'ordre des deux losanges
+    est donc inversé entre "left" et "right", pas seulement leur alignement.
 
     Couleur (règle 15) : liée à la palette du composant appelant, qui garde
     toujours priorité.
@@ -48,9 +52,11 @@
                  "kube" ou "hr" (défaut "default")
       position - "top" ou "bottom" : bordure de la section sur laquelle les
                  losanges sont à cheval (défaut "bottom")
+      side     - "left" ou "right" : côté de la section auquel les losanges
+                 sont alignés (défaut "right", comportement historique)
 
     Exemple d'appel (depuis un shortcode ayant déjà résolu $paletteName) :
-      {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition) }}
+      {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
 */}}
 
 {{ if .show }}
@@ -76,10 +82,25 @@
         {{ $edgeClasses = "top-0 -translate-y-1/2" }}
     {{ end }}
 
+    {{ $side := .side | default "right" }}
+    {{ if not (in (slice "left" "right") $side) }}
+        {{ errorf "brand-diamonds: side %q invalide (attendu \"left\" ou \"right\")" $side }}
+        {{ $side = "right" }}
+    {{ end }}
+    {{ $justifyClass := "justify-end" }}
+    {{ if eq $side "left" }}
+        {{ $justifyClass = "justify-start" }}
+    {{ end }}
+
     <div class="container absolute inset-x-0 z-10 {{ $edgeClasses }} pointer-events-none" aria-hidden="true">
-        <div class="flex justify-end items-center gap-x-[13.25px]">
-            <div class="w-6 h-6 rounded-md rotate-45 {{ $smallColor }}"></div>
-            <div class="w-10 h-10 rounded-md rotate-45 {{ $largeColor }}"></div>
+        <div class="flex {{ $justifyClass }} items-center gap-x-[13.25px]">
+            {{ if eq $side "left" }}
+                <div class="w-10 h-10 rounded-md rotate-45 {{ $largeColor }}"></div>
+                <div class="w-6 h-6 rounded-md rotate-45 {{ $smallColor }}"></div>
+            {{ else }}
+                <div class="w-6 h-6 rounded-md rotate-45 {{ $smallColor }}"></div>
+                <div class="w-10 h-10 rounded-md rotate-45 {{ $largeColor }}"></div>
+            {{ end }}
         </div>
     </div>
 {{ end }}

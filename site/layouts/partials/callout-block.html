@@ -13,24 +13,44 @@
 
     Expected dict keys (all optional unless noted):
       id                                - ancre de la section
-      title, description
+      title
+      description                      - Markdown supporté (gras, liens...).
+                                          Pour un saut de ligne sans nouveau
+                                          paragraphe, ne tapez pas de vrai
+                                          retour à la ligne (collapse en
+                                          espace au rendu) : utilisez le
+                                          texte littéral \n à la place, sur
+                                          une seule ligne physique - \n\n
+                                          démarre un vrai nouveau paragraphe
+                                          (même convention que sokube-
+                                          feature/sokube-carroussel)
       primaryText, primaryLink, primaryExternal ("true"/"false")
       secondaryText, secondaryLink, secondaryExternal ("true"/"false")
       background (required)            - fond de la section
       descriptionColor (required)      - couleur du texte de description
+      descriptionLinkColor (required)  - couleur des liens Markdown dans la
+                                          description (sans le survol)
+      descriptionLinkHoverColor (required) - couleur au survol des liens
+                                          Markdown dans la description (déjà
+                                          préfixée "hover:" par l'appelant,
+                                          ex. "hover:text-kube-700")
       primaryClass (required)          - fond + texte + hover du bouton principal
       secondaryClass (required)        - fond + texte + bordure + hover du bouton secondaire
       showDiamonds                     - bool, affiche la décoration "losanges
                                           de marque" (défaut false) - voir
                                           layouts/partials/brand-diamonds.html
       diamondsPosition                 - "top" ou "bottom" (défaut "bottom")
+      diamondsSide                     - "left" ou "right" (défaut "right")
       diamondsPalette                  - nom de la palette déjà résolue par
                                           l'appelant, pour la couleur des
                                           losanges (règle 15 ; défaut "default")
 */}}
 {{ $id := .id }}
 {{ $title := .title }}
-{{ $description := .description }}
+{{/* Markdown supporté (liens, gras...) + convention "\n\n"/"\n" pour les
+     sauts de paragraphe/ligne, comme sokube-feature/sokube-carroussel -
+     voir la doc plus haut. */}}
+{{ $description := .description | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
 
 {{ $primaryText := .primaryText }}
 {{ $primaryLink := .primaryLink | default "#" }}
@@ -45,12 +65,36 @@
 {{ $primaryClass := .primaryClass }}
 {{ $secondaryClass := .secondaryClass }}
 
+{{/* [&_a]: must prefix every class in the combined light+dark string
+     individually (same technique as sokube-feature/faq's accent hover) -
+     otherwise only the first token is actually scoped to links inside the
+     description, and the rest (typically the dark: variant) would apply
+     globally instead. Markdown links have no color/underline of their own
+     without this: no "prose" wrapper here (see comment below), and no
+     unscoped "a" style in the theme either. */}}
+{{/* "| default """ : évite une erreur de build "split" si un futur appelant
+     oublie ces deux clés (elles sont toujours résolues par les 2 appelants
+     actuels, sokube-callout.html et expertise.html, mais split exige une
+     chaîne, pas nil). */}}
+{{ $linkParts := slice }}
+{{ range (split (.descriptionLinkColor | default "") " ") }}
+    {{ if . }}{{ $linkParts = $linkParts | append (printf "[&_a]:%s" .) }}{{ end }}
+{{ end }}
+{{ $descriptionLinkColor := delimit $linkParts " " }}
+
+{{ $linkHoverParts := slice }}
+{{ range (split (.descriptionLinkHoverColor | default "") " ") }}
+    {{ if . }}{{ $linkHoverParts = $linkHoverParts | append (printf "[&_a]:%s" .) }}{{ end }}
+{{ end }}
+{{ $descriptionLinkHoverColor := delimit $linkHoverParts " " }}
+
 {{ $showDiamonds := .showDiamonds | default false }}
 {{ $diamondsPosition := .diamondsPosition | default "bottom" }}
 {{ $diamondsPalette := .diamondsPalette | default "default" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
 
 <section {{ with $id }}id="{{ . }}"{{ end }} class="{{ $background }} -mx-6 px-6 py-20 md:py-24 scroll-mt-24 relative">
-  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $diamondsPalette "position" $diamondsPosition) }}
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $diamondsPalette "position" $diamondsPosition "side" $diamondsSide) }}
   <div class="container text-center max-w-3xl mx-auto">
 
     {{ with $title }}
@@ -59,10 +103,17 @@
     </h2>
     {{ end }}
 
+    {{/* Pas de classe "prose" ici : le thème définit à la main des règles
+         ".prose a"/".prose h1-h4" avec une spécificité qui l'emporterait sur
+         $descriptionColor (même piège que layouts/partials/faq.html, voir
+         son commentaire) - on garde un <div> nu, les classes de couleur
+         restent donc correctement appliquées via l'héritage CSS normal.
+         "space-y-4" espace les paragraphes générés par markdownify (Tailwind
+         Preflight met déjà leurs marges à 0). */}}
     {{ with $description }}
-    <p class="text-xl {{ $descriptionColor }} mb-10">
-      {{ . }}
-    </p>
+    <div class="text-xl {{ $descriptionColor }} mb-10 space-y-4 [&_a]:underline {{ $descriptionLinkColor }} {{ $descriptionLinkHoverColor }}">
+      {{ . | markdownify }}
+    </div>
     {{ end }}
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center">

@@ -23,13 +23,24 @@
     Paramètres :
       id                     - ancre de la section (optionnel)
       title                  - titre (optionnel)
-      description            - texte (optionnel)
+      description            - texte (optionnel), Markdown supporté (gras,
+                                liens...). Pour un saut de ligne sans nouveau
+                                paragraphe, ne tapez pas de vrai retour à la
+                                ligne (collapse en espace au rendu) : utilisez
+                                le texte littéral \n à la place, sur une seule
+                                ligne physique - \n\n démarre un vrai nouveau
+                                paragraphe (même convention que sokube-
+                                feature/sokube-carroussel/sokube-two-columns)
       primaryButtonText/Url/External   - bouton principal (External: "true"/"false", défaut "false")
       secondaryButtonText/Url/External - bouton secondaire (External: "true"/"false", défaut "false")
       palette                - nom de la palette : "default", "kube" ou "hr"
                                 (défaut "default"; voir [params.callout] dans hugo.toml)
       background             - surcharge ponctuelle du fond (défaut: palette.background)
       descriptionColor       - surcharge ponctuelle du texte de description (défaut: palette.description)
+      descriptionLinkColor      - surcharge ponctuelle de la couleur des liens
+                                Markdown de la description (défaut: palette.descriptionLink)
+      descriptionLinkHoverColor - surcharge ponctuelle du survol de ces liens
+                                (défaut: palette.descriptionLinkHover)
       primaryButtonColor     - surcharge ponctuelle fond+texte+hover du bouton principal (défaut: palette.primaryButton)
       secondaryButtonColor   - surcharge ponctuelle fond+texte+bordure+hover du bouton secondaire (défaut: palette.secondaryButton)
       showDiamonds           - "true"/"false", affiche la décoration "losanges
@@ -37,6 +48,7 @@
                                 layouts/partials/brand-diamonds.html ;
                                 couleur liée à la palette ci-dessus (règle 15)
       diamondsPosition       - "top" ou "bottom" (défaut "bottom")
+      diamondsSide           - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-callout
@@ -83,10 +95,13 @@
 
     "background" (.Get "background" | default $palette.background)
     "descriptionColor" (.Get "descriptionColor" | default $palette.description)
+    "descriptionLinkColor" (.Get "descriptionLinkColor" | default $palette.descriptionLink)
+    "descriptionLinkHoverColor" (.Get "descriptionLinkHoverColor" | default $palette.descriptionLinkHover)
     "primaryClass" (.Get "primaryButtonColor" | default $palette.primaryButton)
     "secondaryClass" (.Get "secondaryButtonColor" | default $palette.secondaryButton)
 
     "showDiamonds" (eq (.Get "showDiamonds") "true")
     "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
     "diamondsPalette" $paletteName
 ) }}

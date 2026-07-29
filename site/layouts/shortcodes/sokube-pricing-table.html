@@ -13,10 +13,22 @@
     de chaque plan (button.style.*, badge.*).
 
     Appel minimal : voir content/en-us/offers.md pour un exemple complet.
+
+    Paramètres additionnels :
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; site-wide (pas
+                        de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 */}}
 
 {{ $json := .Inner | transform.Unmarshal }}
 {{ $style := site.Params.pricing.style | default dict }}
+
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
 
 {{ $sectionBackground := $style.sectionBackground }}
 {{ $cardBackground := $style.card_background }}
@@ -31,7 +43,8 @@
 {{ $descriptionColor := $style.description_color }}
 {{ $priceColor := $style.price_color }}
 
-<section class="py-16 {{ $sectionBackground }}">
+<section class="py-16 {{ $sectionBackground }} relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {{ with $json.title }}

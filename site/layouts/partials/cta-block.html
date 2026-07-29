@@ -34,6 +34,12 @@
         contactButtonLink, contactButtonClass,
         contactBackground (combined light+dark string, same convention as
         "background" above; default "bg-white dark:bg-neurokube-900")
+      showDiamonds     - bool, affiche la décoration "losanges de marque"
+        (défaut false) - voir layouts/partials/brand-diamonds.html ; pas de
+        palette nommée ici (background est une string libre), toujours
+        palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Any new background color/gradient combination used here must be added to
     the safelist in tailwind.config.js, since these classes are built from
@@ -91,7 +97,12 @@
 {{ $isTopImage := and $showImage $image (eq $imagePosition "top") }}
 {{ $isBlendImage := and $showImage $image (not $isTopImage) }}
 
-<section class="cta-section">
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
+
+<section class="cta-section relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="container">
         <div class="relative rounded-2xl overflow-hidden {{ $bgClasses }}">
 

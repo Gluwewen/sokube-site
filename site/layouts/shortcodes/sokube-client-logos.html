@@ -11,6 +11,12 @@
     Paramètres :
       title   - texte au-dessus des logos (défaut : traduction "trustedByCompanies")
       animate - "true" (défaut) ou "false" pour un rendu statique centré
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; site-wide (pas
+                        de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-client-logos animate="true" >}}
@@ -18,8 +24,17 @@
 
 {{ $style := site.Params.clientLogos.style | default dict }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
 {{ if ne (.Site.Params.sections.clientLogos) false }}
-<section class="border-y {{ $style.border }} overflow-hidden">
+{{/* "overflow-hidden" déplacé sur .logo-scroll (déjà défini dans le <style>
+     ci-dessous, nécessaire au défilement) : le garder ici, sur la <section>
+     elle-même, couperait le débordement voulu des losanges à cheval sur la
+     bordure. */}}
+<section class="border-y {{ $style.border }} relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="container mx-auto">
         <div class="py-12">
             <p class="text-center text-3xl md:text-2xl font-bold mb-6 {{ $style.title }}">{{ .Get "title" | default (i18n "trustedByCompanies") }}</p>

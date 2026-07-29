@@ -53,6 +53,12 @@
                     texte littéral \n à la place, sur une seule ligne
                     physique - \n\n démarre un nouveau paragraphe (même
                     convention que sokube-feature)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                    marque" (défaut "false") - voir
+                    layouts/partials/brand-diamonds.html ; site-wide (pas de
+                    palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Paramètre .Inner : liste YAML d'images, chaque entrée avec
       image - chemin de l'image (obligatoire)
@@ -90,7 +96,12 @@
 {{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
 {{ $description = $description | replaceRE `\\n` "  \n" }}
 
-<section class="section sokube-carroussel" id="{{ $id }}">
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
+<section class="section sokube-carroussel relative" id="{{ $id }}">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="container">
         <div class="flex justify-between items-center gap-3 mb-6">
             {{ if $title }}

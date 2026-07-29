@@ -476,6 +476,18 @@ module.exports = {
     'dark:bg-hr-900',
     'dark:hover:text-neurokube-200',
 
+    // === AJOUTS sokube-callout ([params.callout.<nom>].descriptionLink/
+    // descriptionLinkHover, hugo.toml) - même technique "[&_a]:" que
+    // sokube-feature ci-dessus, palettes kube/hr (neurokube déjà couvert) ===
+    '[&_a]:text-kube-600',
+    '[&_a]:dark:text-kube-300',
+    '[&_a]:hover:text-kube-700',
+    '[&_a]:dark:hover:text-kube-200',
+    '[&_a]:text-hr-600',
+    '[&_a]:dark:text-hr-300',
+    '[&_a]:hover:text-hr-700',
+    '[&_a]:dark:hover:text-hr-200',
+
     // === AJOUTS layout job-listing ([params.jobListing.<palette>.button], hugo.toml) ===
     'dark:hover:bg-neurokube-500',
     'dark:hover:bg-kube-500',

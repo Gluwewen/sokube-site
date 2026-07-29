@@ -28,6 +28,12 @@
       showButton   - "true"/"false" (défaut "false")
       buttonText   - texte du bouton (défaut "Learn More")
       buttonLink   - lien du bouton (défaut "#")
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; couleur liée
+                        à la palette ci-dessus (règle 15)
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-feature
@@ -90,6 +96,16 @@
     {{ end }}
 {{ end }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
+{{/* Wrapper "relative" : ce shortcode n'a pas de <section> propre (répété
+     plusieurs fois par page, généralement à l'intérieur de
+     sokube-features-section), donc pas de boîte existante par rapport à
+     laquelle positionner les losanges - un par bloc feature, si activé. */}}
+<div class="relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
 <div class="grid lg:grid-cols-2 gap-12 items-center">
 
     {{ if eq $imagePosition "left" }}
@@ -184,4 +200,5 @@
     </div>
     {{ end }}
 
+</div>
 </div>

@@ -30,6 +30,12 @@
                          [languages.xx.params.faq.button])
       buttonLink       - button link (default: params.faq.button.link, same
                          override rule as buttonText)
+      showDiamonds     - "true"/"false" (default "false") - décoration
+                         "losanges de marque", voir
+                         layouts/partials/brand-diamonds.html ; couleur liée
+                         à la palette ci-dessus (règle 15)
+      diamondsPosition - "top" ou "bottom" (default "bottom")
+      diamondsSide     - "left" ou "right" (default "right")
 
     Minimal call:
       {{</* faq >}}
@@ -65,5 +71,8 @@
     "buttonText" (.Get "buttonText")
     "buttonLink" (.Get "buttonLink")
     "background" (.Get "background")
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
 ) }}
 {{ end }}

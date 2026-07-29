@@ -24,10 +24,18 @@
                          layouts/partials/brand-diamonds.html ; couleur liée
                          à la palette ci-dessus (règle 15)
       diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     .Inner : YAML avec deux clés, chacune en Markdown
       columnLeft  - texte de la colonne de gauche
       columnRight - texte de la colonne de droite
+
+    Pour un saut de ligne SANS nouveau paragraphe (ex: après une phrase, en
+    plein milieu du texte), ne tapez pas de vrai retour à la ligne dans la
+    valeur (le rendu HTML le collapse en simple espace) : utilisez le texte
+    littéral \n à la place, sur une seule ligne physique - \n\n démarre un
+    vrai nouveau paragraphe (même convention que sokube-feature/sokube-
+    carroussel).
 
     Exemple :
       {{</* sokube-two-columns palette="kube" buttonText="Découvrir SoKube" buttonLink="/about" >}}
@@ -44,6 +52,13 @@
 {{ $buttonText := .Get "buttonText" }}
 {{ $buttonLink := .Get "buttonLink" }}
 
+{{/* Turn the literal "\n\n" token into a real paragraph break, and any
+     remaining literal "\n" into a Markdown hard break (two trailing spaces
+     + newline), before running the result through markdownify - same
+     convention as sokube-feature/sokube-carroussel. */}}
+{{ $columnLeft := $data.columnLeft | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
+{{ $columnRight := $data.columnRight | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
+
 {{ $paletteName := .Get "palette" | default "default" }}
 {{ $style := index site.Params.twoColumns $paletteName }}
 {{ if not $style }}
@@ -53,16 +68,17 @@
 
 {{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
 {{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
 
 <section class="section relative">
-    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition) }}
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="container">
         <div class="grid md:grid-cols-2 gap-12">
             <div class="prose prose-lg max-w-none">
-                {{ $data.columnLeft | markdownify }}
+                {{ $columnLeft | markdownify }}
             </div>
             <div class="prose prose-lg max-w-none">
-                {{ $data.columnRight | markdownify }}
+                {{ $columnRight | markdownify }}
             </div>
         </div>
 

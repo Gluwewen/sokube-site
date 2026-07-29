@@ -15,6 +15,12 @@
       tips        - liste de {icon, title, text}
       page        - la Page courante (pour le message d'erreur si un nom
                     d'icône est invalide)
+      showDiamonds     - bool, affiche la décoration "losanges de marque"
+                    (défaut false) - voir layouts/partials/brand-diamonds.html ;
+                    site-wide (pas de palette nommée ici), toujours palette
+                    "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Icônes disponibles : voir layouts/partials/icon.html (liste + validation
     règle 8, partagé avec les "cards" du layout expertise).
@@ -35,7 +41,12 @@
 {{ $tipTitleColor := $style.style.tipTitleColor }}
 {{ $tipTextColor := $style.style.tipTextColor }}
 
-<section class="section">
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
+
+<section class="section relative">
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
   <div class="container">
 
     {{ with $bannerImage }}

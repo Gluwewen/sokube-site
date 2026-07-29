@@ -18,6 +18,12 @@
                     paragraphe, utilisez le texte littéral \n\n (voir
                     sokube-feature pour la même convention).
       .Inner      - contenu (sokube-partners-filter + sokube-partner-category)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                    marque" (défaut "false") - voir
+                    layouts/partials/brand-diamonds.html ; site-wide (pas de
+                    palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-partners-section title="Découvrez nos partenaires" description="..." >}}
@@ -34,7 +40,12 @@
 {{ $id := .Get "id" | default ($title | anchorize) }}
 {{ $descriptionColor := site.Params.partners.style.description | default "text-gray-600 dark:text-neurokube-200" }}
 
-<section id="{{ $id }}" class="section py-16">
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
+<section id="{{ $id }}" class="section py-16 relative">
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
   <div class="container">
     {{ with $title }}
     <div class="max-w-3xl mx-auto text-center mb-16">

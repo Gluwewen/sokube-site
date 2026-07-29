@@ -12,6 +12,12 @@
     Paramètres :
       palette - nom de la palette à utiliser (défaut "default")
       cols    - nombre de colonnes en desktop : "2", "3" ou "4" (défaut "3")
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; couleur liée
+                        à la palette ci-dessus (règle 15)
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
       .Inner  - YAML avec une liste "items", chacun {value, label}
 
     Appel minimal :
@@ -53,15 +59,25 @@
 {{ $data := .Inner | transform.Unmarshal }}
 {{ $items := $data.items | default slice }}
 
-<div class="grid {{ $gridClass }} {{ site.Params.stats.grid_gap | default "gap-8" }} my-16">
-    {{ range $items }}
-    <div class="text-center rounded-xl border p-8 {{ $style.background }} {{ $style.border }}">
-        <div class="text-5xl font-bold mb-4 {{ $style.value }}">
-            {{ .value }}
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
+{{/* Wrapper "relative" : ce shortcode n'a pas de <section> propre (conçu
+     pour s'insérer directement dans le flux d'une page), donc pas de boîte
+     existante par rapport à laquelle positionner les losanges. */}}
+<div class="relative my-16">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
+    <div class="grid {{ $gridClass }} {{ site.Params.stats.grid_gap | default "gap-8" }}">
+        {{ range $items }}
+        <div class="text-center rounded-xl border p-8 {{ $style.background }} {{ $style.border }}">
+            <div class="text-5xl font-bold mb-4 {{ $style.value }}">
+                {{ .value }}
+            </div>
+            <p class="text-lg font-medium {{ $style.label }}">
+                {{ .label }}
+            </p>
         </div>
-        <p class="text-lg font-medium {{ $style.label }}">
-            {{ .label }}
-        </p>
+        {{ end }}
     </div>
-    {{ end }}
 </div>

@@ -8,6 +8,12 @@
       zoom    - niveau de zoom (défaut "15")
       height  - hauteur en pixels (défaut "400")
       title   - attribut title de l'iframe, pour l'accessibilité (défaut "SoKube")
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; site-wide (pas
+                        de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-map address="Rue Adrien-Lachenal 20, 1207 Genève, Suisse" title="SoKube Geneva Office" >}}
@@ -18,17 +24,28 @@
 {{ $height := .Get "height" | default "400" }}
 {{ $title := .Get "title" | default "SoKube" }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
 {{ $query := replace $address " " "+" }}
 
-<div class="w-screen overflow-hidden shadow-sm mt-12 -mb-16 md:-mb-24" style="height: {{ $height }}px; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);">
-    <iframe
-        src="https://maps.google.com/maps?q={{ $query }}&z={{ $zoom }}&output=embed"
-        title="{{ $title }}"
-        width="100%"
-        height="100%"
-        style="border:0;"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        allowfullscreen
-    ></iframe>
+{{/* Wrapper "relative" séparé du div plein cadre (qui a son propre
+     "overflow-hidden", nécessaire à la technique de bleed w-screen/calc) -
+     les losanges ont besoin de déborder du cadre pour être à cheval sur la
+     bordure, ce qu'un overflow-hidden sur leur propre parent empêcherait. */}}
+<div class="relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
+    <div class="w-screen overflow-hidden shadow-sm mt-12 -mb-16 md:-mb-24" style="height: {{ $height }}px; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);">
+        <iframe
+            src="https://maps.google.com/maps?q={{ $query }}&z={{ $zoom }}&output=embed"
+            title="{{ $title }}"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+        ></iframe>
+    </div>
 </div>

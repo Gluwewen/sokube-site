@@ -25,6 +25,12 @@
       cardTextColor  - couleur du texte de la carte (défaut: params.highlightSection.style.cardText)
       section_class  - classe complète de la section, remplace entièrement
                        "background + padding" si fournie (usage avancé, optionnel)
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                       marque" (défaut "false") - voir
+                       layouts/partials/brand-diamonds.html ; site-wide (pas
+                       de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-highlight-section
@@ -50,11 +56,16 @@
 
 {{ $sectionClass := .Get "section_class" | default (printf "%s pt-20 pb-32" $background) }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
 {{ if $id }}
 <div id="{{ $id }}"></div>
 {{ end }}
 
-<section class="{{ $sectionClass }}">
+<section class="{{ $sectionClass }} relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
         <div class="text-center">

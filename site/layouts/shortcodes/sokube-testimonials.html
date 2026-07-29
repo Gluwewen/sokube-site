@@ -12,6 +12,12 @@
       title       - texte au-dessus des témoignages (défaut : traduction "lovedByTeams")
       description - texte sous le titre (défaut : traduction "testimonialsDescription")
       animate     - "true" (défaut) ou "false" pour un rendu statique en grille
+      showDiamonds     - "true"/"false", affiche la décoration "losanges de
+                        marque" (défaut "false") - voir
+                        layouts/partials/brand-diamonds.html ; site-wide (pas
+                        de palette nommée ici), toujours palette "default"
+      diamondsPosition - "top" ou "bottom" (défaut "bottom")
+      diamondsSide     - "left" ou "right" (défaut "right")
 
     Appel minimal :
       {{</* sokube-testimonials title="..." description="..." animate="true" >}}
@@ -19,8 +25,13 @@
 
 {{ $style := site.Params.testimonials.style | default dict }}
 
+{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
+{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
+{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+
 {{ if ne (.Site.Params.sections.testimonials) false }}
-<section class="section {{ $style.sectionBackground }}">
+<section class="section {{ $style.sectionBackground }} relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
     <div class="container">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">{{ .Get "title" | default (i18n "lovedByTeams") }}</h2>
