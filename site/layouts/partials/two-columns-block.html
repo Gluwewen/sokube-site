@@ -1,0 +1,72 @@
+{{/*
+    two-columns-block
+
+    Shared rendering logic behind the "sokube-two-columns" shortcode.
+    Extracted into a partial (règle 13 - see callout-block.html/cta-block.html
+    for the same pattern) so it can ALSO be called directly from a Go
+    template, e.g. layouts/_default/services.html, since shortcodes cannot be
+    invoked from layouts.
+
+    Every value must already be fully resolved by the caller (this partial
+    does not read .Site/.Page) - see layouts/shortcodes/sokube-two-columns.html
+    for how the palette is resolved from params.twoColumns in hugo.toml.
+
+    Expected dict keys (all optional unless noted):
+      columnLeft, columnRight (required) - texte Markdown de chaque colonne.
+                            Pour un saut de ligne sans nouveau paragraphe, ne
+                            tapez pas de vrai retour à la ligne (collapse en
+                            espace au rendu) : utilisez le texte littéral \n à
+                            la place, sur une seule ligne physique - \n\n
+                            démarre un vrai nouveau paragraphe (même
+                            convention que sokube-feature/sokube-carroussel)
+      buttonText, buttonLink            - bouton centré sous les colonnes
+                                          (optionnel : pas de bouton si
+                                          buttonText est omis)
+      buttonClass (required)           - fond + texte + hover du bouton
+      showDiamonds                     - bool, affiche la décoration "losanges
+                                          de marque" (défaut false) - voir
+                                          layouts/partials/brand-diamonds.html
+      diamondsPosition                 - "top" ou "bottom" (défaut "bottom")
+      diamondsSide                     - "left" ou "right" (défaut "right")
+      diamondsPalette                  - nom de la palette déjà résolue par
+                                          l'appelant, pour la couleur des
+                                          losanges (règle 15 ; défaut "default")
+*/}}
+
+{{/* Turn the literal "\n\n" token into a real paragraph break, and any
+     remaining literal "\n" into a Markdown hard break (two trailing spaces
+     + newline), before running the result through markdownify - same
+     convention as sokube-feature/sokube-carroussel/sokube-callout. */}}
+{{ $columnLeft := .columnLeft | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
+{{ $columnRight := .columnRight | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
+
+{{ $buttonText := .buttonText }}
+{{ $buttonLink := .buttonLink }}
+{{ $buttonClass := .buttonClass }}
+
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
+{{ $diamondsPalette := .diamondsPalette | default "default" }}
+
+<section class="section relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $diamondsPalette "position" $diamondsPosition "side" $diamondsSide) }}
+    <div class="container">
+        <div class="grid md:grid-cols-2 gap-12">
+            <div class="prose prose-lg max-w-none">
+                {{ $columnLeft | markdownify }}
+            </div>
+            <div class="prose prose-lg max-w-none">
+                {{ $columnRight | markdownify }}
+            </div>
+        </div>
+
+        {{ with $buttonText }}
+        <div class="text-center mt-12">
+            <a href="{{ $buttonLink }}" class="btn inline-block {{ $buttonClass }}">
+                {{ . }}
+            </a>
+        </div>
+        {{ end }}
+    </div>
+</section>

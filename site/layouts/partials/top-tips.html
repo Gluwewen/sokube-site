@@ -24,12 +24,30 @@
 
     Icônes disponibles : voir layouts/partials/icon.html (liste + validation
     règle 8, partagé avec les "cards" du layout expertise).
+
+    Nombre de colonnes (desktop, "lg") : dépend du nombre de tips fournis
+    (entre 1 et 5, plafonné à 5 - aucune page n'en a utilisé plus à ce jour),
+    pas fixé en dur à 5 - sinon, avec un nombre de tips inférieur à 5 (ex: 4
+    sur content/.../services/realization-of-missions.md), la grille garde 5
+    pistes de largeur égale et les colonnes restantes semblent plus étroites
+    que d'habitude, avec un espace vide à droite au lieu de remplir toute la
+    largeur du conteneur comme sur une page à 5 tips. Classe construite
+    dynamiquement (`lg:grid-cols-N`) : voir le safelist de tailwind.config.js
+    ("lg:grid-cols-1" à "lg:grid-cols-5").
 */}}
 
 {{ $title := .title }}
 {{ $description := .description }}
 {{ $tips := .tips | default slice }}
 {{ $page := .page }}
+
+{{ $lgCols := len $tips }}
+{{ if lt $lgCols 1 }}
+    {{ $lgCols = 1 }}
+{{ else if gt $lgCols 5 }}
+    {{ $lgCols = 5 }}
+{{ end }}
+{{ $lgColsClass := printf "lg:grid-cols-%d" $lgCols }}
 
 {{ $style := site.Params.topTips | default dict }}
 {{ $bannerImage := $style.bannerImage }}
@@ -64,7 +82,7 @@
     </p>
     {{ end }}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 {{ $lgColsClass }} gap-8">
       {{ range $tips }}
       <div>
         <div class="{{ $iconColor }} mb-3">

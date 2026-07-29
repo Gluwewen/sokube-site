@@ -12,6 +12,17 @@ module.exports = {
 
   safelist: [
 
+    // top-tips.html : nombre de colonnes desktop construit dynamiquement
+    // ("lg:grid-cols-N", N = nombre de tips, plafonné à 5) pour que la
+    // largeur totale de la rangée reste la même quel que soit le nombre de
+    // tips (au lieu de garder 5 pistes fixes avec un espace vide à droite
+    // si une page en fournit moins) - voir layouts/partials/top-tips.html.
+    'lg:grid-cols-1',
+    'lg:grid-cols-2',
+    'lg:grid-cols-3',
+    'lg:grid-cols-4',
+    'lg:grid-cols-5',
+
     // Backgrounds
     'bg-white',
     'bg-neurokube-50',

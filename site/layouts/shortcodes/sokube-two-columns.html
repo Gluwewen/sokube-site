@@ -4,13 +4,18 @@
     Bloc de texte Markdown libre sur deux colonnes (desktop), une seule
     colonne empilée en mobile, suivi d'un bouton centré optionnel.
 
+    Thin wrapper around layouts/partials/two-columns-block.html (the shared
+    rendering logic, also called directly by layouts/_default/services.html
+    since shortcodes cannot be invoked from layouts - règle 13).
+
     Shortcode instanciable par page (règle 12) : pas de couleur de marque
     pour le texte (juste du Markdown neutre), mais le bouton fonctionne par
     palette nommée - même convention que sokube-feature/sokube-callout
     (règle 5) - la palette (couleur du bouton) vit dans
     [params.twoColumns.<nom>] (hugo.toml, y compris la palette "default").
-    Aujourd'hui utilisé uniquement sur hiring.md (sujet 2 : présentation +
-    bouton "Découvrir SoKube" vers about.md).
+    Utilisé aujourd'hui sur hiring.md (sujet 2 : présentation + bouton
+    "Découvrir SoKube" vers about.md) et sur services/realization-of-
+    missions.md.
 
     Paramètres :
       palette          - nom de la palette du bouton : "default", "kube" ou
@@ -49,15 +54,6 @@
 */}}
 
 {{ $data := .Inner | transform.Unmarshal }}
-{{ $buttonText := .Get "buttonText" }}
-{{ $buttonLink := .Get "buttonLink" }}
-
-{{/* Turn the literal "\n\n" token into a real paragraph break, and any
-     remaining literal "\n" into a Markdown hard break (two trailing spaces
-     + newline), before running the result through markdownify - same
-     convention as sokube-feature/sokube-carroussel. */}}
-{{ $columnLeft := $data.columnLeft | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
-{{ $columnRight := $data.columnRight | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
 
 {{ $paletteName := .Get "palette" | default "default" }}
 {{ $style := index site.Params.twoColumns $paletteName }}
@@ -66,28 +62,16 @@
     {{ $style = site.Params.twoColumns.default }}
 {{ end }}
 
-{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
-{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
-{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+{{ partial "two-columns-block.html" (dict
+    "columnLeft" $data.columnLeft
+    "columnRight" $data.columnRight
 
-<section class="section relative">
-    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
-    <div class="container">
-        <div class="grid md:grid-cols-2 gap-12">
-            <div class="prose prose-lg max-w-none">
-                {{ $columnLeft | markdownify }}
-            </div>
-            <div class="prose prose-lg max-w-none">
-                {{ $columnRight | markdownify }}
-            </div>
-        </div>
+    "buttonText" (.Get "buttonText")
+    "buttonLink" (.Get "buttonLink")
+    "buttonClass" $style.button
 
-        {{ with $buttonText }}
-        <div class="text-center mt-12">
-            <a href="{{ $buttonLink }}" class="btn inline-block {{ $style.button }}">
-                {{ . }}
-            </a>
-        </div>
-        {{ end }}
-    </div>
-</section>
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
+    "diamondsPalette" $paletteName
+) }}

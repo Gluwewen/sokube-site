@@ -1,0 +1,285 @@
+{{/*
+    services (layout)
+
+    Page individuelle de service ("/services/<slug>/", ex:
+    realization-of-missions.md). Règle 14 : page entièrement pilotée par le
+    front matter, sans aucun shortcode à écrire dans le corps Markdown -
+    objectif : une personne non-développeuse peut ajouter/modifier une page
+    de service en ne touchant que des champs YAML simples (titre, texte,
+    listes). Même principe que layouts/_default/expertise.html, mais avec
+    une succession de sections fixe (règle 3 : structure non paramétrable) :
+
+      1. hero        (sokube-hero-fondu)
+      2. two_columns (sokube-two-columns)
+      3. faq
+      4. feature     (sokube-feature, un seul bloc - pas une liste comme
+                      dans expertise.html)
+      5. tips        (Tips by SoKube, toujours en dernier)
+
+    Toutes les sections sont optionnelles et s'affichent dans cet ordre fixe
+    si présentes dans le front matter, quel que soit l'ordre des champs dans
+    le fichier. Les couleurs de marque réutilisent les mêmes réglages que les
+    shortcodes déjà existants ([params.heroFondu], [params.twoColumns],
+    [params.faq], [params.feature], [params.topTips]) - une seule source de
+    vérité pour ces couleurs, partagée avec le reste du site.
+
+    Front matter :
+
+      hero:                      (rendu via layouts/partials/hero-fondu.html,
+                                  voir layouts/shortcodes/sokube-hero-fondu.html)
+        headline: "..."          (obligatoire pour afficher le hero)
+        sub_headline: "..."      (optionnel, description sous le titre)
+        image: "..."              (optionnel)
+        image_position: "..."    (optionnel, "left" ou "right", défaut "right")
+        palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                  voir [params.heroFondu] dans hugo.toml)
+        fade_distance: "..."     (optionnel, ex. "55%" - distance à laquelle le
+                                  fondu devient transparent, défaut
+                                  params.heroFondu.style.fadeDistance)
+        button_text: "..."
+        button_link: "..."
+
+      two_columns:               (rendu via layouts/partials/two-columns-block.html,
+                                  voir layouts/shortcodes/sokube-two-columns.html)
+        column_left: "..."        (Markdown supporté ; contrairement aux
+                                  paramètres de shortcode, un champ de front
+                                  matter YAML "|" accepte directement de vrais
+                                  retours à la ligne/lignes vides pour les
+                                  sauts de ligne/paragraphe - pas besoin de la
+                                  convention littérale \n / \n\n réservée aux
+                                  shortcodes, voir les pages content/.../services/...)
+        column_right: "..."
+        palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                  couleur du bouton uniquement, voir
+                                  [params.twoColumns] dans hugo.toml)
+        button_text: "..."       (optionnel)
+        button_link: "..."       (optionnel)
+        show_diamonds: true      (optionnel, false par défaut)
+        diamonds_position: "..." (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."     (optionnel, "left" ou "right", défaut "right")
+
+      faq:                        (voir layouts/partials/faq.html)
+        title: "..."
+        description: "..."        (optionnel)
+        palette: "..."             (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                    voir [params.faq] dans hugo.toml ; couleur de l'accent,
+                                    des markers, du menu de catégories et du bouton)
+        show_button: true          (optionnel, false par défaut)
+        button_text: "..."         (optionnel)
+        button_link: "..."         (optionnel)
+        background: "..."         (optionnel, ex: "bg-gray-50 dark:bg-neurokube-800")
+        show_diamonds: true        (optionnel, false par défaut)
+        diamonds_position: "..."  (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."      (optionnel, "left" ou "right", défaut "right")
+        items:                     (liste de {question, answer, category})
+          - question: "..."
+            answer: "..."
+
+      feature:                    (un seul bloc image + texte, rendu via
+                                  layouts/partials/feature-block.html, voir
+                                  layouts/shortcodes/sokube-feature.html)
+        badge: "..."              (optionnel)
+        title: "..."
+        description: "..."       (Markdown supporté ; comme pour two_columns
+                                  ci-dessus, un champ de front matter YAML "|"
+                                  accepte directement de vrais retours à la
+                                  ligne/lignes vides - pas besoin de la
+                                  convention littérale \n / \n\n réservée aux
+                                  shortcodes)
+        features:                 (liste de puces, optionnel)
+          - "..."
+        image: "..."
+        image_position: "..."    (optionnel, "left" ou "right", défaut "right")
+        palette: "..."           (optionnel, "default"/"kube"/"hr", défaut "default" -
+                                  voir [params.feature] dans hugo.toml ; couleur du
+                                  badge ET du bouton)
+        show_button: true         (optionnel, false par défaut)
+        button_text: "..."        (optionnel, défaut "Learn More")
+        button_link: "..."        (optionnel, défaut "#")
+        show_diamonds: true       (optionnel, false par défaut)
+        diamonds_position: "..." (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."     (optionnel, "left" ou "right", défaut "right")
+
+      tips:                        (bandeau "Tips by SoKube", voir layouts/partials/top-tips.html -
+                                    toujours affiché en dernier sur la page, quel que soit l'ordre
+                                    des champs dans le front matter)
+        title: "..."
+        description: "..."
+        show_diamonds: true        (optionnel, false par défaut - décoration "losanges
+                                    de marque", voir layouts/partials/brand-diamonds.html ;
+                                    toujours palette "default", pas de palette nommée ici)
+        diamonds_position: "..."  (optionnel, "top" ou "bottom", défaut "bottom")
+        diamonds_side: "..."      (optionnel, "left" ou "right", défaut "right")
+        items:                     (liste de {icon, title, text})
+          - icon: "pencil"         (voir layouts/partials/top-tips.html pour la liste des icônes)
+            title: "..."
+            text: "..."
+*/}}
+
+{{ define "main" }}
+
+{{/* --- Hero --- */}}
+{{/* Règle 14/13 : rendu partagé avec le shortcode sokube-hero-fondu via
+     layouts/partials/hero-fondu.html (les shortcodes ne peuvent pas être
+     invoqués depuis un layout). La palette de couleur vient de
+     [params.heroFondu.<nom>] (hugo.toml, règle 5), sélectionnée via
+     hero.palette dans le front matter (défaut "default"). */}}
+{{ with .Params.hero }}
+    {{ $paletteName := .palette | default "default" }}
+    {{ $paletteStyle := index site.Params.heroFondu $paletteName }}
+    {{ if not $paletteStyle }}
+        {{ errorf "services layout: palette %q introuvable dans [params.heroFondu] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $paletteStyle = site.Params.heroFondu.default }}
+    {{ end }}
+    {{ $style := site.Params.heroFondu.style | default dict }}
+    {{ $primaryBtn := $style.primary_button | default dict }}
+    {{ $secondaryBtn := $style.secondary_button | default dict }}
+
+    {{ partial "hero-fondu.html" (dict
+        "headline" .headline
+        "subHeadline" .sub_headline
+        "showDescription" true
+
+        "primaryText" .button_text
+        "primaryLink" .button_link
+        "primaryClass" (printf "%s %s %s" $primaryBtn.background $primaryBtn.text_color $primaryBtn.hover)
+
+        "showSecondaryButton" false
+
+        "image" .image
+        "imagePosition" (.image_position | default "right")
+
+        "background" $paletteStyle.background
+        "titleColor" $style.title
+        "descriptionColor" $paletteStyle.description
+        "colorVar" $paletteStyle.colorVar
+        "fadeDistance" (.fade_distance | default $style.fadeDistance)
+    ) }}
+{{ end }}
+
+{{/* --- Two columns --- */}}
+{{/* Règle 14/13 : rendu partagé avec le shortcode sokube-two-columns via
+     layouts/partials/two-columns-block.html. Palette instanciable par page
+     (règle 12), couleur du bouton uniquement, voir [params.twoColumns.<nom>]
+     dans hugo.toml (règle 5). */}}
+{{ with .Params.two_columns }}
+    {{ $paletteName := .palette | default "default" }}
+    {{ $style := index site.Params.twoColumns $paletteName }}
+    {{ if not $style }}
+        {{ errorf "services layout (two_columns): palette %q introuvable dans [params.twoColumns] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $style = site.Params.twoColumns.default }}
+    {{ end }}
+
+    {{ partial "two-columns-block.html" (dict
+        "columnLeft" .column_left
+        "columnRight" .column_right
+
+        "buttonText" .button_text
+        "buttonLink" .button_link
+        "buttonClass" $style.button
+
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
+        "diamondsPalette" $paletteName
+    ) }}
+{{ end }}
+
+{{/* --- FAQ --- */}}
+{{ with .Params.faq }}
+    {{ $faqData := dict "title" .title "description" .description "questions" .items }}
+    {{ partial "faq.html" (dict
+        "id" "page"
+        "data" $faqData
+        "palette" .palette
+        "showButton" .show_button
+        "buttonText" .button_text
+        "buttonLink" .button_link
+        "background" .background
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
+    ) }}
+{{ end }}
+
+{{/* --- Feature (un seul bloc, pas une liste - voir doc en tête de fichier) --- */}}
+{{/* Règle 14/13 : rendu partagé avec le shortcode sokube-feature via
+     layouts/partials/feature-block.html. Palette instanciable par page
+     (règle 12), couleur du badge ET du bouton, voir [params.feature.<nom>]
+     dans hugo.toml (règle 5) ; titre/description restent fixes
+     ([params.feature.style]). */}}
+{{ with .Params.feature }}
+    {{ $paletteName := .palette | default "default" }}
+    {{ $badgeStyle := index site.Params.feature $paletteName }}
+    {{ if not $badgeStyle }}
+        {{ errorf "services layout (feature): palette %q introuvable dans [params.feature] (hugo.toml) — page %s" $paletteName $.File.Path }}
+        {{ $badgeStyle = site.Params.feature.default }}
+    {{ end }}
+    {{ $style := site.Params.feature.style | default dict }}
+
+    {{/* [&_a]: doit préfixer individuellement chaque classe de la chaîne
+         combinée clair+sombre - même technique que sokube-feature. */}}
+    {{ $linkParts := slice }}
+    {{ range (split $style.descriptionLink " ") }}
+        {{ if . }}{{ $linkParts = $linkParts | append (printf "[&_a]:%s" .) }}{{ end }}
+    {{ end }}
+    {{ $descriptionLink := delimit $linkParts " " }}
+
+    {{ $linkHoverParts := slice }}
+    {{ range (split $style.descriptionLinkHover " ") }}
+        {{ if . }}{{ $linkHoverParts = $linkHoverParts | append (printf "[&_a]:%s" .) }}{{ end }}
+    {{ end }}
+    {{ $descriptionLinkHover := delimit $linkHoverParts " " }}
+
+    {{/* Contrairement à sokube-feature.html (shortcode), généralement imbriqué
+         à l'intérieur de sokube-features-section qui fournit déjà son propre
+         ".container", cet appel est direct depuis le layout : il doit donc
+         apporter lui-même sa <section>/.container (même structure que la
+         boucle "features" de layouts/_default/expertise.html), sinon l'image
+         s'affiche en plein cadre jusqu'au bord de l'écran au lieu de suivre
+         les marges habituelles du site. */}}
+    <section class="section">
+        <div class="container">
+            {{ partial "feature-block.html" (dict
+                "title" .title
+                "description" .description
+                "badge" .badge
+                "image" .image
+                "imagePosition" (.image_position | default "right")
+                "features" (.features | default slice)
+
+                "showButton" (.show_button | default false)
+                "buttonText" (.button_text | default "Learn More")
+                "buttonLink" (.button_link | default "#")
+
+                "titleColor" $style.title
+                "descriptionColor" $style.description
+                "badgeBackground" $badgeStyle.badgeBackground
+                "badgeText" $badgeStyle.badgeText
+                "buttonClass" $badgeStyle.button
+                "descriptionLinkColor" $descriptionLink
+                "descriptionLinkHoverColor" $descriptionLinkHover
+
+                "showDiamonds" (.show_diamonds | default false)
+                "diamondsPosition" (.diamonds_position | default "bottom")
+                "diamondsSide" (.diamonds_side | default "right")
+                "diamondsPalette" $paletteName
+            ) }}
+        </div>
+    </section>
+{{ end }}
+
+{{/* --- Tips (toujours en dernier sur la page) --- */}}
+{{ with .Params.tips }}
+    {{ partial "top-tips.html" (dict
+        "title" .title
+        "description" .description
+        "tips" .items
+        "page" $
+        "showDiamonds" (.show_diamonds | default false)
+        "diamondsPosition" (.diamonds_position | default "bottom")
+        "diamondsSide" (.diamonds_side | default "right")
+    ) }}
+{{ end }}
+
+{{ end }}

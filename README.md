@@ -654,6 +654,34 @@ Appel type :
 >}}
 ```
 
+#### 🧩 Feature (bloc image + texte)
+
+Le shortcode **sokube-feature** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Bloc image + texte, utilisé en série (généralement à l'intérieur de `sokube-features-section` ci-dessous, ou directement depuis un layout de page comme `expertise`/`services`). Répété plusieurs fois sur une même page : le badge ET le bouton fonctionnent par palette nommée (`default`/`kube`/`hr`, défaut "default" - voir `[params.feature]` dans `hugo.toml`), même convention que `sokube-card`. Le titre et la description, eux, ne varient pas selon la palette (`[params.feature.style]`).
+
+```
+{{< sokube-feature
+    palette="kube"
+    badge="Investigation"
+    title="Titre du bloc"
+    description="Texte Markdown - \n\n pour un nouveau paragraphe, \n pour un saut de ligne (même convention que sokube-carroussel/sokube-two-columns)"
+    features="Point 1,Point 2,Point 3"
+    image="/images/expertises/exemple.jpg"
+    imagePosition="right"
+    showButton="true"
+    buttonText="En savoir plus"
+    buttonLink="/contact"
+>}}
+```
+
+`features` (optionnel) est une liste de puces séparées par des virgules. `image` : la variante sombre est déduite automatiquement en remplaçant `-light` par `-dark` dans le nom de fichier - si l'image n'a pas ce suffixe, la même image s'affiche dans les deux modes (voir les pages `expertises/*.md` existantes, qui suivent déjà ce comportement).
+
+Comme `sokube-two-columns`, la logique de rendu vit dans une partial partagée `layouts/partials/feature-block.html` (règle 13) : le shortcode n'est qu'un mince adaptateur qui résout la palette depuis `hugo.toml`, pour que `layouts/_default/services.html` (voir plus bas) puisse appeler exactement le même rendu directement depuis un layout Go, sans dupliquer le code.
+
+Supporte aussi la décoration "losanges de marque" (voir section dédiée plus haut) : `showDiamonds="true"`, `diamondsPosition="top"/"bottom"` (défaut "bottom") et `diamondsSide="left"/"right"` (défaut "right") ; couleur liée à la palette ci-dessus.
+
 #### 🧩 Features-section
 
 Le shortcode **sokube-features-section** se trouve dans le répertoire :
@@ -985,6 +1013,8 @@ columnRight: |
 
 `buttonText`/`buttonLink` sont optionnels : sans `buttonText`, aucun bouton ne s'affiche. `palette` est optionnel, défaut "default" (bouton bleu neurokube).
 
+La logique de rendu vit dans une partial partagée `layouts/partials/two-columns-block.html` (règle 13) : le shortcode n'est qu'un mince adaptateur qui résout la palette (couleur du bouton) depuis `hugo.toml`, pour que `layouts/_default/services.html` (voir plus bas) puisse appeler exactement le même rendu directement depuis un layout Go, sans dupliquer le code.
+
 #### 🤝 Partenaires
 
 Trois shortcodes, utilisés ensemble sur `content/*/partners.md`, remplacent l'ancien mur de logos par des catégories filtrables. Tous se trouvent dans :
@@ -1174,6 +1204,36 @@ apply_url: "..."             (optionnel, défaut params.jobListing.style.applyUr
 ```
 
 Le corps Markdown de la page est la description complète du poste. `contractType` (code interne, indépendant de la langue) est résolu en palette nommée (`"default"`/`"kube"`/`"hr"`) via `[params.contractTypes]`, la même table que `sokube-card` utilise pour déduire automatiquement sa palette depuis le label affiché sur les cards d'offres d'emploi de `hiring.md` (voir plus haut, section "🎴 Système de palettes des cartes") - une seule source de vérité, partagée entre le layout et le shortcode. La couleur du badge, du dégradé décoratif en haut de page, du bouton "Postuler" (section "Notre offre") et des pastilles de compétences (section "Vos compétences") vient ensuite de `[params.jobListing.<palette>]` (champs `badgeBackground`/`badgeText`/`colorVar`/`button`/`pillBackground`/`pillText`) ; le texte du badge ("CDI"/"Permanent"...) vient de `[params.contractTypes.<contractType>].label`, surchargé par langue.
+
+#### 🧩 Layout "services"
+
+Les pages individuelles de service (`/site/content/*/services/*.md`, ex. `realization-of-missions.md`) utilisent le layout **services** (`/site/layouts/_default/services.html`, voir règle 14) - même principe que le layout `expertise` ci-dessus (aucun shortcode dans le corps Markdown, tout se pilote depuis le front matter), mais avec une succession de sections **fixe** (règle 3, pas de liste ouverte comme pour `expertise`) :
+
+Ordre d'affichage sur la page (fixe) : `hero`, `two_columns`, `faq`, `feature` (un seul bloc, pas une liste), puis `tips` toujours en tout dernier. Toutes les sections sont optionnelles.
+
+- `hero` : mêmes champs que le layout `expertise` (`headline`, `sub_headline`, `image`, `image_position`, `palette`, `fade_distance`, `button_text`, `button_link`) — rendu via `layouts/partials/hero-fondu.html`
+- `two_columns` : `column_left`, `column_right` (Markdown, texte libre en YAML - un vrai saut de ligne dans le front matter fonctionne directement, pas besoin de la convention `\n`/`\n\n` réservée aux paramètres de shortcode), `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - couleur du bouton uniquement, voir `[params.twoColumns]`), `button_text`/`button_link` (optionnels), `show_diamonds`/`diamonds_position`/`diamonds_side` (optionnels) — rendu via `layouts/partials/two-columns-block.html`
+- `faq` : mêmes champs que le layout `expertise` (`title`, `description`, `palette`, `show_button`, `button_text`, `button_link`, `background`, `items` de `{question, answer, category}`) — rendu via `layouts/partials/faq.html`
+- `feature` : **un seul bloc** (pas une liste, contrairement à `features` du layout `expertise`) — `badge` (optionnel), `title`, `description` (Markdown), `features` (optionnel, liste de puces), `image`, `image_position`, `palette` (optionnel, "default"/"kube"/"hr", défaut "default" - couleur du badge ET du bouton, voir `[params.feature]`), `show_button`, `button_text`, `button_link` — rendu via `layouts/partials/feature-block.html`
+- `tips` : bandeau "Tips by SoKube", toujours affiché en dernier — mêmes champs que le layout `expertise` (`title`, `description`, `items` de `{icon, title, text}`)
+
+Chaque section réutilise exactement la même partial partagée (règle 13) que le shortcode équivalent (`sokube-hero-fondu`, `sokube-two-columns`, `faq`, `sokube-feature`, `sokube-top-tips`) : toute évolution de leur rendu profite donc à la fois aux shortcodes et à ce layout, sans duplication de code.
+
+Exemple minimal (une page qui n'aurait qu'un hero) :
+
+```
+---
+title: "Réalisation de missions"
+layout: "services"
+description: "..."
+
+hero:
+  headline: "Réalisation de missions"
+  image: "/images/expertises/two-smiling-young-businessmen-looking-laptop-screen.jpg"
+  button_text: "Parlons de votre projet"
+  button_link: "/contact"
+---
+```
 
 #### 🧭 Navigation et menus
 

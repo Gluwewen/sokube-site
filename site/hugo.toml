@@ -500,7 +500,7 @@ Our learning methods also help you acquire the skills you need to put them into 
       submenu = [
         { name = "Assessment and Consulting", url = "/services/assessment-consultancy" },
         { name = "Realization of missions", url = "/services/realization-of-missions" },
-        { name = "Training Center by SoKube", url = "/services/training" },
+        { name = "Training Center by SoKube", url = "/services/training-center" },
         { name = "Migration service", url = "/services/migration" },
         { name = "Strategic & Technological Watch", url = "/services/strategic-watch" },
       ]
@@ -1426,7 +1426,7 @@ Nos méthodes d'apprentissage vous permettront également d'acquérir les compé
           submenu = [
             { name = "Assessment et Conseils", url = "/fr/services/assessment-consultancy" },
             { name = "Réalisation de missions", url = "/fr/services/realization-of-missions" },
-            { name = "Centre de Formations by SoKube", url = "/fr/services/training" },
+            { name = "Centre de Formations by SoKube", url = "/fr/services/training-center" },
             { name = "Service de migration", url = "/fr/services/migration" },
             { name = "Veille stratégique et technologique", url = "/fr/services/strategic-watch" },
           ]

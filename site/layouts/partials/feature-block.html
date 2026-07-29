@@ -1,0 +1,184 @@
+{{/*
+    feature-block
+
+    Shared rendering logic behind the "sokube-feature" shortcode. Extracted
+    into a partial (règle 13 - see callout-block.html/two-columns-block.html
+    for the same pattern) so it can ALSO be called directly from a Go
+    template, e.g. layouts/_default/services.html, since shortcodes cannot be
+    invoked from layouts.
+
+    Every value must already be fully resolved by the caller (this partial
+    does not read .Site/.Page) - see layouts/shortcodes/sokube-feature.html
+    for how the palette is resolved from params.feature in hugo.toml.
+
+    Expected dict keys (all optional unless noted):
+      title, description (required)     - description en Markdown supporté.
+                                           Pour un saut de ligne sans nouveau
+                                           paragraphe, ne tapez pas de vrai
+                                           retour à la ligne (collapse en
+                                           espace au rendu) : utilisez le
+                                           texte littéral \n à la place, sur
+                                           une seule ligne physique - \n\n
+                                           démarre un vrai nouveau paragraphe
+      badge                              - texte du badge au-dessus du titre
+                                           (optionnel : rien ne s'affiche si
+                                           omis)
+      image (required)                  - image en mode clair; la variante
+                                           sombre est déduite en remplaçant
+                                           "-light" par "-dark" dans le nom
+                                           de fichier
+      imagePosition                     - "left" ou "right" (défaut "right")
+      features                          - slice de chaînes, liste à puces
+                                           (optionnel)
+      showButton                        - bool (défaut false)
+      buttonText                        - texte du bouton (défaut "Learn More")
+      buttonLink                        - lien du bouton (défaut "#")
+      titleColor, descriptionColor (required) - couleurs fixes (non liées à
+                                           la palette - [params.feature.style])
+      badgeBackground, badgeText, buttonClass (required) - couleurs liées à
+                                           la palette du badge/bouton
+      descriptionLinkColor, descriptionLinkHoverColor (required) - couleur
+                                           des liens Markdown dans la
+                                           description (déjà préfixée
+                                           "[&_a]:" par l'appelant)
+      showDiamonds                      - bool, affiche la décoration
+                                           "losanges de marque" (défaut false)
+                                           - voir
+                                           layouts/partials/brand-diamonds.html
+      diamondsPosition                  - "top" ou "bottom" (défaut "bottom")
+      diamondsSide                      - "left" ou "right" (défaut "right")
+      diamondsPalette                   - nom de la palette déjà résolue par
+                                           l'appelant, pour la couleur des
+                                           losanges (règle 15 ; défaut "default")
+*/}}
+
+{{ $title := .title }}
+{{/* Turn the literal "\n\n" token into a real paragraph break, and any
+     remaining literal "\n" into a Markdown hard break (two trailing spaces
+     + newline), before running the result through markdownify - same
+     convention as sokube-carroussel/sokube-callout/two-columns-block. */}}
+{{ $description := .description | replaceRE `\\n\\n` "\n\n" | replaceRE `\\n` "  \n" }}
+{{ $badge := .badge }}
+{{ $image := .image }}
+{{ $imageDark := replace $image "-light" "-dark" }}
+{{ $buttonText := .buttonText | default "Learn More" }}
+{{ $buttonLink := .buttonLink | default "#" }}
+{{ $imagePosition := .imagePosition | default "right" }}
+{{ $showButton := .showButton | default false }}
+{{ $features := .features | default slice }}
+
+{{ $titleColor := .titleColor }}
+{{ $descriptionColor := .descriptionColor }}
+{{ $badgeBackground := .badgeBackground }}
+{{ $badgeText := .badgeText }}
+{{ $buttonClass := .buttonClass }}
+{{ $descriptionLinkColor := .descriptionLinkColor | default "" }}
+{{ $descriptionLinkHoverColor := .descriptionLinkHoverColor | default "" }}
+
+{{ $showDiamonds := .showDiamonds | default false }}
+{{ $diamondsPosition := .diamondsPosition | default "bottom" }}
+{{ $diamondsSide := .diamondsSide | default "right" }}
+{{ $diamondsPalette := .diamondsPalette | default "default" }}
+
+{{/* Wrapper "relative" : ce composant n'a pas de <section> propre (répété
+     plusieurs fois par page, généralement à l'intérieur de
+     sokube-features-section), donc pas de boîte existante par rapport à
+     laquelle positionner les losanges - un par bloc feature, si activé. */}}
+<div class="relative">
+    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $diamondsPalette "position" $diamondsPosition "side" $diamondsSide) }}
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+
+    {{ if eq $imagePosition "left" }}
+    <div class="order-2 lg:order-1">
+        <img
+            src="{{ $image | relURL }}"
+            alt="{{ $title }}"
+            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
+        >
+        <img
+            src="{{ $imageDark | relURL }}"
+            alt="{{ $title }}"
+            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
+        >
+    </div>
+    {{ end }}
+
+    <div class="space-y-6 {{ if eq $imagePosition "left" }}order-1 lg:order-2{{ end }}">
+
+       {{ with $badge }}
+       <div
+            class="
+                inline-block
+                px-4 py-2
+                rounded-full
+                font-semibold
+                {{ $badgeBackground }}
+                {{ $badgeText }}
+            "
+        >
+            {{ . }}
+        </div>
+        {{ end }}
+
+        <h3 class="text-2xl md:text-3xl font-bold {{ $titleColor }}">
+            {{ $title }}
+        </h3>
+
+        <div class="text-lg {{ $descriptionColor }} {{ $descriptionLinkColor }} [&_a]:underline {{ $descriptionLinkHoverColor }}">
+            {{ $description | markdownify }}
+        </div>
+
+        {{ if gt (len $features) 0 }}
+        <ul class="space-y-4">
+
+            {{ range $features }}
+            <li class="flex items-center space-x-3">
+
+                <svg
+                    class="w-5 h-5 {{ $badgeText }}"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    >
+                    <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+
+                <span>{{ . }}</span>
+
+            </li>
+            {{ end }}
+
+        </ul>
+        {{ end }}
+
+        {{ if $showButton }}
+        <a
+            href="{{ $buttonLink }}"
+            class="btn inline-block {{ $buttonClass }}"
+        >
+            {{ $buttonText }}
+        </a>
+        {{ end }}
+
+    </div>
+
+    {{ if ne $imagePosition "left" }}
+    <div>
+        <img
+            src="{{ $image | relURL }}"
+            alt="{{ $title }}"
+            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
+        >
+        <img
+            src="{{ $imageDark | relURL }}"
+            alt="{{ $title }}"
+            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
+        >
+    </div>
+    {{ end }}
+
+</div>
+</div>

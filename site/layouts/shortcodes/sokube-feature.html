@@ -4,6 +4,10 @@
     Bloc image + texte, utilisé en série (page d'accueil, pages de
     formation individuelles) pour présenter une fonctionnalité ou un thème.
 
+    Thin wrapper around layouts/partials/feature-block.html (the shared
+    rendering logic, also called directly by layouts/_default/services.html
+    since shortcodes cannot be invoked from layouts - règle 13).
+
     Répété plusieurs fois sur une même page : le badge ET le bouton
     fonctionnent par palette nommée, comme sokube-card - la palette (couleurs
     du badge et du bouton) vit dans [params.feature.<nom>] (hugo.toml, y
@@ -54,11 +58,11 @@
 {{ end }}
 {{ $style := site.Params.feature.style | default dict }}
 
-{{/* [&_a]: (and [&_a]:hover:) must prefix every class in the combined
-     light+dark string individually, same technique as faq's accent hover -
-     otherwise only the first token is actually scoped to links inside the
-     description, and the rest (typically the dark: variant) would apply
-     globally instead. */}}
+{{/* [&_a]: (et [&_a]:hover:) doit préfixer individuellement chaque classe de
+     la chaîne combinée clair+sombre (même technique que faq/callout-block) -
+     sinon seul le premier token est effectivement scopé aux liens dans la
+     description, et le reste (typiquement la variante dark:) s'appliquerait
+     globalement. */}}
 {{ $linkParts := slice }}
 {{ range (split $style.descriptionLink " ") }}
     {{ if . }}{{ $linkParts = $linkParts | append (printf "[&_a]:%s" .) }}{{ end }}
@@ -71,21 +75,6 @@
 {{ end }}
 {{ $descriptionLinkHover := delimit $linkHoverParts " " }}
 
-{{ $title := .Get "title" }}
-{{ $description := .Get "description" }}
-{{/* Turn the literal "\n\n" token into a real paragraph break, and any
-     remaining literal "\n" into a Markdown hard break (two trailing spaces
-     + newline), before running the result through markdownify. */}}
-{{ $description = $description | replaceRE `\\n\\n` "\n\n" }}
-{{ $description = $description | replaceRE `\\n` "  \n" }}
-{{ $badge := .Get "badge" }}
-{{ $image := .Get "image" }}
-{{ $imageDark := replace $image "-light" "-dark" }}
-{{ $buttonText := .Get "buttonText" | default "Learn More" }}
-{{ $buttonLink := .Get "buttonLink" | default "#" }}
-{{ $imagePosition := .Get "imagePosition" | default "right" }}
-{{ $showButton := eq (.Get "showButton" | default "false") "true" }}
-
 {{/* .Get "features" is "" when the parameter is omitted, and split "" ","
      returns [""] (one empty string) rather than an empty slice - without
      filtering that out, an empty checkmark bullet would still render. */}}
@@ -96,109 +85,28 @@
     {{ end }}
 {{ end }}
 
-{{ $showDiamonds := eq (.Get "showDiamonds") "true" }}
-{{ $diamondsPosition := .Get "diamondsPosition" | default "bottom" }}
-{{ $diamondsSide := .Get "diamondsSide" | default "right" }}
+{{ partial "feature-block.html" (dict
+    "title" (.Get "title")
+    "description" (.Get "description")
+    "badge" (.Get "badge")
+    "image" (.Get "image")
+    "imagePosition" (.Get "imagePosition" | default "right")
+    "features" $features
 
-{{/* Wrapper "relative" : ce shortcode n'a pas de <section> propre (répété
-     plusieurs fois par page, généralement à l'intérieur de
-     sokube-features-section), donc pas de boîte existante par rapport à
-     laquelle positionner les losanges - un par bloc feature, si activé. */}}
-<div class="relative">
-    {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
-<div class="grid lg:grid-cols-2 gap-12 items-center">
+    "showButton" (eq (.Get "showButton" | default "false") "true")
+    "buttonText" (.Get "buttonText" | default "Learn More")
+    "buttonLink" (.Get "buttonLink" | default "#")
 
-    {{ if eq $imagePosition "left" }}
-    <div class="order-2 lg:order-1">
-        <img
-            src="{{ $image | relURL }}"
-            alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
-        >
-        <img
-            src="{{ $imageDark | relURL }}"
-            alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
-        >
-    </div>
-    {{ end }}
+    "titleColor" $style.title
+    "descriptionColor" $style.description
+    "badgeBackground" $badgeStyle.badgeBackground
+    "badgeText" $badgeStyle.badgeText
+    "buttonClass" $badgeStyle.button
+    "descriptionLinkColor" $descriptionLink
+    "descriptionLinkHoverColor" $descriptionLinkHover
 
-    <div class="space-y-6 {{ if eq $imagePosition "left" }}order-1 lg:order-2{{ end }}">
-
-       {{ with $badge }}
-       <div
-            class="
-                inline-block
-                px-4 py-2
-                rounded-full
-                font-semibold
-                {{ $badgeStyle.badgeBackground }}
-                {{ $badgeStyle.badgeText }}
-            "
-        >
-            {{ . }}
-        </div>
-        {{ end }}
-
-        <h3 class="text-2xl md:text-3xl font-bold {{ $style.title }}">
-            {{ $title }}
-        </h3>
-
-        <div class="text-lg {{ $style.description }} {{ $descriptionLink }} [&_a]:underline {{ $descriptionLinkHover }}">
-            {{ $description | markdownify }}
-        </div>
-
-        {{ if gt (len $features) 0 }}
-        <ul class="space-y-4">
-
-            {{ range $features }}
-            <li class="flex items-center space-x-3">
-
-                <svg
-                    class="w-5 h-5 {{ $badgeStyle.badgeText }}"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    >
-                    <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-
-                <span>{{ . }}</span>
-
-            </li>
-            {{ end }}
-
-        </ul>
-        {{ end }}
-
-        {{ if $showButton }}
-        <a
-            href="{{ $buttonLink }}"
-            class="btn inline-block {{ $badgeStyle.button }}"
-        >
-            {{ $buttonText }}
-        </a>
-        {{ end }}
-
-    </div>
-
-    {{ if ne $imagePosition "left" }}
-    <div>
-        <img
-            src="{{ $image | relURL }}"
-            alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
-        >
-        <img
-            src="{{ $imageDark | relURL }}"
-            alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
-        >
-    </div>
-    {{ end }}
-
-</div>
-</div>
+    "showDiamonds" (eq (.Get "showDiamonds") "true")
+    "diamondsPosition" (.Get "diamondsPosition" | default "bottom")
+    "diamondsSide" (.Get "diamondsSide" | default "right")
+    "diamondsPalette" $paletteName
+) }}
