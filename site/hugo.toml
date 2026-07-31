@@ -544,14 +544,15 @@ Our learning methods also help you acquire the skills you need to put them into 
     url = "/contact/"
     weight = 7
   [[menu.main]]
-    name = "Old"
+    name = "Others"
     weight = 8
     [menu.main.params]
       has_submenu = true
       submenu = [
-        { name = "About", url = "/about" },
-        { name = "Offers", url = "/offers" },
-        { name = "Feature A", url = "/features/ai-assisted-remediation" },
+        { name = "NeuroKube - About", url = "/about" },
+        { name = "NeuroKube - Offers", url = "/offers" },
+        { name = "NeuroKube - Feature A", url = "/features/ai-assisted-remediation" },
+        { name = "Trival - Services", url = "/trival/trival-services" },
       ]
 
   # Footer Column 1 Menu
@@ -830,12 +831,29 @@ Our learning methods also help you acquire the skills you need to put them into 
 
 # Cards-section shortcode default style (see layouts/shortcodes/sokube-cards-section.html).
 [params.cardsSection]
+  # Style fixe (règle 5, second cas) : l'eyebrow ne varie jamais d'une page à
+  # l'autre, quelle que soit la palette choisie ci-dessous.
   [params.cardsSection.style]
+    eyebrow = "text-kube-600 dark:text-kube-600"
+
+  # Instanciable par page (règle 12) : fonctionne par palette nommée pour la
+  # description et le fond, même convention que [params.featuresSection] -
+  # le nom de la palette se passe via le paramètre "palette" du shortcode,
+  # défaut "default". Une instance peut toujours surcharger ponctuellement
+  # "descriptionColor"/"background" par-dessus la palette choisie.
+  [params.cardsSection.default]
     description = "text-gray-600 dark:text-neurokube-200"
     # Transparent by default (matches the previous, unconfigurable behavior) - a page
     # can override this per instance, e.g. background="bg-gray-50 dark:bg-neurokube-800".
     background = "bg-transparent dark:bg-transparent"
-    eyebrow = "text-kube-600 dark:text-kube-600"
+
+  [params.cardsSection.kube]
+    description = "text-gray-600 dark:text-kube-200"
+    background = "bg-transparent dark:bg-transparent"
+
+  [params.cardsSection.hr]
+    description = "text-gray-600 dark:text-hr-200"
+    background = "bg-transparent dark:bg-transparent"
 
 # Features-section shortcode default style (see layouts/shortcodes/sokube-features-section.html).
 [params.featuresSection]
@@ -930,9 +948,11 @@ Our learning methods also help you acquire the skills you need to put them into 
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-neurokube-600 dark:marker:text-neurokube-300"
     # Eyebrow de la section (layouts/_default/expertise.html) - propre à la
-    # palette de la section de cards, distinct de [params.cardsSection.style]
-    # (celui-là reste l'eyebrow fixe du shortcode sokube-cards-section, un
-    # composant différent qui n'a pas de palette).
+    # palette de la section de cards, distinct de [params.cardsSection.<nom>]
+    # (celui-là ne couvre que la description/le fond de sokube-cards-section,
+    # un composant différent - son eyebrow reste fixe dans
+    # [params.cardsSection.style], seul l'eyebrow des cards ci-dessous suit
+    # leur propre palette).
     eyebrow = "text-neurokube-600 dark:text-neurokube-300"
 
   # Nouvelle palette KUBE (ex: cartes "PROBLEME" de la page About)
@@ -956,6 +976,44 @@ Our learning methods also help you acquire the skills you need to put them into 
     text = "text-gray-700 dark:text-gray-300"
     marker = "marker:text-hr-600 dark:marker:text-hr-300"
     eyebrow = "text-hr-600 dark:text-hr-300"
+
+# Card-image Configuration (sokube-card-image shortcode) : une image + un
+# titre en surimpression (dégradé sombre en bas, pour la lisibilité).
+[params.cardImage]
+  # Style fixe (règle 5, second cas) : le dégradé de lisibilité et la couleur
+  # du titre ne varient jamais d'une page à l'autre - identité visuelle
+  # unique, quelle que soit l'image utilisée.
+  [params.cardImage.style]
+    title = "text-white"
+    # Couleur de départ du dégradé (bas de la card, opaque) qui s'estompe
+    # vers transparent en remontant - garantit la lisibilité du titre quelle
+    # que soit l'image. Valeur CSS libre (rgba, hex...), pas une classe
+    # Tailwind : construite en CSS inline (voir layouts/shortcodes/
+    # sokube-card-image.html), donc aucune entrée de safelist nécessaire dans
+    # tailwind.config.js, même si elle change.
+    overlayColor = "rgba(0, 0, 0, 0.65)"
+    # Intensité par défaut (%) de l'overlay coloré des palettes ci-dessous -
+    # une instance de sokube-card-image peut la surcharger ponctuellement via
+    # son paramètre "overlayOpacity".
+    overlayOpacity = 50
+
+  # Palette nommée (règle 15) pour l'overlay coloré de la card - contrairement
+  # au dégradé ci-dessus, cette couleur peut raisonnablement varier d'une
+  # page/instance à l'autre (ex. une couleur par secteur d'activité), d'où la
+  # palette plutôt qu'un style fixe. Chaque palette ne référence qu'une
+  # variable CSS (colorVar, assets/css/custom.css), même convention que
+  # [params.heroFondu] : l'opacité (variable, réglée par overlayOpacity) est
+  # appliquée en CSS inline sur le calque entier, jamais dans la couleur
+  # elle-même - donc aucune entrée de safelist nécessaire dans
+  # tailwind.config.js, quelle que soit la valeur choisie.
+  [params.cardImage.default]
+    colorVar = "--color-neurokube-900"
+
+  [params.cardImage.kube]
+    colorVar = "--color-kube-900"
+
+  [params.cardImage.hr]
+    colorVar = "--color-hr-900"
 
 # Partners page (see layouts/shortcodes/sokube-partner-category.html and
 # sokube-partner.html). One page, several category sections, each with a mix
@@ -1475,14 +1533,15 @@ Nos méthodes d'apprentissage vous permettront également d'acquérir les compé
         weight = 7
 
       [[languages.fr.menu.main]]
-        name = "Old"
+        name = "Autres"
         weight = 8
         [languages.fr.menu.main.params]
           has_submenu = true
           submenu = [
-            { name = "About", url = "/fr/about" },
-            { name = "Offers", url = "/fr/offers" },
-            { name = "Feature A", url = "/fr/features/ai-assisted-remediation" },
+            { name = "NeuroKube - About", url = "/fr/about" },
+            { name = "NeuroKube - Offers", url = "/fr/offers" },
+            { name = "NeuroKube - Feature A", url = "/fr/features/ai-assisted-remediation" },
+            { name = "Trival - Services", url = "/fr/trival/trival-services" },
           ]
 
       [[languages.fr.menu.footer_column_1]]

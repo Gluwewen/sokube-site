@@ -29,6 +29,12 @@
       image        - image en mode clair; la variante sombre est déduite en
                      remplaçant "-light" par "-dark" dans le nom de fichier
       imagePosition - "left" ou "right" (défaut "right")
+      imageMaxWidth - largeur maximale de l'image (valeur CSS, ex. "320px" ou
+                     "60%"), pour les visuels qui n'ont pas vocation à remplir
+                     toute la colonne (ex. pictos/illustrations plutôt que
+                     captures/photos). Défaut : pas de limite (l'image remplit
+                     la colonne, comportement actuel). L'image reste centrée
+                     dans sa colonne dès qu'elle est plus étroite que celle-ci.
       showButton   - "true"/"false" (défaut "false")
       buttonText   - texte du bouton (défaut "Learn More")
       buttonLink   - lien du bouton (défaut "#")
@@ -91,6 +97,7 @@
     "badge" (.Get "badge")
     "image" (.Get "image")
     "imagePosition" (.Get "imagePosition" | default "right")
+    "imageMaxWidth" (.Get "imageMaxWidth")
     "features" $features
 
     "showButton" (eq (.Get "showButton" | default "false") "true")

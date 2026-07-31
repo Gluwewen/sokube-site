@@ -1,0 +1,159 @@
+{{/*
+    Card-image Shortcode
+
+    Une card composée d'une image en plein cadre et d'un titre en
+    surimpression (dégradé sombre en bas, pour la lisibilité du texte quelle
+    que soit l'image) - à utiliser en série à l'intérieur d'un
+    sokube-card-grid (ex. liste de secteurs d'activité, chacun illustré par
+    une photo).
+
+    Répété plusieurs fois sur une même page. Deux couches de couleur, avec
+    deux logiques différentes (règle 15) :
+      - le dégradé de lisibilité + la couleur du titre sont fixes, vivant
+        dans [params.cardImage.style] (hugo.toml) - ne varient jamais d'une
+        page à l'autre ;
+      - l'overlay coloré, lui, fonctionne par palette nommée (comme
+        sokube-card), car cette couleur peut raisonnablement varier selon la
+        page ou l'instance (ex. une couleur par secteur d'activité) - voir
+        [params.cardImage.<nom>] (hugo.toml). Chaque palette n'y référence
+        qu'une variable CSS ("colorVar", même convention que
+        layouts/partials/hero-fondu.html) - la couleur elle-même reste
+        définie une seule fois dans assets/css/custom.css.
+
+    Ce même overlay coloré peut se déclencher dans un sens ou dans l'autre
+    (paramètre "colorOnHover"), et à une intensité réglable (paramètre
+    "overlayOpacity") :
+      - colorOnHover="true" (défaut) : image d'origine au repos, la couleur
+        de la palette apparaît au survol ;
+      - colorOnHover="false" : couleur de la palette visible au repos (comme
+        si elle était "intégrée" à l'image via un effet de transparence),
+        qui disparaît au survol pour révéler l'image d'origine, sans couleur.
+    Dans les deux cas, c'est la même couche dont on inverse simplement
+    l'état de repos et l'état de survol - implémenté en CSS pur (opacité
+    d'un calque plein-cadre, cf. plus bas) plutôt qu'en classes Tailwind
+    opacity-0/opacity-100 : "overlayOpacity" est un pourcentage libre choisi
+    par l'appelant (0 à 100), qu'aucune classe Tailwind figée ne peut
+    représenter sans lister à l'avance toutes les valeurs possibles dans le
+    safelist (règle 4) - la propriété CSS "opacity" accepte nativement un
+    pourcentage, sans dépendre de Tailwind.
+
+    Format carré fixe (aspect-square) et arrondi (rounded-2xl), volontairement
+    non paramétrables (règle 3) : pour que toutes les cards d'une même grille
+    s'alignent visuellement quelle que soit la proportion d'origine de chaque
+    photo.
+
+    Purement décoratif : aucun lien (pas de <a>), voir sokube-cta-image si un
+    lien est nécessaire.
+
+    Paramètres :
+      image          - chemin de l'image (obligatoire)
+      imageAlt       - texte alternatif de l'image (optionnel, défaut : title)
+      title          - texte affiché en surimpression, en bas de la card (obligatoire)
+      palette        - nom de la palette de l'overlay coloré : "default",
+                       "kube" ou "hr" (défaut "default" ; voir
+                       [params.cardImage] dans hugo.toml). À répéter sur
+                       chaque sokube-card-image d'une même grille pour une
+                       couleur homogène : sokube-card-grid ne peut pas
+                       transmettre de valeur par défaut à son .Inner (Hugo
+                       rend le contenu imbriqué avant le template du
+                       shortcode parent qui l'englobe - voir le commentaire
+                       dans sokube-card-grid.html).
+      colorOnHover   - "true" (défaut) : image sans couleur au repos, overlay
+                       coloré au survol. "false" : overlay coloré visible au
+                       repos, qui disparaît au survol pour révéler l'image
+                       d'origine.
+      overlayOpacity - intensité de l'overlay coloré, en pourcentage (0 à
+                       100 ; défaut params.cardImage.style.overlayOpacity,
+                       "50" - plus transparent que la couleur pleine).
+
+    Appel minimal (dans un sokube-card-grid) :
+      {{</* sokube-card-grid cols="3" >}}
+        {{</* sokube-card-image image="/images/sectors/banking.jpg" title="Bancaire" palette="kube" >}}
+        {{</* sokube-card-image image="/images/sectors/insurance.jpg" title="Assurance" palette="kube" >}}
+      {{</* /sokube-card-grid >}}
+
+    Appel avec couleur visible au repos (35% d'intensité), qui disparaît au survol :
+      {{</* sokube-card-image image="/images/sectors/banking.jpg" title="Bancaire" palette="kube" colorOnHover="false" overlayOpacity="35" >}}
+*/}}
+
+{{ $image := .Get "image" }}
+{{ $title := .Get "title" }}
+{{ $imageAlt := .Get "imageAlt" | default $title }}
+
+{{ if not $image }}
+    {{ errorf "sokube-card-image: paramètre \"image\" manquant — page %s" .Page.File.Path }}
+{{ end }}
+{{ if not $title }}
+    {{ errorf "sokube-card-image: paramètre \"title\" manquant — page %s" .Page.File.Path }}
+{{ end }}
+
+{{ $style := site.Params.cardImage.style | default dict }}
+{{ $titleColor := $style.title | default "text-white" }}
+{{ $overlayColor := $style.overlayColor | default "rgba(0, 0, 0, 0.65)" }}
+{{ $overlayOpacity := .Get "overlayOpacity" | default $style.overlayOpacity | default 50 }}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $paletteStyle := index site.Params.cardImage $paletteName }}
+{{ if not $paletteStyle }}
+    {{ errorf "sokube-card-image: palette %q introuvable dans [params.cardImage] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $paletteStyle = site.Params.cardImage.default }}
+{{ end }}
+{{ $colorVar := $paletteStyle.colorVar }}
+
+{{/* Les deux états (repos/survol) partagent la même couleur - seule
+     l'opacité de repos et celle de survol sont inversées selon colorOnHover. */}}
+{{ $colorOnHover := eq (.Get "colorOnHover" | default "true") "true" }}
+{{ $restOpacity := 0 }}
+{{ $hoverOpacity := $overlayOpacity }}
+{{ if not $colorOnHover }}
+    {{ $restOpacity = $overlayOpacity }}
+    {{ $hoverOpacity = 0 }}
+{{ end }}
+
+{{ $id := printf "sokube-card-image-%d" .Ordinal }}
+
+{{/* La propriété CSS "opacity" accepte en théorie un pourcentage, mais ce
+     n'est pas supporté par tous les navigateurs (contrairement à l'alpha
+     d'une couleur, ex. rgba/#rrggbbaa) - on convertit donc "overlayOpacity"
+     (0-100) en fraction 0-1 avant de l'utiliser, seule syntaxe fiable
+     partout. */}}
+{{ $restOpacityFraction := div (float $restOpacity) 100 }}
+{{ $hoverOpacityFraction := div (float $hoverOpacity) 100 }}
+
+{{/* Dégradé construit en une seule fois via printf puis marqué safeCSS d'un
+     seul bloc (même technique que layouts/partials/hero-fondu.html) : une
+     valeur CSS arbitraire (rgba...) plutôt qu'une classe Tailwind, donc
+     aucune entrée de safelist nécessaire dans tailwind.config.js. */}}
+{{ $gradientCSS := printf "background-image: linear-gradient(to top, %s 0%%, transparent 65%%);" $overlayColor }}
+{{/* Seule la couleur (constante, ne change jamais d'état) reste en style
+     inline. L'opacité, elle, DOIT vivre dans le bloc <style> ci-dessous pour
+     les deux états (repos ET survol) : un style inline a toujours priorité
+     sur une règle ":hover" définie dans une feuille de style, quelle que
+     soit sa spécificité - la mettre en inline pour le seul état de repos
+     empêcherait donc la règle de survol de jamais s'appliquer. */}}
+{{ $overlayColorCSS := printf "background-color: var(%s);" $colorVar }}
+
+<div class="relative aspect-square rounded-2xl overflow-hidden shadow-elevation" id="{{ $id }}">
+    <img
+        src="{{ $image | relURL }}"
+        alt="{{ $imageAlt }}"
+        class="absolute inset-0 w-full h-full object-cover"
+    >
+    <div class="absolute inset-0" style="{{ $gradientCSS | safeCSS }}"></div>
+    <div class="sokube-card-image-overlay absolute inset-0 transition-opacity duration-300" style="{{ $overlayColorCSS | safeCSS }}"></div>
+    <div class="absolute inset-x-0 bottom-0 p-6 z-10">
+        <h3 class="text-xl font-bold {{ $titleColor }}">
+            {{ $title }}
+        </h3>
+    </div>
+</div>
+
+<style>
+    #{{ $id }} .sokube-card-image-overlay {
+        opacity: {{ $restOpacityFraction }};
+    }
+
+    #{{ $id }}:hover .sokube-card-image-overlay {
+        opacity: {{ $hoverOpacityFraction }};
+    }
+</style>

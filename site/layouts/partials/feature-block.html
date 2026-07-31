@@ -28,6 +28,10 @@
                                            "-light" par "-dark" dans le nom
                                            de fichier
       imagePosition                     - "left" ou "right" (défaut "right")
+      imageMaxWidth                     - largeur maximale de l'image (valeur
+                                           CSS, ex. "320px"), défaut aucune
+                                           limite ; centrée dès qu'elle est
+                                           plus étroite que sa colonne
       features                          - slice de chaînes, liste à puces
                                            (optionnel)
       showButton                        - bool (défaut false)
@@ -64,6 +68,9 @@
 {{ $buttonText := .buttonText | default "Learn More" }}
 {{ $buttonLink := .buttonLink | default "#" }}
 {{ $imagePosition := .imagePosition | default "right" }}
+{{ $imageMaxWidth := .imageMaxWidth }}
+{{ $imageStyle := "" }}
+{{ with $imageMaxWidth }}{{ $imageStyle = printf "max-width: %s;" . }}{{ end }}
 {{ $showButton := .showButton | default false }}
 {{ $features := .features | default slice }}
 
@@ -93,12 +100,14 @@
         <img
             src="{{ $image | relURL }}"
             alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
+            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden mx-auto"
+            style="{{ $imageStyle | safeCSS }}"
         >
         <img
             src="{{ $imageDark | relURL }}"
             alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
+            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block mx-auto"
+            style="{{ $imageStyle | safeCSS }}"
         >
     </div>
     {{ end }}
@@ -170,12 +179,14 @@
         <img
             src="{{ $image | relURL }}"
             alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden"
+            class="sokube-feature-img rounded-2xl shadow-elevation dark:hidden mx-auto"
+            style="{{ $imageStyle | safeCSS }}"
         >
         <img
             src="{{ $imageDark | relURL }}"
             alt="{{ $title }}"
-            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block"
+            class="sokube-feature-img rounded-2xl shadow-elevation hidden dark:block mx-auto"
+            style="{{ $imageStyle | safeCSS }}"
         >
     </div>
     {{ end }}

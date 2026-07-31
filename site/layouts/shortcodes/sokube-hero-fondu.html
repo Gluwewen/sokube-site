@@ -29,6 +29,8 @@
       sub_headline          - description, sous le titre, texte plus petit
       show_description      - "true" (défaut) ou "false" pour masquer sub_headline
       primary_button_text/url    - bouton principal
+      show_primary_button    - "true" (défaut) ou "false" pour masquer le bouton
+                              principal
       secondary_button_text/url  - bouton secondaire (couleurs communes à
                               toutes les palettes, voir [params.heroFondu.style])
       show_secondary_button - "true" (défaut) ou "false" pour masquer le bouton
@@ -38,6 +40,12 @@
                               fichier (même convention que sokube-hero)
       imagePosition          - "left" ou "right" (défaut "right") : côté de la
                               photo. Le texte se trouve toujours du côté opposé.
+      imageFit               - "cover" (défaut) : la photo remplit toute sa
+                              colonne, rognée si besoin. "contain" : l'image
+                              entière reste visible, sans rognage - à utiliser
+                              pour un visuel avec son propre fond (souvent la
+                              même couleur que la palette choisie) qui ne doit
+                              pas être coupé.
       fade_distance          - distance (%) à laquelle le dégradé de fondu
                               devient entièrement transparent (défaut
                               params.heroFondu.style.fadeDistance, "55%").
@@ -89,6 +97,7 @@
     "primaryText" (.Get "primary_button_text")
     "primaryLink" (.Get "primary_button_url")
     "primaryClass" $primaryClass
+    "showPrimaryButton" (eq (.Get "show_primary_button" | default "true") "true")
 
     "showSecondaryButton" (eq (.Get "show_secondary_button" | default "true") "true")
     "secondaryText" (.Get "secondary_button_text")
@@ -97,6 +106,7 @@
 
     "image" (.Get "hero_image")
     "imagePosition" (.Get "imagePosition" | default "right")
+    "imageFit" (.Get "imageFit" | default "cover")
 
     "background" $paletteStyle.background
     "titleColor" $style.title

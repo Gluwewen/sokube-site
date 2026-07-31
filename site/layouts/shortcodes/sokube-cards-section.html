@@ -4,46 +4,53 @@
     Wraps a sokube-card-grid + sokube-card group with a centered
     title/description header.
 
-    Site-wide : la couleur de description, le fond (transparent par défaut) et
-    la couleur de la citation vivent dans [params.cardsSection.style]
-    (hugo.toml) - surchargeables ponctuellement, sans paramètre d'activation :
-    un appel peut remplacer le fond transparent par n'importe quelle autre
-    valeur (ex. un fond gris clair).
+    Instanciable par page (règle 12) : fonctionne par palette nommée pour la
+    description et le fond, même convention que sokube-features-section
+    (règle 5) - la palette vit dans [params.cardsSection.<nom>] (hugo.toml, y
+    compris la palette "default"), le template ne fait que la sélectionner et
+    vérifier qu'elle existe (erreur explicite sinon, règle 8). L'eyebrow, lui,
+    reste fixe (ne varie jamais d'une page à l'autre), dans
+    [params.cardsSection.style].
 
     Paramètres :
       id          - ancre de la section (optionnel, déduite du titre sinon)
+      palette     - nom de la palette pour la description et le fond :
+                    "default", "kube" ou "hr" (défaut "default") - voir
+                    [params.cardsSection] (hugo.toml)
       eyebrow     - courte citation/accroche affichée au-dessus du titre, en
                     petites capitales (optionnel)
       eyebrowColor - couleur de la citation (défaut: params.cardsSection.style.eyebrow)
       title       - titre (optionnel)
       description - texte sous le titre (optionnel)
-      descriptionColor - couleur du texte (défaut: params.cardsSection.style.description)
-      background  - fond de la section (défaut: params.cardsSection.style.background,
-                    transparent ; passer par exemple
-                    background="bg-gray-100 dark:bg-neurokube-700" pour un fond
-                    gris clair - une valeur vide est ignorée par Hugo et
-                    retomberait sur le défaut. Si la section précédente a déjà
-                    un fond de couleur (ex: sokube-callout, gris bg-gray-50 par
-                    défaut), choisir une teinte différente ici pour qu'une
-                    frontière reste visible entre les deux plutôt que de
-                    fusionner en un seul bloc)
+      descriptionColor - surcharge ponctuelle de la couleur du texte,
+                    par-dessus la palette choisie (défaut: palette.description)
+      background  - surcharge ponctuelle du fond de la section, par-dessus la
+                    palette choisie (défaut: palette.background, transparent ;
+                    passer par exemple background="bg-gray-100 dark:bg-neurokube-700"
+                    pour un fond gris clair - une valeur vide est ignorée par
+                    Hugo et retomberait sur le défaut. Si la section
+                    précédente a déjà un fond de couleur (ex: sokube-callout,
+                    gris bg-gray-50 par défaut), choisir une teinte différente
+                    ici pour qu'une frontière reste visible entre les deux
+                    plutôt que de fusionner en un seul bloc)
       .Inner      - contenu (typiquement un sokube-card-grid)
       showDiamonds     - "true"/"false", affiche la décoration "losanges de
                     marque" (défaut "false") - voir
-                    layouts/partials/brand-diamonds.html ; site-wide (pas de
-                    palette nommée ici), toujours palette "default"
+                    layouts/partials/brand-diamonds.html ; couleur liée à la
+                    palette ci-dessus (règle 15)
       diamondsPosition - "top" ou "bottom" (défaut "bottom")
       diamondsSide     - "left" ou "right" (défaut "right")
 
-    Appel minimal (fond transparent par défaut) :
+    Appel minimal (fond transparent par défaut, palette "default") :
       {{</* sokube-cards-section title="Born from a recurring operational problem" description="..." >}}
       {{</* sokube-card-grid cols="2" >}}
         ...
       {{</* /sokube-card-grid >}}
       {{</* /sokube-cards-section >}}
 
-    Appel avec citation et fond gris clair (remplace le défaut) :
+    Appel avec palette "kube", citation et fond gris clair (remplace le défaut) :
       {{</* sokube-cards-section
+          palette="kube"
           eyebrow="Benefit from expert advice to accelerate your digital transformation"
           title="Your DevOps partner"
           description="..."
@@ -56,8 +63,16 @@
 {{ $title := .Get "title" }}
 {{ $description := .Get "description" }}
 {{ $id := .Get "id" | default ($title | anchorize) }}
-{{ $descriptionColor := .Get "descriptionColor" | default site.Params.cardsSection.style.description }}
-{{ $background := .Get "background" | default site.Params.cardsSection.style.background }}
+
+{{ $paletteName := .Get "palette" | default "default" }}
+{{ $paletteStyle := index site.Params.cardsSection $paletteName }}
+{{ if not $paletteStyle }}
+    {{ errorf "sokube-cards-section: palette %q introuvable dans [params.cardsSection] (hugo.toml) — page %s" $paletteName .Page.File.Path }}
+    {{ $paletteStyle = site.Params.cardsSection.default }}
+{{ end }}
+
+{{ $descriptionColor := .Get "descriptionColor" | default $paletteStyle.description }}
+{{ $background := .Get "background" | default $paletteStyle.background }}
 {{ $eyebrow := .Get "eyebrow" }}
 {{ $eyebrowColor := .Get "eyebrowColor" | default site.Params.cardsSection.style.eyebrow }}
 
@@ -66,7 +81,7 @@
 {{ $diamondsSide := .Get "diamondsSide" | default "right" }}
 
 <section id="{{ $id }}" class="section scroll-mt-24 {{ $background }} relative">
-  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" "default" "position" $diamondsPosition "side" $diamondsSide) }}
+  {{ partial "brand-diamonds.html" (dict "show" $showDiamonds "palette" $paletteName "position" $diamondsPosition "side" $diamondsSide) }}
   <div class="container">
     <div class="text-center max-w-3xl mx-auto mb-16">
       {{ with $eyebrow }}

@@ -22,11 +22,18 @@
     Expected dict keys (all optional unless noted):
       headline (required)      - titre (HTML autorisé, non passé dans markdownify)
       subHeadline, showDescription
-      primaryText, primaryLink, primaryClass
+      primaryText, primaryLink, primaryClass, showPrimaryButton
       secondaryText, secondaryLink, secondaryClass, showSecondaryButton
       image                     - image; la variante sombre est déduite en
                                   remplaçant "-light" par "-dark"
       imagePosition             - "left" ou "right" (défaut "right")
+      imageFit                  - "cover" (défaut) : l'image remplit toute sa
+                                  colonne, rognée si besoin (comportement
+                                  historique). "contain" : l'image entière
+                                  reste visible, sans rognage - à utiliser
+                                  quand l'image a son propre fond (souvent de
+                                  la même couleur que "background" ci-dessous)
+                                  et ne doit pas être coupée.
       background (required)    - classe de fond combinée du panneau
       titleColor, descriptionColor
       colorVar (required if image set) - nom d'une variable CSS (ex.
@@ -54,6 +61,7 @@
 {{ $subHeadline := .subHeadline }}
 {{ $showDescription := .showDescription }}
 
+{{ $showPrimaryButton := .showPrimaryButton }}
 {{ $primaryText := .primaryText }}
 {{ $primaryLink := .primaryLink | default "#" }}
 {{ $primaryClass := .primaryClass }}
@@ -67,6 +75,9 @@
 {{ $imageDark := replace $image "-light" "-dark" }}
 {{ $imagePosition := .imagePosition | default "right" }}
 {{ $isLeft := eq $imagePosition "left" }}
+{{ $imageFit := .imageFit | default "cover" }}
+{{ $imageFitClass := "object-cover" }}
+{{ if eq $imageFit "contain" }}{{ $imageFitClass = "object-contain" }}{{ end }}
 
 {{ $background := .background }}
 {{ $titleColor := .titleColor | default "text-white" }}
@@ -92,8 +103,8 @@
 
         <div class="relative h-64 lg:h-auto {{ $imageOrder }}">
             {{ with $image }}
-            <img src="{{ . | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full object-cover dark:hidden">
-            <img src="{{ $imageDark | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full object-cover hidden dark:block">
+            <img src="{{ . | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full {{ $imageFitClass }} dark:hidden">
+            <img src="{{ $imageDark | relURL }}" alt="{{ $headline }}" class="absolute inset-0 w-full h-full {{ $imageFitClass }} hidden dark:block">
             <div class="absolute inset-0" style="{{ $gradientCSS | safeCSS }}"></div>
             {{ end }}
         </div>
@@ -108,10 +119,12 @@
             </p>
             {{ end }}
             <div class="flex flex-col sm:flex-row gap-4">
+                {{ if $showPrimaryButton }}
                 {{ with $primaryText }}
                 <a href="{{ $primaryLink }}" class="btn text-center {{ $primaryClass }}">
                     {{ . }}
                 </a>
+                {{ end }}
                 {{ end }}
 
                 {{ if $showSecondaryButton }}

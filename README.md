@@ -482,16 +482,19 @@ Vous devez insérer le code suivant pour ajouter le composant **sokube-cards-sec
 ```
 {{< sokube-cards-section
     id="nom servant de lien"
+    palette="default | kube | hr (optionnel, default par défaut)"
     eyebrow="Courte citation/accroche affichée en petites capitales au-dessus du titre (optionnel)"
     title="Titre de la section"
     description="Description de la section"
-    background="Fond de la section (optionnel, transparent par défaut - voir [params.cardsSection.style] dans hugo.toml)"
+    background="Fond de la section (optionnel, surcharge ponctuelle par-dessus la palette choisie)"
 >}}
 ...
 {{< /sokube-cards-section >}}
 ```
 
-Le fond transparent est le défaut de la section (pas de paramètre d'activation à part) : un appel peut le remplacer par n'importe quelle autre valeur, ex. `background="bg-gray-100 dark:bg-neurokube-700"` pour un fond gris clair (voir la page Expertises). Si la section précédente a déjà un fond de couleur (ex. `sokube-callout`, gris `bg-gray-50` par défaut), choisir une teinte différente pour garder une frontière visible entre les deux plutôt que de les fusionner en un seul bloc.
+Instanciable par page (règle 12) : la couleur de la description et le fond de section suivent une palette nommée (`palette="default"`, `"kube"` ou `"hr"`, voir `[params.cardsSection.<nom>]` dans `hugo.toml`), même convention que `sokube-features-section`. L'eyebrow, lui, reste fixe (`[params.cardsSection.style]`), il ne varie jamais d'une page à l'autre.
+
+Le fond transparent est le défaut de chaque palette (pas de paramètre d'activation à part) : un appel peut le remplacer ponctuellement par n'importe quelle autre valeur, ex. `background="bg-gray-100 dark:bg-neurokube-700"` pour un fond gris clair (voir la page Expertises). Si la section précédente a déjà un fond de couleur (ex. `sokube-callout`, gris `bg-gray-50` par défaut), choisir une teinte différente pour garder une frontière visible entre les deux plutôt que de les fusionner en un seul bloc.
 
 Vous devez insérer le code suivant pour ajouter le composant **neurokube-card-grid** dans une page :
 
@@ -533,6 +536,54 @@ Ajoutez le contenu de la carte en HTML ou en MD
 ```
 
 Cette même table `[params.contractTypes]` est aussi utilisée par le layout `job-listing` (voir plus bas) pour résoudre le champ `contractType` du front matter en palette. Une card dont le `label` ne correspond à aucun type de contrat connu (ex. "PROBLÈME 01" sur `about.md`) n'est pas affectée : elle retombe sur la palette "default", ou sur `palette="..."` si fourni explicitement.
+
+#### 🖼️ Cartes image (sokube-card-image)
+
+Le shortcode **sokube-card-image** se trouve dans le répertoire :
+> /site/layouts/shortcodes/
+
+Une card composée d'une image en plein cadre (format carré fixe) et d'un titre en surimpression, avec un dégradé sombre en bas pour garantir la lisibilité quelle que soit l'image - typiquement une liste de secteurs d'activité, chacun illustré par une photo. À utiliser en série à l'intérieur d'un `sokube-card-grid` (même grille que les `sokube-card` "texte").
+
+Le dégradé de lisibilité et la couleur du titre sont fixes (`[params.cardImage.style]`, hugo.toml) - ils ne varient jamais d'une page à l'autre. Un overlay coloré vient en plus se superposer à l'image : sa couleur suit une palette nommée (`palette="default"`, `"kube"` ou `"hr"`, même convention que `sokube-card`) - voir `[params.cardImage.<nom>]`. Composant purement décoratif (pas de lien) - voir `sokube-cta-image` si un lien est nécessaire.
+
+Le déclenchement de cet overlay coloré se règle avec `colorOnHover` :
+- `colorOnHover="true"` (défaut) : image d'origine au repos, la couleur apparaît au survol.
+- `colorOnHover="false"` : couleur visible au repos (comme intégrée à l'image via un effet de transparence), qui disparaît au survol pour révéler l'image d'origine.
+
+Son intensité se règle avec `overlayOpacity` (0 à 100, défaut `params.cardImage.style.overlayOpacity`, `50`) :
+
+```
+{{< sokube-card-image image="/images/sectors/banking.jpg" title="Bancaire" palette="kube" colorOnHover="false" overlayOpacity="35" >}}
+```
+
+`sokube-card-grid` ne peut pas transmettre de `palette` par défaut à ses `sokube-card-image` imbriqués (Hugo rend le contenu `.Inner` avant le template du shortcode parent qui l'englobe - limitation connue, non contournable). Pour une couleur homogène sur toute une grille, répéter `palette="..."` sur chaque carte :
+
+```
+{{< sokube-card-grid cols="3" >}}
+  {{< sokube-card-image image="/images/sectors/banking.jpg" title="Bancaire" palette="kube" >}}
+  {{< sokube-card-image image="/images/sectors/insurance.jpg" title="Assurance" palette="kube" >}}
+  {{< sokube-card-image image="/images/sectors/industry.jpg" title="Industrie" palette="kube" >}}
+{{< /sokube-card-grid >}}
+```
+
+```
+[params.cardImage]
+  [params.cardImage.style]
+    title = "text-white"
+    overlayColor = "rgba(0, 0, 0, 0.65)"
+    overlayOpacity = 50
+
+  [params.cardImage.default]
+    colorVar = "--color-neurokube-900"
+
+  [params.cardImage.kube]
+    colorVar = "--color-kube-900"
+
+  [params.cardImage.hr]
+    colorVar = "--color-hr-900"
+```
+
+`colorVar` référence une variable CSS (`assets/css/custom.css`, même convention que `sokube-hero-fondu`) plutôt qu'une classe Tailwind - l'opacité (`overlayOpacity`) est appliquée en CSS inline sur le calque entier, ce qui permet n'importe quelle valeur (pas seulement celles listées dans le safelist Tailwind).
 
 #### 🎯 Hero
 
@@ -597,6 +648,8 @@ Le shortcode **sokube-hero-fondu** se trouve dans le répertoire :
 > /site/layouts/shortcodes/
 
 Variante en deux colonnes pleine largeur du Hero : un panneau de couleur pleine (titre, description, boutons) d'un côté, une photo de l'autre, qui se "fond" dans la couleur du panneau via un dégradé. Le texte se trouve toujours du côté opposé à la photo (`imagePosition="left"` ou `"right"`, défaut `"right"`), et reste aligné sur les mêmes marges que le reste du site (`.container`, `max-w-7xl`) au lieu de coller au bord plein cadre de la section - seule la photo va jusqu'au bord.
+
+Par défaut, la photo remplit toute sa colonne quitte à être rognée (`imageFit="cover"`). Si le visuel a son propre fond (souvent la même couleur que la palette) et ne doit pas être coupé, passer `imageFit="contain"` pour qu'il reste entièrement visible.
 
 Contrairement au Hero classique (une seule identité visuelle pour tout le site), ce shortcode est **instanciable par page** : chaque appel choisit une palette de couleur (`palette="default"`, `"kube"` ou `"hr"`), définie dans `hugo.toml`. Le titre, les boutons et la progressivité du fondu, eux, ne changent pas d'une palette à l'autre.
 

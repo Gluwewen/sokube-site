@@ -1,13 +1,21 @@
 {{/*
     Card-grid Shortcode
 
-    Grille responsive pour un groupe de sokube-card. Purement structurel
-    (aucune couleur) - le seul style configurable, l'espacement entre
-    cartes, vit déjà dans [params.cards.grid_gap] (hugo.toml).
+    Grille responsive pour un groupe de sokube-card (ou sokube-card-image).
+    Purement structurel (aucune couleur) - le seul style configurable,
+    l'espacement entre cartes, vit déjà dans [params.cards.grid_gap]
+    (hugo.toml).
+
+    Pas de paramètre "palette" ici : Hugo rend le contenu imbriqué (.Inner)
+    AVANT d'exécuter le template du shortcode parent qui l'englobe, donc une
+    valeur déposée ici (ex. via .Page.Store) pour être lue par chaque
+    sokube-card-image de .Inner arrive toujours trop tard (limitation connue
+    de Hugo, pas contournable pour une relation parent → enfant imbriqué).
+    Chaque sokube-card-image doit donc porter son propre "palette".
 
     Paramètres :
-      cols - nombre de colonnes en desktop : "1", "2", "3" ou "4" (défaut "2")
-      .Inner - une série de sokube-card
+      cols   - nombre de colonnes en desktop : "1", "2", "3" ou "4" (défaut "2")
+      .Inner - une série de sokube-card ou de sokube-card-image
 
     Appel minimal :
       {{</* sokube-card-grid cols="2" >}}
